@@ -1,0 +1,8 @@
+rootProject.name = 'productquery'
+include 'facade','infrastructure','domain','test','web'
+
+include 'facade:model'
+include 'facade:interface'
+include 'facade:impl'
+
+
