@@ -7,7 +7,7 @@ import com.ymatou.productquery.infrastructure.config.TomcatConfig;
  * Created by zhangyifan on 2016/12/9.
  */
 public class Constants {
-    public static final String APP_ID = "productsync.iapi.ymatou.com";
+    public static final String APP_ID = "productquery.iapi.ymatou.com";
     public static final String LOG_PREFIX = "logPrefix";
     public static TomcatConfig TOMCAT_CONFIG;
     public static final String SNAPSHOP_MQ_ID = "product";

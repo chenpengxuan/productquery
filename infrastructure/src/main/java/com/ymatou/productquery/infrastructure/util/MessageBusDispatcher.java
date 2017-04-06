@@ -3,7 +3,7 @@ package com.ymatou.productquery.infrastructure.util;
 import com.ymatou.messagebus.client.KafkaBusClient;
 import com.ymatou.messagebus.client.Message;
 import com.ymatou.messagebus.client.MessageBusException;
-import com.ymatou.productsync.infrastructure.constants.Constants;
+import com.ymatou.productquery.infrastructure.constants.Constants;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

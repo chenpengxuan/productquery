@@ -1,7 +1,7 @@
 description = "this is a infrastructure jar"
 
 jar {
-	baseName = "productsync-infrastructure"
+	baseName = "productquery-infrastructure"
 }
 
 dependencies {

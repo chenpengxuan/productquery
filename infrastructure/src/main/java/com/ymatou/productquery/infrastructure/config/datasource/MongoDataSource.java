@@ -3,7 +3,7 @@ package com.ymatou.productquery.infrastructure.config.datasource;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.ymatou.productsync.infrastructure.config.props.MongoProps;
+import com.ymatou.productquery.infrastructure.config.props.MongoProps;
 import org.jongo.Jongo;
 import org.jongo.marshall.jackson.JacksonMapper;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.ymatou.productsync.infrastructure.util.Utils.DEFAULT_DATE_FORMAT;
+import static com.ymatou.productquery.infrastructure.util.Utils.DEFAULT_DATE_FORMAT;
 
 /**
  * Map Util

@@ -6,7 +6,7 @@
  */
 package com.ymatou.productquery.infrastructure.util;
 
-import com.ymatou.productsync.infrastructure.config.props.BizProps;
+import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
