@@ -1,7 +1,7 @@
 description = "this is a facade jar"
 
 jar {
-    baseName = 'productprice-facade-interface'
+    baseName = 'productquery-facade-interface'
     version = "${facadeVersion}"
 }
 
@@ -20,7 +20,7 @@ uploadArchives {
             snapshotRepository(url: "http://172.16.100.98/nexus/content/repositories/snapshots")
                     { authentication(userName: "admin", password: "admin123") }
             pom.version = "$project.version"
-            pom.artifactId = "productprice-facade-interface"
+            pom.artifactId = "productquery-facade-interface"
             pom.groupId = "$project.group"
         }
     }

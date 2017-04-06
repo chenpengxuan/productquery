@@ -29,7 +29,7 @@ public class LogWrapper {
      * @param msg
      */
     public void recordErrorLog(String msg){
-        if(bizProps.isBizExceptionWarning()){
+        if(bizProps.getExceptionWarningSwitch()){
             logger.error(msg);
         }else{
             logger.debug(msg);
@@ -42,7 +42,7 @@ public class LogWrapper {
      * @param objects
      */
     public void recordErrorLog(String msg,Object... objects){
-        if(bizProps.isBizExceptionWarning()){
+        if(bizProps.getExceptionWarningSwitch()){
             logger.error(msg,objects);
         }else{
             logger.debug(msg,objects);
