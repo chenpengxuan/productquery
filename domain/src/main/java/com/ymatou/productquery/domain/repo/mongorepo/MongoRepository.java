@@ -1,6 +1,7 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
-import com.ymatou.productquery.domain.repo.parallelrepo.Repository;
+import com.ymatou.productquery.domain.model.ActivityProducts;
+import com.ymatou.productquery.domain.repo.Repository;
 import com.ymatou.productquery.infrastructure.constants.Constants;
 import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoOperationTypeEnum;
 import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoProcessor;
@@ -141,5 +142,37 @@ public class MongoRepository implements Repository {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 获取活动商品信息列表
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductList(List<String> productIdList) {
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("spid", productIdList);
+        matchConditionMap.put("spid", temp);
+        return null;
+    }
 
+    /**
+     * 获取新增活动商品信息列表
+     *
+     * @param newestActivityObjectId 最新主键
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductList(ObjectId newestActivityObjectId) {
+        return null;
+    }
+
+    /**
+     * 获取全部有效活动商品列表
+     *
+     * @return
+     */
+    public List<ActivityProducts> getAllValidActivityProductList() {
+        return null;
+    }
 }

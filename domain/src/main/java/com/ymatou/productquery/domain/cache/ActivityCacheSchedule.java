@@ -1,5 +1,6 @@
 package com.ymatou.productquery.domain.cache;
 
+import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.infrastructure.config.props.CacheProps;
 import com.ymatou.productquery.infrastructure.util.LogWrapper;
@@ -10,7 +11,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
+import java.util.stream.Collectors;
 
 /**
  * Created by zhangyong on 2017/4/6.
@@ -78,4 +81,6 @@ public class ActivityCacheSchedule {
             logWrapper.recordErrorLog("增量添加活动商品缓存发生异常", ex);
         }
     }
+
+
 }

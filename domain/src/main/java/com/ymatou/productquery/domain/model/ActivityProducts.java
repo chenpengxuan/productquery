@@ -1,5 +1,7 @@
 package com.ymatou.productquery.domain.model;
 
+import org.bson.types.ObjectId;
+
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import java.util.List;
  */
 public class ActivityProducts {
 
+    private ObjectId id;
     private String spid;
     private int aid;
     private String aname;
@@ -21,6 +24,14 @@ public class ActivityProducts {
     private boolean nbuyer;
     private boolean part;
     private List<ActivityCatalogInfo> catalogs;
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     public String getSpid() {
         return spid;
