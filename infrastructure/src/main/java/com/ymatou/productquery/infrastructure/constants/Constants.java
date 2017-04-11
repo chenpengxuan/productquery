@@ -53,4 +53,9 @@ public class Constants {
      * 商品相关时间戳表
      */
     public static final String ProductTimeStampDb = "ProductTimeStamp";
+
+    /**
+     * 历史商品库
+     */
+    public static final String HistoryProductModel = "HistoryProductModel";
 }

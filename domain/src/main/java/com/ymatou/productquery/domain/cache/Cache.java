@@ -32,15 +32,15 @@ public class Cache {
     @Resource(name = "mongoRepository")
     private Repository mongoRepository;
 
-    @Resource(name = "parallelRepository")
-    private Repository parallelRepository;
+//    @Resource(name = "parallelRepository")
+//    private Repository parallelRepository;
 
     private Repository realBusinessRepository;
 
     @PostConstruct
     public void init() {
         if (bizProps.isUseParallel()) {
-            realBusinessRepository = parallelRepository;
+            //realBusinessRepository = parallelRepository;
         } else {
             realBusinessRepository = mongoRepository;
         }

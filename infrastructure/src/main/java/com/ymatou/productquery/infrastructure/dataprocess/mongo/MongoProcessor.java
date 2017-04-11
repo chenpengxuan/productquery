@@ -11,6 +11,7 @@ import com.ymatou.productquery.infrastructure.util.MapUtil;
 import com.ymatou.productquery.infrastructure.util.Utils;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
+import org.jongo.MongoCursor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ import java.util.stream.Collectors;
 public class MongoProcessor {
     @Autowired
     private Jongo jongoClient;
+
+    @Autowired
+    private Jongo historyProductJongoClient;
 
     @Autowired
     private LogWrapper logWrapper;
@@ -61,7 +65,6 @@ public class MongoProcessor {
      * @return
      * @throws IllegalArgumentException
      */
-    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> queryMongo(MongoQueryData mongoQueryData) throws IllegalArgumentException {
         if (mongoQueryData == null) {
             throw new IllegalArgumentException("mongoData 不能为空");
@@ -71,14 +74,13 @@ public class MongoProcessor {
         }
         MongoCollection collection = jongoClient.getCollection(mongoQueryData.getTableName());
 
-
         Object[] paramList = processQueryCondition(mongoQueryData.getMatchCondition());
         String matchCondition = mongoQueryData.getMatchCondition() != null
-                ? MapUtil.makeJsonStringFromMapForJongo(mongoQueryData.getMatchCondition()):"{}";
+                ? MapUtil.makeJsonStringFromMapForJongo(mongoQueryData.getMatchCondition()) : "{}";
         String projection = mongoQueryData.getProjection() != null
-                ? MapUtil.makeJsonStringFromMapForJongo(Maps.transformEntries(mongoQueryData.getProjection(),(x,y)-> y ? 1:0)):"{}";
+                ? MapUtil.makeJsonStringFromMapForJongo(Maps.transformEntries(mongoQueryData.getProjection(), (x, y) -> y ? 1 : 0)) : "{}";
         String sort = mongoQueryData.getSort() != null
-                ? MapUtil.makeJsonStringFromMapForJongo(Maps.transformEntries(mongoQueryData.getSort(),(x,y)-> y ? 1:-1)):"{}";
+                ? MapUtil.makeJsonStringFromMapForJongo(Maps.transformEntries(mongoQueryData.getSort(), (x, y) -> y ? 1 : -1)) : "{}";
         //增加定制化性能监控汇报
         List<Map<String, Object>> result = PerformanceStatisticContainer.addWithReturn(() -> {
             Map<String, Object> tempMap = new HashMap<>();
@@ -97,18 +99,47 @@ public class MongoProcessor {
                     throw new IllegalArgumentException("mongo 操作类型不正确");
             }
             return mapList;
-        },"processMongoData_" + mongoQueryData.getOperationType().name() + "_" + mongoQueryData.getTableName(), Constants.APP_ID);
-        logger.info("mongo查询信息为{}",mongoQueryData);
+        }, "processMongoData_" + mongoQueryData.getOperationType().name() + "_" + mongoQueryData.getTableName(), Constants.APP_ID);
+        logger.info("mongo查询信息为{}", mongoQueryData);
         return result;
     }
 
     /**
+     * 查询ymtproducts库
+     *
+     * @param query
+     * @param entityClass
+     * @param collection
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> find(String query, Class<T> entityClass, String collection) {
+        MongoCollection mongoCollection = jongoClient.getCollection(collection);
+        return Lists.newArrayList(mongoCollection.find(query).as(entityClass).iterator());
+    }
+
+    /**
+     * 查询历史商品库
+     *
+     * @param query
+     * @param entityClass
+     * @param collection
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> findHistoryProduct(String query, Class<T> entityClass, String collection) {
+        MongoCollection mongoCollection = historyProductJongoClient.getCollection(collection);
+        return Lists.newArrayList(mongoCollection.find(query).as(entityClass).iterator());
+    }
+
+    /**
      * 处理mongo查询条件
+     *
      * @param queryMatchConditionData
      * @return
      * @throws IllegalArgumentException
      */
-    private Object[] processQueryCondition(Map<String,Object> queryMatchConditionData){
+    private Object[] processQueryCondition(Map<String, Object> queryMatchConditionData) {
         List tempResult = new ArrayList();
         if (queryMatchConditionData != null && !queryMatchConditionData.isEmpty()) {
             //针对嵌套Map
@@ -131,6 +162,7 @@ public class MongoProcessor {
         }
         return tempResult.toArray();
     }
+
     /**
      * mongodata 实际操作
      *
@@ -178,8 +210,8 @@ public class MongoProcessor {
                 return processResult;
             }, "processMongoData_" + mongoData.getOperationType().name() + "_" + mongoData.getTableName(), Constants.APP_ID);
             logger.info("操作mongo信息：mongo表名{},mongo操作类型{},mongo匹配参数为{},mongo同步数据为{},操作结果为{}", mongoData.getTableName(), mongoData.getOperationType().name(), Utils.toJSONString(mongoData.getMatchCondition()), Utils.toJSONString(mongoData.getUpdateData()), result);
-        }catch (Exception ex){
-            logWrapper.recordErrorLog("processMongoData 发生异常",ex);
+        } catch (Exception ex) {
+            logWrapper.recordErrorLog("processMongoData 发生异常", ex);
         }
         return result;
     }

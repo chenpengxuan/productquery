@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class ActivityProducts {
 
-    private ObjectId id;
+    private ObjectId _id;
     private String spid;
     private int aid;
     private String aname;
@@ -26,11 +26,11 @@ public class ActivityProducts {
     private List<ActivityCatalogInfo> catalogs;
 
     public ObjectId getId() {
-        return id;
+        return _id;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
+    public void setId(ObjectId _id) {
+        this._id = _id;
     }
 
     public String getSpid() {

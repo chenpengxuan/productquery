@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
-/** mongo data source
+/**
+ * mongo data source
  * Created by chenpengxuan on 2017/2/6.
  */
 @Configuration
@@ -24,10 +25,17 @@ public class MongoDataSource {
     private MongoDataMappingConverter mongoDataMappingConverter;
 
     @Bean
-    public Jongo jongoClient(){
+    public Jongo jongoClient() {
         MongoClientURI uri = new MongoClientURI(mongoProps.getMongoProductUrl());
         //Todo getDB deprecated,please use getDatabase
-        DB db =new MongoClient(uri).getDB(uri.getDatabase());
-        return new Jongo(db,new JacksonMapper.Builder().addModifier(mongoDataMappingConverter).build());
+        DB db = new MongoClient(uri).getDB(uri.getDatabase());
+        return new Jongo(db, new JacksonMapper.Builder().addModifier(mongoDataMappingConverter).build());
+    }
+
+    @Bean
+    public Jongo historyProductJongoClient() {
+        MongoClientURI uri = new MongoClientURI(mongoProps.getMongoHistoryProductUrl());
+        DB db = new MongoClient(uri).getDB(uri.getDatabase());
+        return new Jongo(db, new JacksonMapper.Builder().addModifier(mongoDataMappingConverter).build());
     }
 }

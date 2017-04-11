@@ -1,17 +1,22 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.ymatou.productquery.domain.model.ActivityProducts;
+import com.ymatou.productquery.domain.model.LiveProducts;
+import com.ymatou.productquery.domain.model.ProductDetailModel;
+import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.domain.repo.Repository;
 import com.ymatou.productquery.infrastructure.constants.Constants;
 import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoOperationTypeEnum;
 import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoProcessor;
 import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoQueryData;
+import com.ymatou.productquery.infrastructure.util.MapUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by zhangyong on 2017/4/6.
@@ -152,9 +157,11 @@ public class MongoRepository implements Repository {
         MongoQueryData queryData = new MongoQueryData();
         Map<String, Object> matchConditionMap = new HashMap<>();
         Map<String, Object> temp = new HashMap<>();
-        temp.put("spid", productIdList);
+        temp.put("$in", productIdList);
         matchConditionMap.put("spid", temp);
-        return null;
+        queryData.setMatchCondition(matchConditionMap);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, ActivityProducts.class, Constants.ActivityProductDb);
     }
 
     /**
@@ -164,7 +171,12 @@ public class MongoRepository implements Repository {
      * @return
      */
     public List<ActivityProducts> getActivityProductList(ObjectId newestActivityObjectId) {
-        return null;
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$gt", newestActivityObjectId);
+        matchConditionMap.put("_id", temp);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, ActivityProducts.class, Constants.ActivityProductDb);
     }
 
     /**
@@ -173,6 +185,82 @@ public class MongoRepository implements Repository {
      * @return
      */
     public List<ActivityProducts> getAllValidActivityProductList() {
-        return null;
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> tempGte = new HashMap<>();
+        tempGte.put("$gte", new Date());
+        matchConditionMap.put("end", tempGte);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, ActivityProducts.class, Constants.ActivityProductDb);
+    }
+
+    /**
+     * 根据catalogid查catalogs取productid
+     *
+     * @param catalogIdList
+     * @return
+     */
+    public List<String> getProductIdListByCatalogIdList(List<String> catalogIdList) {
+        List<String> pids = new ArrayList<>();
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchCondition = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$in", catalogIdList);
+        matchCondition.put("cid", temp);
+        queryData.setMatchCondition(matchCondition);
+        Map<String, Boolean> projectionMap = new HashMap<>();
+        projectionMap.put("spid", true);
+        projectionMap.put("_id", false);
+        queryData.setProjection(projectionMap);
+        queryData.setTableName(Constants.CatalogDb);
+        queryData.setOperationType(MongoOperationTypeEnum.SELECTMANY);
+        Stream<Object> query = mongoProcessor.queryMongo(queryData).stream().map(t -> t.get("spid")).distinct();
+        query.forEach(t -> pids.add(t.toString()));
+        return pids;
+    }
+
+    /**
+     * 取商品关联直播编号列表
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<LiveProducts> getLiveProductList(List<String> productIdList) {
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$in", productIdList);
+        matchConditionMap.put("spid", temp);
+        queryData.setMatchCondition(matchConditionMap);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, LiveProducts.class, Constants.LiveProudctDb);
+    }
+
+    /**
+     * 根据多个商品编号查询活动商品列表
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<ActivityProducts> getActivityProducts(List<String> productIdList) {
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$in", productIdList);
+        matchConditionMap.put("spid", temp);
+        queryData.setMatchCondition(matchConditionMap);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, ActivityProducts.class, Constants.ActivityProductDb);
+    }
+
+
+    public List<ProductDetailModel> getHistoryProductListByProductIdList(List<String> productIdList) {
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$in", productIdList);
+        matchConditionMap.put("ProductId", temp);
+        queryData.setMatchCondition(matchConditionMap);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.findHistoryProduct(query, ProductDetailModel.class, Constants.HistoryProductModel);
     }
 }

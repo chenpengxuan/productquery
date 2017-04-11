@@ -3,13 +3,20 @@
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
 DISCONF_ENV=$1
-MAIN_CLASS="com.ymatou.productquery.web.productqueryApplication"
+MAIN_CLASS="com.ymatou.productquery.web.ProductQueryApplication"
 CLASS_PATH="lib/*:conf"
 JAVA_OPTS=" -server \
             -Ddisconf.env=${DISCONF_ENV}
             -Xms4096m -Xmx4096m \
             -XX:MaxMetaspaceSize=512m \
             -Xmn1500M \
+            -Dcom.sun.management.jmxremote=true \
+            -Dcom.sun.management.jmxremote.port=7092 \
+            -Dcom.sun.management.jmxremote.authenticate=false \
+            -Dcom.sun.management.jmxremote.ssl=false \
+            -XX:+UnlockCommercialFeatures \
+            -XX:+FlightRecorder \
+            -Djava.rmi.server.hostname=172.16.103.133
             -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled \
             -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=75 \
             -XX:+ScavengeBeforeFullGC -XX:+CMSScavengeBeforeRemark \
