@@ -50,7 +50,7 @@ public class Catalogs {
         this.sku = sku;
     }
 
-    public boolean isPresale() {
+    public boolean getPresale() {
         return presale;
     }
 

@@ -12,7 +12,9 @@ public class ActivityProducts {
 
     private ObjectId _id;
     private String spid;
+
     private int aid;
+
     private String aname;
     private int inaid;
     private Date start;
@@ -31,14 +33,6 @@ public class ActivityProducts {
 
     public void setId(ObjectId _id) {
         this._id = _id;
-    }
-
-    public String getSpid() {
-        return spid;
-    }
-
-    public void setSpid(String spid) {
-        this.spid = spid;
     }
 
     public int getAid() {
@@ -105,7 +99,7 @@ public class ActivityProducts {
         this.plimit = plimit;
     }
 
-    public boolean isolation() {
+    public boolean getIsolation() {
         return isolation;
     }
 
@@ -113,7 +107,7 @@ public class ActivityProducts {
         this.isolation = isolation;
     }
 
-    public boolean isNbuyer() {
+    public boolean getIsNbuyer() {
         return nbuyer;
     }
 
@@ -137,6 +131,12 @@ public class ActivityProducts {
         this.catalogs = catalogs;
     }
 
+    public String getSpid() {
+        return spid;
+    }
 
+    public void setSpid(String spid) {
+        this.spid = spid;
+    }
 }
 

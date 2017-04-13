@@ -1,8 +1,6 @@
 package com.ymatou.productquery.domain.repo;
 
-import com.ymatou.productquery.domain.model.ActivityProducts;
-import com.ymatou.productquery.domain.model.Catalogs;
-import com.ymatou.productquery.domain.model.ProductDetailModel;
+import com.ymatou.productquery.domain.model.*;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +19,7 @@ public interface Repository {
      * @param catalogIdList
      * @return
      */
-    List<Map<String, Object>> getProductIdByCatalogIdList(List<String> catalogIdList);
+    List<String> getProductIdsByCatalogIds(List<String> catalogIdList);
 
     /**
      * 获取全部有效活动商品列表
@@ -48,8 +46,27 @@ public interface Repository {
 
     /**
      * 获取历史商品
+     *
      * @param productIdList
      * @return
      */
     List<ProductDetailModel> getHistoryProductListByProductIdList(List<String> productIdList);
+
+    /**
+     * 根据ProductIds查询Proudcts
+     *
+     * @param productIdList
+     * @return
+     */
+    List<Products> getProductsByProductIds(List<String> productIdList);
+
+    /**
+     * 根据ProductIds查询Catalogs
+     *
+     * @param productIdList
+     * @return
+     */
+    List<Catalogs> getCatalogsByProductIds(List<String> productIdList);
+
+    List<LiveProducts> getLiveProductList(List<String> productIdList);
 }

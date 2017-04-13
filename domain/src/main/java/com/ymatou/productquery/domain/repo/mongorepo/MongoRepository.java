@@ -1,9 +1,6 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
-import com.ymatou.productquery.domain.model.ActivityProducts;
-import com.ymatou.productquery.domain.model.LiveProducts;
-import com.ymatou.productquery.domain.model.ProductDetailModel;
-import com.ymatou.productquery.domain.model.Products;
+import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.Repository;
 import com.ymatou.productquery.infrastructure.constants.Constants;
 import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoOperationTypeEnum;
@@ -199,7 +196,7 @@ public class MongoRepository implements Repository {
      * @param catalogIdList
      * @return
      */
-    public List<String> getProductIdListByCatalogIdList(List<String> catalogIdList) {
+    public List<String> getProductIdsByCatalogIds(List<String> catalogIdList) {
         List<String> pids = new ArrayList<>();
         MongoQueryData queryData = new MongoQueryData();
         Map<String, Object> matchCondition = new HashMap<>();
@@ -253,6 +250,12 @@ public class MongoRepository implements Repository {
     }
 
 
+    /**
+     * 查询历史商品
+     *
+     * @param productIdList
+     * @return
+     */
     public List<ProductDetailModel> getHistoryProductListByProductIdList(List<String> productIdList) {
         MongoQueryData queryData = new MongoQueryData();
         Map<String, Object> matchConditionMap = new HashMap<>();
@@ -262,5 +265,33 @@ public class MongoRepository implements Repository {
         queryData.setMatchCondition(matchConditionMap);
         String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
         return mongoProcessor.findHistoryProduct(query, ProductDetailModel.class, Constants.HistoryProductModel);
+    }
+
+    /**
+     * 根据ProductIds查询Proudcts
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<Products> getProductsByProductIds(List<String> productIdList) {
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$in", productIdList);
+        matchConditionMap.put("spid", temp);
+        queryData.setMatchCondition(matchConditionMap);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, Products.class, Constants.ProductDb);
+    }
+
+    public List<Catalogs> getCatalogsByProductIds(List<String> productIdList) {
+        MongoQueryData queryData = new MongoQueryData();
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> temp = new HashMap<>();
+        temp.put("$in", productIdList);
+        matchConditionMap.put("spid", temp);
+        queryData.setMatchCondition(matchConditionMap);
+        String query = MapUtil.makeJsonStringFromMapForJongo(matchConditionMap);
+        return mongoProcessor.find(query, Catalogs.class, Constants.CatalogDb);
     }
 }

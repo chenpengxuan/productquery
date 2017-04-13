@@ -1,1 +1,1 @@
-MAIN_CLASS="com.ymatou.productquery.web.ProductPriceApplication"
+MAIN_CLASS="com.ymatou.productquery.web.ProductQueryApplication"

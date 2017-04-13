@@ -1,5 +1,7 @@
 package com.ymatou.productquery.model.res;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,17 +12,19 @@ public class ProductInCartDto {
     /// <summary>
     /// 商品编号
     /// </summary>
-    private String ProductId;
+    @JsonProperty("ProductId")
+    private String productId;
 
     /// <summary>
     /// 快照版本
     /// </summary>
-    private String Version;
+    @JsonProperty("Version")
+    private String version;
 
     /// <summary>
     /// 规格编号
     /// </summary>
-    private String CatalogId;
+    private String catalogId;
 
     /// <summary>
     /// 商品名称
@@ -198,4 +202,275 @@ public class ProductInCartDto {
     /// </summary>
     private ProductActivityCartDto ProductActivity;
 
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getCatalogId() {
+        return catalogId;
+    }
+
+    public void setCatalogId(String catalogId) {
+        this.catalogId = catalogId;
+    }
+
+    public String getProductName() {
+        return ProductName;
+    }
+
+    public void setProductName(String productName) {
+        ProductName = productName;
+    }
+
+    public String getMainPicUrl() {
+        return MainPicUrl;
+    }
+
+    public void setMainPicUrl(String mainPicUrl) {
+        MainPicUrl = mainPicUrl;
+    }
+
+    public Date getValidStart() {
+        return ValidStart;
+    }
+
+    public void setValidStart(Date validStart) {
+        ValidStart = validStart;
+    }
+
+    public Date getValidEnd() {
+        return ValidEnd;
+    }
+
+    public void setValidEnd(Date validEnd) {
+        ValidEnd = validEnd;
+    }
+
+    public int getBrandId() {
+        return BrandId;
+    }
+
+    public void setBrandId(int brandId) {
+        BrandId = brandId;
+    }
+
+    public int getMasterCategoryId() {
+        return MasterCategoryId;
+    }
+
+    public void setMasterCategoryId(int masterCategoryId) {
+        MasterCategoryId = masterCategoryId;
+    }
+
+    public int getCategoryId() {
+        return CategoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        CategoryId = categoryId;
+    }
+
+    public int getThirdCategoryId() {
+        return ThirdCategoryId;
+    }
+
+    public void setThirdCategoryId(int thirdCategoryId) {
+        ThirdCategoryId = thirdCategoryId;
+    }
+
+    public int getSellerId() {
+        return SellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        SellerId = sellerId;
+    }
+
+    public String getSellerName() {
+        return SellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        SellerName = sellerName;
+    }
+
+    public int getDeliveryMethod() {
+        return DeliveryMethod;
+    }
+
+    public void setDeliveryMethod(int deliveryMethod) {
+        DeliveryMethod = deliveryMethod;
+    }
+
+    public int getBondedArea() {
+        return BondedArea;
+    }
+
+    public void setBondedArea(int bondedArea) {
+        BondedArea = bondedArea;
+    }
+
+    public Double getWeight() {
+        return Weight;
+    }
+
+    public void setWeight(Double weight) {
+        Weight = weight;
+    }
+
+    public boolean getFreeShipping() {
+        return IsFreeShipping;
+    }
+
+    public void setFreeShipping(boolean freeShipping) {
+        IsFreeShipping = freeShipping;
+    }
+
+    public int getTariffType() {
+        return TariffType;
+    }
+
+    public void setTariffType(int tariffType) {
+        TariffType = tariffType;
+    }
+
+    public ProductStatusEnum getStatus() {
+        return Status;
+    }
+
+    public void setStatus(ProductStatusEnum status) {
+        Status = status;
+    }
+
+    public int getLimitNumber() {
+        return LimitNumber;
+    }
+
+    public void setLimitNumber(int limitNumber) {
+        LimitNumber = limitNumber;
+    }
+
+    public Date getLimitStartTime() {
+        return LimitStartTime;
+    }
+
+    public void setLimitStartTime(Date limitStartTime) {
+        LimitStartTime = limitStartTime;
+    }
+
+    public int getStockNum() {
+        return StockNum;
+    }
+
+    public void setStockNum(int stockNum) {
+        StockNum = stockNum;
+    }
+
+    public String getProductCode() {
+        return ProductCode;
+    }
+
+    public void setProductCode(String productCode) {
+        ProductCode = productCode;
+    }
+
+    public int getLocalReturn() {
+        return LocalReturn;
+    }
+
+    public void setLocalReturn(int localReturn) {
+        LocalReturn = localReturn;
+    }
+
+    public String getSKU() {
+        return SKU;
+    }
+
+    public void setSKU(String SKU) {
+        this.SKU = SKU;
+    }
+
+    public int getCatalogType() {
+        return CatalogType;
+    }
+
+    public void setCatalogType(int catalogType) {
+        CatalogType = catalogType;
+    }
+
+    public boolean getNoReasonReturn() {
+        return IsNoReasonReturn;
+    }
+
+    public void setNoReasonReturn(boolean noReasonReturn) {
+        IsNoReasonReturn = noReasonReturn;
+    }
+
+    public int getCatalogCount() {
+        return CatalogCount;
+    }
+
+    public void setCatalogCount(int catalogCount) {
+        CatalogCount = catalogCount;
+    }
+
+    public boolean getPreSale() {
+        return IsPreSale;
+    }
+
+    public void setPreSale(boolean preSale) {
+        IsPreSale = preSale;
+    }
+
+    public List<PropertyDto> getProperties() {
+        return Properties;
+    }
+
+    public void setProperties(List<PropertyDto> properties) {
+        Properties = properties;
+    }
+
+    public Double getPrice() {
+        return Price;
+    }
+
+    public void setPrice(Double price) {
+        Price = price;
+    }
+
+    public boolean getPspProduct() {
+        return IsPspProduct;
+    }
+
+    public void setPspProduct(boolean pspProduct) {
+        IsPspProduct = pspProduct;
+    }
+
+    public LiveProductCartDto getLiveProduct() {
+        return LiveProduct;
+    }
+
+    public void setLiveProduct(LiveProductCartDto liveProduct) {
+        LiveProduct = liveProduct;
+    }
+
+    public ProductActivityCartDto getProductActivity() {
+        return ProductActivity;
+    }
+
+    public void setProductActivity(ProductActivityCartDto productActivity) {
+        ProductActivity = productActivity;
+    }
 }

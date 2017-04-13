@@ -22,4 +22,28 @@ public class PropertyDto
     /// 规格图片
     /// </summary>
     private String PropertyPictureUrl ;
+
+    public String getPropertyName() {
+        return PropertyName;
+    }
+
+    public void setPropertyName(String propertyName) {
+        PropertyName = propertyName;
+    }
+
+    public String getPropertyValue() {
+        return PropertyValue;
+    }
+
+    public void setPropertyValue(String propertyValue) {
+        PropertyValue = propertyValue;
+    }
+
+    public String getPropertyPictureUrl() {
+        return PropertyPictureUrl;
+    }
+
+    public void setPropertyPictureUrl(String propertyPictureUrl) {
+        PropertyPictureUrl = propertyPictureUrl;
+    }
 }

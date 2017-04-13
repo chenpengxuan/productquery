@@ -2,43 +2,53 @@ package com.ymatou.productquery.domain.model;
 
 import java.util.Date;
 import java.util.List;
+
 /**
  * Created by zhangyong on 2017/4/6.
  */
 public class Products {
-    private	String	spid	;//	商品编号
-    private	int	ipid	;//	商品数字编号
-    private	String	title	;//	商品标题
-    private	String	intro	;//	商品简介
-    private	List<String>	pics	;//	商品主图列表
-    private	Date	start	;//	商品开始有效期
-    private Date end	;//	商品结束有效期
-    private	String	minp	;//	最低规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
-    private	Double	maxp	;//	最高规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
-    private	int	sid	;//	买手编号
-    private	String	sname	;//	买手账号
-    private	int	bid	;//	品牌编号
-    private	String	brand	;//	品牌中文名称
-    private	String	ebrand	;//	品牌英文名称
-    private	int	mcatid	;//	一级分类编号
-    private	String	mcatname	;//	一级分类名称
-    private	int	scatid	;//	二级分类编号
-    private	String	scatname	;//	二级分类名称
-    private	int	tcatid	;//	三级分类编号
-    private	String	tcatname	;//	三级分类名称
-    private	int	ctype	;//	备货方式
-    private	int	deliv	;//	发货方式
-    private	int	bonded	;//	保税区
-    private	int	tariffy	;//	是否包税
-    private	int	shipping	;//	是否包邮
-    private	int	country	;//	国家编号
-    private	boolean	newdesc	;//	是否新图文描述
-    private	int	localr	;//	本土退货
-    private	boolean	noreason	;//	7天无理由退货
-    private	int	action	;//	商品状态
-    private	Date	addtime	;//	发布时间
-    private	boolean	risk	;//	砍单风险提醒
-    private	String	pcode	;//	商品备案号（保税商品）
+    private String spid;//	商品编号
+    private int ipid;//	商品数字编号
+    private String title;//	商品标题
+    private String intro;//	商品简介
+    private List<String> pics;//	商品主图列表
+    private Date start;//	商品开始有效期
+    private Date end;//	商品结束有效期
+    private String minp;//	最低规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
+    private String maxp;//	最高规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
+    private int sid;//	买手编号
+    private String sname;//	买手账号
+    private int bid;//	品牌编号
+    private String brand;//	品牌中文名称
+    private String ebrand;//	品牌英文名称
+    private int mcatid;//	一级分类编号
+    private String mcatname;//	一级分类名称
+    private int scatid;//	二级分类编号
+    private String scatname;//	二级分类名称
+    private int tcatid;//	三级分类编号
+    private String tcatname;//	三级分类名称
+    private int ctype;//	备货方式
+    private int deliv;//	发货方式
+    private int bonded;//	保税区
+    private int tariffy;//	是否包税
+    private int shipping;//	是否包邮
+    private int country;//	国家编号
+    private boolean newdesc;//	是否新图文描述
+    private int localr;//	本土退货
+    private boolean noreason;//	7天无理由退货
+    private int action;//	商品状态
+    private Date addtime;//	发布时间
+    private boolean risk;//	砍单风险提醒
+    private String pcode;//	商品备案号（保税商品）
+    private boolean isnew;//	是否新品
+    private Date newstart;//	新品有效开始时间
+    private Date newend;//	新品有效结束时间
+    private boolean istop;//	是否买手热推商品
+    private String ver;//	最新快照版本号
+    private boolean ispsp;//	是否psp商品 0不是 1是
+    private Date verupdate;//	快照更新时间
+    private String grade;//	商品等级
+    private List<String> sizepics;//	尺码表
 
     public String getSpid() {
         return spid;
@@ -104,11 +114,11 @@ public class Products {
         this.minp = minp;
     }
 
-    public Double getMaxp() {
+    public String getMaxp() {
         return maxp;
     }
 
-    public void setMaxp(Double maxp) {
+    public void setMaxp(String maxp) {
         this.maxp = maxp;
     }
 
@@ -248,7 +258,7 @@ public class Products {
         this.country = country;
     }
 
-    public boolean isNewdesc() {
+    public boolean getNewdesc() {
         return newdesc;
     }
 
@@ -264,7 +274,7 @@ public class Products {
         this.localr = localr;
     }
 
-    public boolean isNoreason() {
+    public boolean getNoreason() {
         return noreason;
     }
 
@@ -288,7 +298,7 @@ public class Products {
         this.addtime = addtime;
     }
 
-    public boolean isRisk() {
+    public boolean getRisk() {
         return risk;
     }
 
@@ -304,7 +314,7 @@ public class Products {
         this.pcode = pcode;
     }
 
-    public boolean isnew() {
+    public boolean getnew() {
         return isnew;
     }
 
@@ -328,7 +338,7 @@ public class Products {
         this.newend = newend;
     }
 
-    public boolean istop() {
+    public boolean gettop() {
         return istop;
     }
 
@@ -344,7 +354,7 @@ public class Products {
         this.ver = ver;
     }
 
-    public boolean ispsp() {
+    public boolean getpsp() {
         return ispsp;
     }
 
@@ -376,13 +386,4 @@ public class Products {
         this.sizepics = sizepics;
     }
 
-    private	boolean	isnew	;//	是否新品
-    private	Date	newstart	;//	新品有效开始时间
-    private	Date	newend	;//	新品有效结束时间
-    private	boolean	istop	;//	是否买手热推商品
-    private	String	ver	;//	最新快照版本号
-    private	boolean	ispsp	;//	是否psp商品 0不是 1是
-    private	Date	verupdate	;//	快照更新时间
-    private	String	grade	;//	商品等级
-    private	List<String>	sizepics	;//	尺码表
 }

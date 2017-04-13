@@ -34,4 +34,44 @@ public class LiveProductCartDto
     /// 直播商品售卖状态
     /// </summary>
     private int SellStatus ;
+
+    public int getLiveId() {
+        return LiveId;
+    }
+
+    public void setLiveId(int liveId) {
+        LiveId = liveId;
+    }
+
+    public String getLiveName() {
+        return LiveName;
+    }
+
+    public void setLiveName(String liveName) {
+        LiveName = liveName;
+    }
+
+    public Date getStartTime() {
+        return StartTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        StartTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return EndTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        EndTime = endTime;
+    }
+
+    public int getSellStatus() {
+        return SellStatus;
+    }
+
+    public void setSellStatus(int sellStatus) {
+        SellStatus = sellStatus;
+    }
 }

@@ -1,4 +1,4 @@
-package com.ymatou.productquery.test;
+package com.ymatou.productquery.test.domain;
 
 import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.ProductDetailModel;
@@ -28,9 +28,9 @@ public class MongoRepositoryTest {
     @Test
     public void testGetActivityProductList() {
         List<String> productids = new ArrayList<>();
-        productids.add("72e06e05-028e-468f-bb00-bccb85654aae");
-        productids.add("fae31b4f-ec1d-40f2-86f6-fb7b4ccf93d2");
-        productids.add("a3c5350d-50df-46fe-aac8-a7d2bf06cd1a");
+        productids.add("4b37659f-fb97-4a81-8ba6-a6f884a2caa0");
+        productids.add("2baf8ca7-34e3-405b-ae54-7cad82430554");
+        productids.add("c69abee5-2beb-4e73-b2ea-5236179319de");
         List<ActivityProducts> aps = mongoRepository.getActivityProductList(productids);
     }
 

@@ -60,4 +60,84 @@ public class ProductActivityCartDto
     /// 是否仅限码头新人
     /// </summary>
     private boolean IsNewBuyer ;
+
+    public int getActivityId() {
+        return ActivityId;
+    }
+
+    public void setActivityId(int activityId) {
+        ActivityId = activityId;
+    }
+
+    public String getActivityName() {
+        return ActivityName;
+    }
+
+    public void setActivityName(String activityName) {
+        ActivityName = activityName;
+    }
+
+    public int getProductInActivityId() {
+        return ProductInActivityId;
+    }
+
+    public void setProductInActivityId(int productInActivityId) {
+        ProductInActivityId = productInActivityId;
+    }
+
+    public Date getProductActivityStartTime() {
+        return ProductActivityStartTime;
+    }
+
+    public void setProductActivityStartTime(Date productActivityStartTime) {
+        ProductActivityStartTime = productActivityStartTime;
+    }
+
+    public Date getProductActivityEndTime() {
+        return ProductActivityEndTime;
+    }
+
+    public void setProductActivityEndTime(Date productActivityEndTime) {
+        ProductActivityEndTime = productActivityEndTime;
+    }
+
+    public int getActivityLimitNumber() {
+        return ActivityLimitNumber;
+    }
+
+    public void setActivityLimitNumber(int activityLimitNumber) {
+        ActivityLimitNumber = activityLimitNumber;
+    }
+
+    public int getProductActivityLimitNumber() {
+        return ProductActivityLimitNumber;
+    }
+
+    public void setProductActivityLimitNumber(int productActivityLimitNumber) {
+        ProductActivityLimitNumber = productActivityLimitNumber;
+    }
+
+    public int getPromotionType() {
+        return PromotionType;
+    }
+
+    public void setPromotionType(int promotionType) {
+        PromotionType = promotionType;
+    }
+
+    public List<String> getActivityCatalogList() {
+        return ActivityCatalogList;
+    }
+
+    public void setActivityCatalogList(List<String> activityCatalogList) {
+        ActivityCatalogList = activityCatalogList;
+    }
+
+    public boolean isNewBuyer() {
+        return IsNewBuyer;
+    }
+
+    public void setNewBuyer(boolean newBuyer) {
+        IsNewBuyer = newBuyer;
+    }
 }
