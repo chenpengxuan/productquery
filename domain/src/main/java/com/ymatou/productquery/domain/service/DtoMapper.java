@@ -44,13 +44,13 @@ public class DtoMapper {
         result.setProductCode(product.getPcode());
         result.setLocalReturn(product.getLocalr());
         result.setCatalogType(product.getCtype());
-        result.setNoReasonReturn(product.getNoreason());
+        result.setNoReasonReturn(product.isNoreason());
         result.setStockNum(getCatalogStock(catalog, activityProduct));
         result.setCatalogCount((int) catalogsList.stream().filter(t -> t.getSpid().equals(product.getSpid())).count());
         result.setPrice(getCatalogPrice(catalog, activityProduct));
-        result.setSKU(catalog.getSku());
-        result.setPreSale(catalog.getPresale());
-        result.setPspProduct(product.getpsp());
+        result.setSku(catalog.getSku());
+        result.setPreSale(catalog.isPresale());
+        result.setPspProduct(product.ispsp());
         result.setProperties(getCatalogPropertyList(catalog.getProps()));
         return result;
     }
@@ -114,7 +114,7 @@ public class DtoMapper {
         pa.setProductActivityLimitNumber(model.getPlimit());
         pa.setProductInActivityId(model.getAid());
         pa.setActivityCatalogList(model.getCatalogs().stream().map(t -> t.getCid()).collect(Collectors.toList()));
-        pa.setNewBuyer(model.getIsNbuyer());
+        pa.setNewBuyer(model.isNbuyer());
         return pa;
     }
 

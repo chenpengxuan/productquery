@@ -99,7 +99,15 @@ public class ActivityProducts {
         this.plimit = plimit;
     }
 
-    public boolean getIsolation() {
+    public ObjectId get_id() {
+        return _id;
+    }
+
+    public void set_id(ObjectId _id) {
+        this._id = _id;
+    }
+
+    public boolean isolation() {
         return isolation;
     }
 
@@ -107,7 +115,7 @@ public class ActivityProducts {
         this.isolation = isolation;
     }
 
-    public boolean getIsNbuyer() {
+    public boolean isNbuyer() {
         return nbuyer;
     }
 

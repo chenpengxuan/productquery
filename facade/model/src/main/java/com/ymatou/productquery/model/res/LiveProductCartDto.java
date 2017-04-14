@@ -1,5 +1,7 @@
 package com.ymatou.productquery.model.res;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 /**
@@ -13,65 +15,70 @@ public class LiveProductCartDto
     /// <summary>
     /// 直播编号
     /// </summary>
-    private int LiveId ;
+    @JsonProperty("LiveId")
+    private int liveId;
 
     /// <summary>
     /// 直播名称
     /// </summary>
-    private String LiveName ;
+    @JsonProperty("LiveName")
+    private String liveName;
 
     /// <summary>
     /// 直播开始时间
     /// </summary>
-    private Date StartTime ;
+    @JsonProperty("StartTime")
+    private Date startTime;
 
     /// <summary>
     /// 直播结束时间
     /// </summary>
-    private Date EndTime ;
+    @JsonProperty("EndTime")
+    private Date endTime;
 
     /// <summary>
     /// 直播商品售卖状态
     /// </summary>
-    private int SellStatus ;
+    @JsonProperty("SellStatus")
+    private int sellStatus;
 
     public int getLiveId() {
-        return LiveId;
+        return liveId;
     }
 
     public void setLiveId(int liveId) {
-        LiveId = liveId;
+        this.liveId = liveId;
     }
 
     public String getLiveName() {
-        return LiveName;
+        return liveName;
     }
 
     public void setLiveName(String liveName) {
-        LiveName = liveName;
+        this.liveName = liveName;
     }
 
     public Date getStartTime() {
-        return StartTime;
+        return startTime;
     }
 
     public void setStartTime(Date startTime) {
-        StartTime = startTime;
+        this.startTime = startTime;
     }
 
     public Date getEndTime() {
-        return EndTime;
+        return endTime;
     }
 
     public void setEndTime(Date endTime) {
-        EndTime = endTime;
+        this.endTime = endTime;
     }
 
     public int getSellStatus() {
-        return SellStatus;
+        return sellStatus;
     }
 
     public void setSellStatus(int sellStatus) {
-        SellStatus = sellStatus;
+        this.sellStatus = sellStatus;
     }
 }

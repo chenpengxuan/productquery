@@ -49,7 +49,7 @@ public class ListQueryService {
 
             List<ActivityProducts> activityProductses = activityProductsList.stream().filter(t -> t.getSpid().equals(productid)).collect(Collectors.toList());
             ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProductses, catalog);
-            if (activityProduct != null && (!activityProduct.getIsolation() || tradeIsolation) && (activityProduct.getCatalogs() != null)) {
+            if (activityProduct != null && (!activityProduct.isolation()|| tradeIsolation) && (activityProduct.getCatalogs() != null)) {
                 ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream().filter(t -> t.getCid().equals(catalogId)).findFirst().orElse(null);
                 if (activityCatalogInfo != null) {
                     if (activityCatalogInfo.getStock() > 0) {

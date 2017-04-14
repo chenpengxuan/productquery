@@ -24,58 +24,68 @@ public class ProductInCartDto {
     /// <summary>
     /// 规格编号
     /// </summary>
+    @JsonProperty("CatalogId")
     private String catalogId;
 
     /// <summary>
     /// 商品名称
     /// </summary>
-    private String ProductName;
+    @JsonProperty("ProductName")
+    private String productName;
 
     /// <summary>
     /// 商品主要图片
     /// </summary>
-    private String MainPicUrl;
+    @JsonProperty("MainPicUrl")
+    private String mainPicUrl;
 
     /// <summary>
     /// 有效开始时间（年月日时分秒）
     /// </summary>
-
-    private Date ValidStart;
+    @JsonProperty("ValidStart")
+    private Date validStart;
 
     /// <summary>
     /// 有效结束时间（年月日时分秒）
     /// </summary>
-    private Date ValidEnd;
+    @JsonProperty("ValidEnd")
+    private Date validEnd;
 
     /// <summary>
     /// 品牌编号
     /// </summary>
-    private int BrandId;
+    @JsonProperty("BrandId")
+    private int brandId;
 
     /// <summary>
     /// 一级分类
     /// </summary>
-    private int MasterCategoryId;
+    @JsonProperty("MasterCategoryId")
+    private int masterCategoryId;
 
     /// <summary>
     /// 二级分类
     /// </summary>
-    private int CategoryId;
+    @JsonProperty("CategoryId")
+    private int categoryId;
 
     /// <summary>
     /// 三级分类
     /// </summary>
-    private int ThirdCategoryId;
+    @JsonProperty("ThirdCategoryId")
+    private int thirdCategoryId;
 
     /// <summary>
     /// 买手用户编号
     /// </summary>
-    private int SellerId;
+    @JsonProperty("SellerId")
+    private int sellerId;
 
     /// <summary>
     /// 买手用户账号
     /// </summary>
-    private String SellerName;
+    @JsonProperty("SellerName")
+    private String sellerName;
 
     /// <summary>
     /// 发货类型
@@ -87,7 +97,8 @@ public class ProductInCartDto {
     /// 6.海外认证直邮
     /// 7.海外拼邮
     /// </summary>
-    private int DeliveryMethod;
+    @JsonProperty("DeliveryMethod")
+    private int deliveryMethod;
 
     /// <summary>
     /// 保税区
@@ -100,24 +111,28 @@ public class ProductInCartDto {
     /// 7.深圳
     /// 8.上海
     /// </summary>
-    private int BondedArea;
+    @JsonProperty("BondedArea")
+    private int bondedArea;
 
     /// <summary>
     /// 重量
     /// </summary>
-    private Double Weight;
+    @JsonProperty("Weight")
+    private Double weight;
 
     /// <summary>
     /// 是否包邮商品
     /// </summary>
-    private boolean IsFreeShipping;
+    @JsonProperty("IsFreeShipping")
+    private boolean freeShipping;
 
     /// <summary>
     /// 交税方
     /// 0. 卖家交税
     /// 1. 买家交税
     /// </summary>
-    private int TariffType;
+    @JsonProperty("TariffType")
+    private int tariffType;
 
     /// <summary>
     /// 状态
@@ -125,82 +140,98 @@ public class ProductInCartDto {
     ///  0. 有效
     ///  2. 无效
     /// </summary>
-    private ProductStatusEnum Status;
+    @JsonProperty("Status")
+    private ProductStatusEnum status;
 
     /// <summary>
     /// 商品的限购数量(0 为不限制购买数量)
     /// </summary>
-    private int LimitNumber;
+    @JsonProperty("LimitNumber")
+    private int limitNumber;
 
     /// <summary>
     /// 限购的起始时间
     /// </summary>
-    private Date LimitStartTime;
+    @JsonProperty("LimitStartTime")
+    private Date limitStartTime;
 
     /// <summary>
     /// 库存数量（活动中为活动库存）
     /// </summary>
-    private int StockNum;
+    @JsonProperty("StockNum")
+    private int stockNum;
 
     /// <summary>
     /// 商品备案号（杭保商品）
     /// </summary>
-    private String ProductCode;
+    @JsonProperty("ProductCode")
+    private String productCode;
 
     /// <summary>
     /// 本土退货
     /// </summary>
-    private int LocalReturn;
+    @JsonProperty("LocalReturn")
+    private int localReturn;
 
     /// <summary>
     /// 规格的sku 编号
     /// </summary>
-    private String SKU;
+    @JsonProperty("SKU")
+    private String sku;
 
     /// <summary>
     /// 备货类型（2- FBX商品）
     /// </summary>
-    private int CatalogType;
+    @JsonProperty("CatalogType")
+    private int catalogType;
 
     /// <summary>
     /// 是否支持7天无理由退货
     /// </summary>
-    private boolean IsNoReasonReturn;
+    @JsonProperty("IsNoReasonReturn")
+    private boolean noReasonReturn;
 
     /// <summary>
     /// 商品下有效规格总数
     /// </summary>
-    private int CatalogCount;
+    @JsonProperty("CatalogCount")
+    private int catalogCount;
 
     /// <summary>
     /// 预订商品
     /// </summary>
-    private boolean IsPreSale;
+    @JsonProperty("IsPreSale")
+    private boolean preSale;
 
     /// <summary>
     /// 规格属性列表
     /// </summary>
-    private List<PropertyDto> Properties;
+    @JsonProperty("Properties")
+    private List<PropertyDto> properties;
 
     /// <summary>
     /// 规格价格
     /// </summary>
-    private Double Price;
+    @JsonProperty("Price")
+    private Double price;
 
     /// <summary>
     /// 是否是PSP商品
     /// </summary>
-    private boolean IsPspProduct;
+    @JsonProperty("IsPspProduct")
+    private boolean pspProduct;
 
     /// <summary>
     /// 商品关联直播
     /// </summary>
-    private LiveProductCartDto LiveProduct;
+    @JsonProperty("LiveProduct")
+    private LiveProductCartDto liveProduct;
 
     /// <summary>
     /// 商品活动
     /// </summary>
-    private ProductActivityCartDto ProductActivity;
+    @JsonProperty("ProductActivity")
+    private ProductActivityCartDto productActivity;
 
     public String getProductId() {
         return productId;
@@ -227,250 +258,254 @@ public class ProductInCartDto {
     }
 
     public String getProductName() {
-        return ProductName;
+        return productName;
     }
 
     public void setProductName(String productName) {
-        ProductName = productName;
+        this.productName = productName;
     }
 
     public String getMainPicUrl() {
-        return MainPicUrl;
+        return mainPicUrl;
     }
 
     public void setMainPicUrl(String mainPicUrl) {
-        MainPicUrl = mainPicUrl;
+        this.mainPicUrl = mainPicUrl;
     }
 
     public Date getValidStart() {
-        return ValidStart;
+        return validStart;
     }
 
     public void setValidStart(Date validStart) {
-        ValidStart = validStart;
+        this.validStart = validStart;
     }
 
     public Date getValidEnd() {
-        return ValidEnd;
+        return validEnd;
     }
 
-    public void setValidEnd(Date validEnd) {
-        ValidEnd = validEnd;
-    }
-
-    public int getBrandId() {
-        return BrandId;
-    }
-
-    public void setBrandId(int brandId) {
-        BrandId = brandId;
-    }
-
-    public int getMasterCategoryId() {
-        return MasterCategoryId;
-    }
-
-    public void setMasterCategoryId(int masterCategoryId) {
-        MasterCategoryId = masterCategoryId;
-    }
-
-    public int getCategoryId() {
-        return CategoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        CategoryId = categoryId;
-    }
-
-    public int getThirdCategoryId() {
-        return ThirdCategoryId;
-    }
-
-    public void setThirdCategoryId(int thirdCategoryId) {
-        ThirdCategoryId = thirdCategoryId;
-    }
-
-    public int getSellerId() {
-        return SellerId;
-    }
-
-    public void setSellerId(int sellerId) {
-        SellerId = sellerId;
-    }
-
-    public String getSellerName() {
-        return SellerName;
-    }
-
-    public void setSellerName(String sellerName) {
-        SellerName = sellerName;
-    }
-
-    public int getDeliveryMethod() {
-        return DeliveryMethod;
-    }
-
-    public void setDeliveryMethod(int deliveryMethod) {
-        DeliveryMethod = deliveryMethod;
-    }
-
-    public int getBondedArea() {
-        return BondedArea;
-    }
-
-    public void setBondedArea(int bondedArea) {
-        BondedArea = bondedArea;
-    }
-
-    public Double getWeight() {
-        return Weight;
-    }
-
-    public void setWeight(Double weight) {
-        Weight = weight;
-    }
-
-    public boolean getFreeShipping() {
-        return IsFreeShipping;
-    }
-
-    public void setFreeShipping(boolean freeShipping) {
-        IsFreeShipping = freeShipping;
-    }
-
-    public int getTariffType() {
-        return TariffType;
-    }
-
-    public void setTariffType(int tariffType) {
-        TariffType = tariffType;
-    }
-
-    public ProductStatusEnum getStatus() {
-        return Status;
-    }
-
-    public void setStatus(ProductStatusEnum status) {
-        Status = status;
-    }
-
-    public int getLimitNumber() {
-        return LimitNumber;
-    }
-
-    public void setLimitNumber(int limitNumber) {
-        LimitNumber = limitNumber;
-    }
-
-    public Date getLimitStartTime() {
-        return LimitStartTime;
-    }
-
-    public void setLimitStartTime(Date limitStartTime) {
-        LimitStartTime = limitStartTime;
-    }
-
-    public int getStockNum() {
-        return StockNum;
-    }
-
-    public void setStockNum(int stockNum) {
-        StockNum = stockNum;
-    }
-
-    public String getProductCode() {
-        return ProductCode;
-    }
-
-    public void setProductCode(String productCode) {
-        ProductCode = productCode;
-    }
-
-    public int getLocalReturn() {
-        return LocalReturn;
-    }
-
-    public void setLocalReturn(int localReturn) {
-        LocalReturn = localReturn;
-    }
-
-    public String getSKU() {
-        return SKU;
-    }
-
-    public void setSKU(String SKU) {
-        this.SKU = SKU;
-    }
-
-    public int getCatalogType() {
-        return CatalogType;
-    }
-
-    public void setCatalogType(int catalogType) {
-        CatalogType = catalogType;
-    }
-
-    public boolean getNoReasonReturn() {
-        return IsNoReasonReturn;
+    public boolean isNoReasonReturn() {
+        return noReasonReturn;
     }
 
     public void setNoReasonReturn(boolean noReasonReturn) {
-        IsNoReasonReturn = noReasonReturn;
+        this.noReasonReturn = noReasonReturn;
+    }
+
+    public void setValidEnd(Date validEnd) {
+        this.validEnd = validEnd;
+    }
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public int getMasterCategoryId() {
+        return masterCategoryId;
+    }
+
+    public void setMasterCategoryId(int masterCategoryId) {
+        this.masterCategoryId = masterCategoryId;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public int getThirdCategoryId() {
+        return thirdCategoryId;
+    }
+
+    public void setThirdCategoryId(int thirdCategoryId) {
+        this.thirdCategoryId = thirdCategoryId;
+    }
+
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public int getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(int deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public int getBondedArea() {
+        return bondedArea;
+    }
+
+    public void setBondedArea(int bondedArea) {
+        this.bondedArea = bondedArea;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public int getTariffType() {
+        return tariffType;
+    }
+
+    public void setTariffType(int tariffType) {
+        this.tariffType = tariffType;
+    }
+
+    public ProductStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatusEnum status) {
+        this.status = status;
+    }
+
+    public int getLimitNumber() {
+        return limitNumber;
+    }
+
+    public void setLimitNumber(int limitNumber) {
+        this.limitNumber = limitNumber;
+    }
+
+    public Date getLimitStartTime() {
+        return limitStartTime;
+    }
+
+    public void setLimitStartTime(Date limitStartTime) {
+        this.limitStartTime = limitStartTime;
+    }
+
+    public int getStockNum() {
+        return stockNum;
+    }
+
+    public void setStockNum(int stockNum) {
+        this.stockNum = stockNum;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public int getLocalReturn() {
+        return localReturn;
+    }
+
+    public void setLocalReturn(int localReturn) {
+        this.localReturn = localReturn;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public int getCatalogType() {
+        return catalogType;
+    }
+
+    public void setCatalogType(int catalogType) {
+        this.catalogType = catalogType;
     }
 
     public int getCatalogCount() {
-        return CatalogCount;
+        return catalogCount;
     }
 
     public void setCatalogCount(int catalogCount) {
-        CatalogCount = catalogCount;
+        this.catalogCount = catalogCount;
     }
 
     public boolean getPreSale() {
-        return IsPreSale;
+        return preSale;
     }
 
     public void setPreSale(boolean preSale) {
-        IsPreSale = preSale;
+        preSale = preSale;
     }
 
     public List<PropertyDto> getProperties() {
-        return Properties;
+        return properties;
     }
 
     public void setProperties(List<PropertyDto> properties) {
-        Properties = properties;
+        this.properties = properties;
     }
 
     public Double getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(Double price) {
-        Price = price;
+        this.price = price;
     }
 
-    public boolean getPspProduct() {
-        return IsPspProduct;
+    public boolean isFreeShipping() {
+        return freeShipping;
+    }
+
+    public void setFreeShipping(boolean freeShipping) {
+        this.freeShipping = freeShipping;
+    }
+
+    public boolean isPreSale() {
+        return preSale;
+    }
+
+    public boolean isPspProduct() {
+        return pspProduct;
     }
 
     public void setPspProduct(boolean pspProduct) {
-        IsPspProduct = pspProduct;
+        this.pspProduct = pspProduct;
     }
 
     public LiveProductCartDto getLiveProduct() {
-        return LiveProduct;
+        return liveProduct;
     }
 
     public void setLiveProduct(LiveProductCartDto liveProduct) {
-        LiveProduct = liveProduct;
+        this.liveProduct = liveProduct;
     }
 
     public ProductActivityCartDto getProductActivity() {
-        return ProductActivity;
+        return productActivity;
     }
 
     public void setProductActivity(ProductActivityCartDto productActivity) {
-        ProductActivity = productActivity;
+        this.productActivity = productActivity;
     }
 }

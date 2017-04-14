@@ -1,5 +1,7 @@
 package com.ymatou.productquery.model.res;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 import java.util.List;
 
@@ -14,130 +16,140 @@ public class ProductActivityCartDto
     /// <summary>
     /// 活动编号
     /// </summary>
-    private int ActivityId ;
+    @JsonProperty("ActivityId")
+    private int activityId;
 
     /// <summary>
     /// 活动名称
     /// </summary>
-    private String ActivityName ;
+    @JsonProperty("ActivityName")
+    private String activityName;
 
     /// <summary>
     /// 活动商品编号
     /// </summary>
-    private int ProductInActivityId ;
+    @JsonProperty("ProductInActivityId")
+    private int productInActivityId;
 
     /// <summary>
     /// 商品在活动中的开始时间
     /// </summary>
-    private Date ProductActivityStartTime ;
+    @JsonProperty("ProductActivityStartTime")
+    private Date productActivityStartTime;
 
     /// <summary>
     /// 商品在活动中的结束时间
     /// </summary>
-    private Date ProductActivityEndTime ;
+    @JsonProperty("ProductActivityEndTime")
+    private Date productActivityEndTime;
 
     /// <summary>
     /// 活动的限购数量
     /// </summary>
-    private int ActivityLimitNumber ;
+    @JsonProperty("ActivityLimitNumber")
+    private int activityLimitNumber;
 
     /// <summary>
     /// 活动商品的限购数量
     /// </summary>
-    private int ProductActivityLimitNumber ;
+    @JsonProperty("ProductActivityLimitNumber")
+    private int productActivityLimitNumber;
 
     /// <summary>
     /// 促销类型
     /// </summary>
-    private int PromotionType ;
+    @JsonProperty("PromotionType")
+    private int promotionType;
 
     /// <summary>
     /// 活动规格列表
     /// </summary>
-    private List<String> ActivityCatalogList ;
+    @JsonProperty("ActivityCatalogList")
+    private List<String> activityCatalogList;
 
     /// <summary>
     /// 是否仅限码头新人
     /// </summary>
-    private boolean IsNewBuyer ;
+    @JsonProperty("IsNewBuyer")
+    private boolean newBuyer;
 
     public int getActivityId() {
-        return ActivityId;
+        return activityId;
     }
 
     public void setActivityId(int activityId) {
-        ActivityId = activityId;
+        this.activityId = activityId;
     }
 
     public String getActivityName() {
-        return ActivityName;
+        return activityName;
     }
 
     public void setActivityName(String activityName) {
-        ActivityName = activityName;
+        this.activityName = activityName;
     }
 
     public int getProductInActivityId() {
-        return ProductInActivityId;
+        return productInActivityId;
     }
 
     public void setProductInActivityId(int productInActivityId) {
-        ProductInActivityId = productInActivityId;
+        this.productInActivityId = productInActivityId;
     }
 
     public Date getProductActivityStartTime() {
-        return ProductActivityStartTime;
+        return productActivityStartTime;
     }
 
     public void setProductActivityStartTime(Date productActivityStartTime) {
-        ProductActivityStartTime = productActivityStartTime;
+        this.productActivityStartTime = productActivityStartTime;
     }
 
     public Date getProductActivityEndTime() {
-        return ProductActivityEndTime;
+        return productActivityEndTime;
     }
 
     public void setProductActivityEndTime(Date productActivityEndTime) {
-        ProductActivityEndTime = productActivityEndTime;
+        this.productActivityEndTime = productActivityEndTime;
     }
 
     public int getActivityLimitNumber() {
-        return ActivityLimitNumber;
+        return activityLimitNumber;
     }
 
     public void setActivityLimitNumber(int activityLimitNumber) {
-        ActivityLimitNumber = activityLimitNumber;
+        this.activityLimitNumber = activityLimitNumber;
     }
 
     public int getProductActivityLimitNumber() {
-        return ProductActivityLimitNumber;
+        return productActivityLimitNumber;
     }
 
     public void setProductActivityLimitNumber(int productActivityLimitNumber) {
-        ProductActivityLimitNumber = productActivityLimitNumber;
+        this.productActivityLimitNumber = productActivityLimitNumber;
     }
 
     public int getPromotionType() {
-        return PromotionType;
+        return promotionType;
     }
 
     public void setPromotionType(int promotionType) {
-        PromotionType = promotionType;
+        this.promotionType = promotionType;
     }
 
     public List<String> getActivityCatalogList() {
-        return ActivityCatalogList;
+        return activityCatalogList;
     }
 
     public void setActivityCatalogList(List<String> activityCatalogList) {
-        ActivityCatalogList = activityCatalogList;
+        this.activityCatalogList = activityCatalogList;
     }
 
     public boolean isNewBuyer() {
-        return IsNewBuyer;
+        return newBuyer;
     }
 
     public void setNewBuyer(boolean newBuyer) {
-        IsNewBuyer = newBuyer;
+        this.newBuyer = newBuyer;
     }
 }

@@ -258,28 +258,12 @@ public class Products {
         this.country = country;
     }
 
-    public boolean getNewdesc() {
-        return newdesc;
-    }
-
-    public void setNewdesc(boolean newdesc) {
-        this.newdesc = newdesc;
-    }
-
     public int getLocalr() {
         return localr;
     }
 
     public void setLocalr(int localr) {
         this.localr = localr;
-    }
-
-    public boolean getNoreason() {
-        return noreason;
-    }
-
-    public void setNoreason(boolean noreason) {
-        this.noreason = noreason;
     }
 
     public int getAction() {
@@ -298,28 +282,12 @@ public class Products {
         this.addtime = addtime;
     }
 
-    public boolean getRisk() {
-        return risk;
-    }
-
-    public void setRisk(boolean risk) {
-        this.risk = risk;
-    }
-
     public String getPcode() {
         return pcode;
     }
 
     public void setPcode(String pcode) {
         this.pcode = pcode;
-    }
-
-    public boolean getnew() {
-        return isnew;
-    }
-
-    public void setIsnew(boolean isnew) {
-        this.isnew = isnew;
     }
 
     public Date getNewstart() {
@@ -338,12 +306,52 @@ public class Products {
         this.newend = newend;
     }
 
-    public boolean gettop() {
+    public boolean isNewdesc() {
+        return newdesc;
+    }
+
+    public void setNewdesc(boolean newdesc) {
+        this.newdesc = newdesc;
+    }
+
+    public boolean isNoreason() {
+        return noreason;
+    }
+
+    public void setNoreason(boolean noreason) {
+        this.noreason = noreason;
+    }
+
+    public boolean isRisk() {
+        return risk;
+    }
+
+    public void setRisk(boolean risk) {
+        this.risk = risk;
+    }
+
+    public boolean isnew() {
+        return isnew;
+    }
+
+    public void setIsnew(boolean isnew) {
+        this.isnew = isnew;
+    }
+
+    public boolean istop() {
         return istop;
     }
 
     public void setIstop(boolean istop) {
         this.istop = istop;
+    }
+
+    public boolean ispsp() {
+        return ispsp;
+    }
+
+    public void setIspsp(boolean ispsp) {
+        this.ispsp = ispsp;
     }
 
     public String getVer() {
@@ -352,14 +360,6 @@ public class Products {
 
     public void setVer(String ver) {
         this.ver = ver;
-    }
-
-    public boolean getpsp() {
-        return ispsp;
-    }
-
-    public void setIspsp(boolean ispsp) {
-        this.ispsp = ispsp;
     }
 
     public Date getVerupdate() {

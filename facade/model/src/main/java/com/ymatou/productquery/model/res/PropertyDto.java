@@ -1,5 +1,7 @@
 package com.ymatou.productquery.model.res;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by zhangyong on 2017/4/10.
  */
@@ -11,39 +13,42 @@ public class PropertyDto
     /// <summary>
     /// 属性名称
     /// </summary>
-    private String PropertyName ;
+    @JsonProperty("PropertyName")
+    private String propertyName;
 
     /// <summary>
     /// 属性值
     /// </summary>
-    private String PropertyValue ;
+    @JsonProperty("PropertyValue")
+    private String propertyValue;
 
     /// <summary>
     /// 规格图片
     /// </summary>
-    private String PropertyPictureUrl ;
+    @JsonProperty("PropertyPictureUrl")
+    private String propertyPictureUrl;
 
     public String getPropertyName() {
-        return PropertyName;
+        return propertyName;
     }
 
     public void setPropertyName(String propertyName) {
-        PropertyName = propertyName;
+        this.propertyName = propertyName;
     }
 
     public String getPropertyValue() {
-        return PropertyValue;
+        return propertyValue;
     }
 
     public void setPropertyValue(String propertyValue) {
-        PropertyValue = propertyValue;
+        this.propertyValue = propertyValue;
     }
 
     public String getPropertyPictureUrl() {
-        return PropertyPictureUrl;
+        return propertyPictureUrl;
     }
 
     public void setPropertyPictureUrl(String propertyPictureUrl) {
-        PropertyPictureUrl = propertyPictureUrl;
+        this.propertyPictureUrl = propertyPictureUrl;
     }
 }
