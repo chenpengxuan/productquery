@@ -7,12 +7,12 @@ import com.ymatou.productquery.infrastructure.config.TomcatConfig;
  * Created by zhangyifan on 2016/12/9.
  */
 public class Constants {
-    public static final String APP_ID = "productsync.iapi.ymatou.com";
+    public static final String APP_ID = "productquery.iapi.ymatou.com";
     public static final String LOG_PREFIX = "logPrefix";
     public static TomcatConfig TOMCAT_CONFIG;
     public static final String SNAPSHOP_MQ_ID = "product";
     public static final String SNAPSHOP_MQ_CODE = "snapshotmq_from_apollo";
-    public static final String[] IGNORE_COMMANDTYPE = new String[]{"ActivityStockChange","ActivityStockTransfer","ModifyActivityPrice","UpdateProductsInfo"};
+    public static final String[] IGNORE_COMMANDTYPE = new String[]{"ActivityStockChange", "ActivityStockTransfer", "ModifyActivityPrice", "UpdateProductsInfo"};
 
     /**
      * Mongo商品库名
@@ -37,7 +37,7 @@ public class Constants {
     /**
      * 商品图文描述（2）
      */
-    public static  final  String ProductDescExtraDb="ProductDescExtra";
+    public static final String ProductDescExtraDb = "ProductDescExtra";
 
     /**
      * Mongo直播库名
@@ -52,5 +52,10 @@ public class Constants {
     /**
      * 商品相关时间戳表
      */
-    public static final String ProductTimeStamp = "ProductTimeStamp";
+    public static final String ProductTimeStampDb = "ProductTimeStamp";
+
+    /**
+     * 历史商品库
+     */
+    public static final String HistoryProductModel = "HistoryProductModel";
 }

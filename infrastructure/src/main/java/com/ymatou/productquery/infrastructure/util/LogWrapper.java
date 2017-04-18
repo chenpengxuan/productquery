@@ -6,7 +6,7 @@
  */
 package com.ymatou.productquery.infrastructure.util;
 
-import com.ymatou.productsync.infrastructure.config.props.BizProps;
+import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class LogWrapper {
      * @param msg
      */
     public void recordErrorLog(String msg){
-        if(bizProps.isBizExceptionWarning()){
+        if(bizProps.getExceptionWarningSwitch()){
             logger.error(msg);
         }else{
             logger.debug(msg);
@@ -42,7 +42,7 @@ public class LogWrapper {
      * @param objects
      */
     public void recordErrorLog(String msg,Object... objects){
-        if(bizProps.isBizExceptionWarning()){
+        if(bizProps.getExceptionWarningSwitch()){
             logger.error(msg,objects);
         }else{
             logger.debug(msg,objects);

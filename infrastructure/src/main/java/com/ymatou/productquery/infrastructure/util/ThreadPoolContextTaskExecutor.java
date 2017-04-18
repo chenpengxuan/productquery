@@ -7,7 +7,7 @@
 
 package com.ymatou.productquery.infrastructure.util;
 
-import com.ymatou.productsync.infrastructure.constants.Constants;
+import com.ymatou.productquery.infrastructure.constants.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.MDC;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;

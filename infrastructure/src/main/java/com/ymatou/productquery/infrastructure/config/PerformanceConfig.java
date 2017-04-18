@@ -31,7 +31,7 @@ public class PerformanceConfig {
     @Bean(name = "performanceMonitorAdvice")
     public PerformanceMonitorAdvice performanceMonitorAdvice() {
         PerformanceMonitorAdvice performanceMonitorAdvice = new PerformanceMonitorAdvice();
-        performanceMonitorAdvice.setAppId("productsync.iapi.ymatou.com");
+        performanceMonitorAdvice.setAppId("productquery.iapi.ymatou.com");
         performanceMonitorAdvice.setServerUrl(String.format("http://%s/api/perfmon", performanceServerUrl));
         return performanceMonitorAdvice;
     }
@@ -41,9 +41,8 @@ public class PerformanceConfig {
         AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
 
         aspectJExpressionPointcut.setExpression(
-                "execution(* com.ymatou.productsync.facade.*Facade.*(..))"
-                        + "|| execution(* com.ymatou.productsync.domain.mongorepo.MongoRepository.excuteMongo(..))"
-                        + "|| execution(* com.ymatou.productsync.domain.sqlrepo.*Query.*(..))"
+                "execution(* com.ymatou.productquery.facade.*Facade.*(..))"
+                        + "|| execution(* com.ymatou.productquery.domain.repo.*.*(..))"
         );
 
         return aspectJExpressionPointcut;

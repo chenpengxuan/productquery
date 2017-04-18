@@ -11,73 +11,147 @@ import org.springframework.stereotype.Component;
 @Component
 @DisconfFile(fileName = "biz.properties")
 public class BizProps {
-    /**
-     * 补单读取条目数限制
-     */
-    private int readCount;
+    public BizProps() {
 
-    /**
-     * 补单初始状态重试时间限制
-     */
-    private int minuteLimit;
+    }
 
     /**
-     * 补单创建时间范围限制
+     * 异常日志开关
      */
-    private int hourLimit;
+    private Boolean exceptionWarningSwitch;
 
     /**
-     * 重试次数限制
+     * restclient连接超时上限(单位毫秒)
      */
-    private int retryLimit;
+    private long restconnectiontimeout;
 
     /**
-     * 业务异常告警开关
+     * restclient读超时上限(单位毫秒)
      */
-    private boolean bizExceptionWarning;
+    private long restreadtimeout;
 
-    @DisconfFileItem(name = "readCount")
-    public int getReadCount() {
-        return readCount;
+    /**
+     * restclient写超时上限(单位毫秒)
+     */
+    private long restwritetimeout;
+
+    /**
+     * restclient连接池size
+     */
+    private int restconnectionpoolsize;
+
+    /**
+     * restclient连接存活时间(单位分钟)
+     */
+    private long restconnectionaliveduration;
+
+    /**
+     * 是否使用并行
+     */
+    private boolean useParallel;
+
+    /**
+     * 并行数
+     */
+    private int parallelCount;
+
+    /**
+     * 并行阀值
+     */
+    private int parallelThresHoldCount;
+
+    /**
+     * 是否使用缓存
+     */
+    private boolean useCache;
+
+    @DisconfFileItem(name = "exceptionWarningSwitch")
+    public Boolean getExceptionWarningSwitch() {
+        return exceptionWarningSwitch;
     }
 
-    public void setReadCount(int readCount) {
-        this.readCount = readCount;
+    public void setExceptionWarningSwitch(Boolean exceptionWarningSwitch) {
+        this.exceptionWarningSwitch = exceptionWarningSwitch;
     }
 
-    @DisconfFileItem(name = "retryLimit")
-    public int getRetryLimit() {
-        return retryLimit;
+    @DisconfFileItem(name = "restconnectiontimeout")
+    public long getRestconnectiontimeout() {
+        return restconnectiontimeout;
     }
 
-    public void setRetryLimit(int retryLimit) {
-        this.retryLimit = retryLimit;
+    public void setRestconnectiontimeout(long restconnectiontimeout) {
+        this.restconnectiontimeout = restconnectiontimeout;
     }
 
-    @DisconfFileItem(name = "bizExceptionWarning")
-    public boolean isBizExceptionWarning() {
-        return bizExceptionWarning;
+    @DisconfFileItem(name = "restreadtimeout")
+    public long getRestreadtimeout() {
+        return restreadtimeout;
     }
 
-    @DisconfFileItem(name = "minuteLimit")
-    public int getMinuteLimit() {
-        return minuteLimit;
+    public void setRestreadtimeout(long restreadtimeout) {
+        this.restreadtimeout = restreadtimeout;
     }
 
-    public void setMinuteLimit(int minuteLimit) {
-        this.minuteLimit = minuteLimit;
+    @DisconfFileItem(name = "restwritetimeout")
+    public long getRestwritetimeout() {
+        return restwritetimeout;
     }
 
-    @DisconfFileItem(name = "hourLimit")
-    public int getHourLimit() {
-        return hourLimit;
+    public void setRestwritetimeout(long restwritetimeout) {
+        this.restwritetimeout = restwritetimeout;
     }
 
-    public void setHourLimit(int hourLimit) {
-        this.hourLimit = hourLimit;
+    @DisconfFileItem(name = "restconnectionpoolsize")
+    public int getRestconnectionpoolsize() {
+        return restconnectionpoolsize;
     }
 
-    public void setBizExceptionWarning(boolean bizExceptionWarning) {
-        this.bizExceptionWarning = bizExceptionWarning;
+    public void setRestconnectionpoolsize(int restconnectionpoolsize) {
+        this.restconnectionpoolsize = restconnectionpoolsize;
+    }
+
+    @DisconfFileItem(name = "restconnectionaliveduration")
+    public long getRestconnectionaliveduration() {
+        return restconnectionaliveduration;
+    }
+
+    public void setRestconnectionaliveduration(long restconnectionaliveduration) {
+        this.restconnectionaliveduration = restconnectionaliveduration;
+    }
+
+    @DisconfFileItem(name = "useParallel")
+    public boolean isUseParallel() {
+        return useParallel;
+    }
+
+    public void setUseParallel(boolean useParallel) {
+        this.useParallel = useParallel;
+    }
+
+    @DisconfFileItem(name = "parallelCount")
+    public int getParallelCount() {
+        return parallelCount;
+    }
+
+    @DisconfFileItem(name = "parallelThresHoldCount")
+    public int getParallelThresHoldCount() {
+        return parallelThresHoldCount;
+    }
+
+    public void setParallelThresHoldCount(int parallelThresHoldCount) {
+        this.parallelThresHoldCount = parallelThresHoldCount;
+    }
+
+    @DisconfFileItem(name = "useCache")
+    public boolean isUseCache() {
+        return useCache;
+    }
+
+    public void setUseCache(boolean useCache) {
+        this.useCache = useCache;
+    }
+
+    public void setParallelCount(int parallelCount) {
+        this.parallelCount = parallelCount;
     }
 }

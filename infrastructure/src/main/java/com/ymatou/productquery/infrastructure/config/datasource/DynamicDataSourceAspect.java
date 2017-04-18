@@ -1,6 +1,6 @@
 package com.ymatou.productquery.infrastructure.config.datasource;
 
-import com.ymatou.productsync.infrastructure.util.LogWrapper;
+import com.ymatou.productquery.infrastructure.util.LogWrapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
@@ -28,7 +28,7 @@ public class DynamicDataSourceAspect {
     @Autowired
     private LogWrapper logWrapper;
 
-    @Pointcut("execution(* com.ymatou.productsync.domain.sqlrepo.*Query.*(..))")
+    @Pointcut("execution(* com.ymatou.productquery.domain.sqlrepo.*Query.*(..))")
     public void executeRepository() {
     }
 
