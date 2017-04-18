@@ -7,7 +7,6 @@ jar {
 
 dependencies {
     compile(project(":infrastructure"))
-    compile(project(":intergration"))
     compile ("com.aol.simplereact:cyclops-react:${cyclopsReactVersion}"){
         exclude group:'org.slf4j',module:'slf4j-simple'
     }
