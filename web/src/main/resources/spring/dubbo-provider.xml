@@ -20,6 +20,7 @@
         <property name="locations">
             <list>
                 <value>app.properties</value>
+
             </list>
         </property>
     </bean>
@@ -59,4 +60,6 @@
         <!-- 异步发送消息队列长度，推荐10000，可根据发送量及机器性能进行配置 -->
         <property name="asyncSendMaxQueueNum" value="10000" />
     </bean>
+
+    <import resource="classpath*:spring/persistence.xml" ></import>
 </beans>

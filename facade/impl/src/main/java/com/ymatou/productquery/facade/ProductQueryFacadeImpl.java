@@ -31,10 +31,11 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getCatalogListByCatalogIdList(GetCatalogListByCatalogIdListRequest request) {
-        List<ProductInCartDto> result = listQueryService.getProductListFromShoppingCart(request.getCatalogIdList(), false);
-
-        Map<String, Object> productList = new HashMap<>();
-        productList.put("ProductList", result);
-        return BaseResponseNetAdapter.newSuccessInstance(productList);
+//        List<ProductInCartDto> result = listQueryService.getProductListFromShoppingCart(request.getCatalogIdList(), false);
+//
+//        Map<String, Object> productList = new HashMap<>();
+//        productList.put("ProductList", result);
+//        return BaseResponseNetAdapter.newSuccessInstance(productList);
+        return null;
     }
 }
