@@ -31,7 +31,7 @@ public class ActivityProdutRepository extends MongoRepository {
     }
 
     /**
-     * 根据多个商品编号查询活动商品列表
+     * 根据多个 商品编号查询活动商品列表
      *
      * @param productIdList
      * @return
