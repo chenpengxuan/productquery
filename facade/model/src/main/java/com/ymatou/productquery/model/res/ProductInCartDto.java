@@ -9,227 +9,227 @@ import java.util.List;
  * Created by zhangyong on 2017/4/10.
  */
 public class ProductInCartDto {
-    /// <summary>
-    /// 商品编号
-    /// </summary>
+    
+    // 商品编号
+    
     @JsonProperty("ProductId")
     private String productId;
 
-    /// <summary>
-    /// 快照版本
-    /// </summary>
+    
+    // 快照版本
+    
     @JsonProperty("Version")
     private String version;
 
-    /// <summary>
-    /// 规格编号
-    /// </summary>
+    
+    // 规格编号
+    
     @JsonProperty("CatalogId")
     private String catalogId;
 
-    /// <summary>
-    /// 商品名称
-    /// </summary>
+    
+    // 商品名称
+    
     @JsonProperty("ProductName")
     private String productName;
 
-    /// <summary>
-    /// 商品主要图片
-    /// </summary>
+    
+    // 商品主要图片
+    
     @JsonProperty("MainPicUrl")
     private String mainPicUrl;
 
-    /// <summary>
-    /// 有效开始时间（年月日时分秒）
-    /// </summary>
+    
+    // 有效开始时间（年月日时分秒）
+    
     @JsonProperty("ValidStart")
     private Date validStart;
 
-    /// <summary>
-    /// 有效结束时间（年月日时分秒）
-    /// </summary>
+    
+    // 有效结束时间（年月日时分秒）
+    
     @JsonProperty("ValidEnd")
     private Date validEnd;
 
-    /// <summary>
-    /// 品牌编号
-    /// </summary>
+    
+    // 品牌编号
+    
     @JsonProperty("BrandId")
     private int brandId;
 
-    /// <summary>
-    /// 一级分类
-    /// </summary>
+    
+    // 一级分类
+    
     @JsonProperty("MasterCategoryId")
     private int masterCategoryId;
 
-    /// <summary>
-    /// 二级分类
-    /// </summary>
+    
+    // 二级分类
+    
     @JsonProperty("CategoryId")
     private int categoryId;
 
-    /// <summary>
-    /// 三级分类
-    /// </summary>
+    
+    // 三级分类
+    
     @JsonProperty("ThirdCategoryId")
     private int thirdCategoryId;
 
-    /// <summary>
-    /// 买手用户编号
-    /// </summary>
+    
+    // 买手用户编号
+    
     @JsonProperty("SellerId")
     private int sellerId;
 
-    /// <summary>
-    /// 买手用户账号
-    /// </summary>
+    
+    // 买手用户账号
+    
     @JsonProperty("SellerName")
     private String sellerName;
 
-    /// <summary>
-    /// 发货类型
-    /// 1.国内
-    /// 2.海外直邮
-    /// 3.贝海直邮
-    /// 4.商家保税
-    /// 5.贝海保税
-    /// 6.海外认证直邮
-    /// 7.海外拼邮
-    /// </summary>
+    
+    // 发货类型
+    // 1.国内
+    // 2.海外直邮
+    // 3.贝海直邮
+    // 4.商家保税
+    // 5.贝海保税
+    // 6.海外认证直邮
+    // 7.海外拼邮
+    
     @JsonProperty("DeliveryMethod")
     private int deliveryMethod;
 
-    /// <summary>
-    /// 保税区
-    /// 1.广州
-    /// 2.宁波
-    /// 3.杭州
-    /// 4.郑州
-    /// 5.天津
-    /// 6.重庆
-    /// 7.深圳
-    /// 8.上海
-    /// </summary>
+    
+    // 保税区
+    // 1.广州
+    // 2.宁波
+    // 3.杭州
+    // 4.郑州
+    // 5.天津
+    // 6.重庆
+    // 7.深圳
+    // 8.上海
+    
     @JsonProperty("BondedArea")
     private int bondedArea;
 
-    /// <summary>
-    /// 重量
-    /// </summary>
+    
+    // 重量
+    
     @JsonProperty("Weight")
     private Double weight;
 
-    /// <summary>
-    /// 是否包邮商品
-    /// </summary>
+    
+    // 是否包邮商品
+    
     @JsonProperty("IsFreeShipping")
     private boolean freeShipping;
 
-    /// <summary>
-    /// 交税方
-    /// 0. 卖家交税
-    /// 1. 买家交税
-    /// </summary>
+    
+    // 交税方
+    // 0. 卖家交税
+    // 1. 买家交税
+    
     @JsonProperty("TariffType")
     private int tariffType;
 
-    /// <summary>
-    /// 状态
-    /// -1. 已删除
-    ///  0. 有效
-    ///  2. 无效
-    /// </summary>
+    
+    // 状态
+    // -1. 已删除
+    //  0. 有效
+    //  2. 无效
+    
     @JsonProperty("Status")
     private ProductStatusEnum status;
 
-    /// <summary>
-    /// 商品的限购数量(0 为不限制购买数量)
-    /// </summary>
+    
+    // 商品的限购数量(0 为不限制购买数量)
+    
     @JsonProperty("LimitNumber")
     private int limitNumber;
 
-    /// <summary>
-    /// 限购的起始时间
-    /// </summary>
+    
+    // 限购的起始时间
+    
     @JsonProperty("LimitStartTime")
     private Date limitStartTime;
 
-    /// <summary>
-    /// 库存数量（活动中为活动库存）
-    /// </summary>
+    
+    // 库存数量（活动中为活动库存）
+    
     @JsonProperty("StockNum")
     private int stockNum;
 
-    /// <summary>
-    /// 商品备案号（杭保商品）
-    /// </summary>
+    
+    // 商品备案号（杭保商品）
+    
     @JsonProperty("ProductCode")
     private String productCode;
 
-    /// <summary>
-    /// 本土退货
-    /// </summary>
+    
+    // 本土退货
+    
     @JsonProperty("LocalReturn")
     private int localReturn;
 
-    /// <summary>
-    /// 规格的sku 编号
-    /// </summary>
+    
+    // 规格的sku 编号
+    
     @JsonProperty("SKU")
     private String sku;
 
-    /// <summary>
-    /// 备货类型（2- FBX商品）
-    /// </summary>
+    
+    // 备货类型（2- FBX商品）
+    
     @JsonProperty("CatalogType")
     private int catalogType;
 
-    /// <summary>
-    /// 是否支持7天无理由退货
-    /// </summary>
+    
+    // 是否支持7天无理由退货
+    
     @JsonProperty("IsNoReasonReturn")
     private boolean noReasonReturn;
 
-    /// <summary>
-    /// 商品下有效规格总数
-    /// </summary>
+    
+    // 商品下有效规格总数
+    
     @JsonProperty("CatalogCount")
     private int catalogCount;
 
-    /// <summary>
-    /// 预订商品
-    /// </summary>
+    
+    // 预订商品
+    
     @JsonProperty("IsPreSale")
     private boolean preSale;
 
-    /// <summary>
-    /// 规格属性列表
-    /// </summary>
+    
+    // 规格属性列表
+    
     @JsonProperty("Properties")
     private List<PropertyDto> properties;
 
-    /// <summary>
-    /// 规格价格
-    /// </summary>
+    
+    // 规格价格
+    
     @JsonProperty("Price")
     private Double price;
 
-    /// <summary>
-    /// 是否是PSP商品
-    /// </summary>
+    
+    // 是否是PSP商品
+    
     @JsonProperty("IsPspProduct")
     private boolean pspProduct;
 
-    /// <summary>
-    /// 商品关联直播
-    /// </summary>
+    
+    // 商品关联直播
+    
     @JsonProperty("LiveProduct")
     private LiveProductCartDto liveProduct;
 
-    /// <summary>
-    /// 商品活动
-    /// </summary>
+    
+    // 商品活动
+    
     @JsonProperty("ProductActivity")
     private ProductActivityCartDto productActivity;
 

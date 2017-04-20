@@ -1,6 +1,6 @@
 package com.ymatou.productquery.facade;
 
-import com.ymatou.productquery.model.req.GetCatalogListByCatalogIdListRequest;
+import com.ymatou.productquery.model.req.*;
 import com.ymatou.productquery.model.res.BaseResponseNetAdapter;
 
 /**
@@ -14,4 +14,14 @@ public interface ProductQueryFacade {
      * @return
      */
     BaseResponseNetAdapter getCatalogListByCatalogIdList(GetCatalogListByCatalogIdListRequest request);
+
+    /**
+     * 购物车中商品列表（交易隔离中用）
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getCatalogListByTradeIsolation(GetCatalogListByTradeIsolationRequest request);
+
+    BaseResponseNetAdapter  getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
 }

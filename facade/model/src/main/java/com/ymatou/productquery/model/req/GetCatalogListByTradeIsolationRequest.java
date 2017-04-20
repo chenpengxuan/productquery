@@ -6,9 +6,9 @@ import org.hibernate.validator.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * Created by zhangyong on 2017/4/10.
+ * Created by zhangyong on 2017/4/20.
  */
-public class GetCatalogListByCatalogIdListRequest extends BaseRequest {
+public class GetCatalogListByTradeIsolationRequest extends BaseRequest {
     /**
      * 规格编号列表
      */

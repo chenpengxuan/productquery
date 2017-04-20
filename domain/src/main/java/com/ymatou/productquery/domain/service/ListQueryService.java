@@ -4,6 +4,7 @@ import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.ActivityProdutRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.LiveProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
+import com.ymatou.productquery.model.res.ProductDetailDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,12 @@ public class ListQueryService {
     @Autowired
     private ActivityProdutRepository activityProdutRepository;
 
+    /**
+     *  购物车中商品列表
+     * @param catalogIds
+     * @param tradeIsolation
+     * @return
+     */
     public List<ProductInCartDto> getProductListFromShoppingCart(List<String> catalogIds, boolean tradeIsolation) {
         List<ProductInCartDto> productInCartDtoList = new ArrayList<>();
         List<String> pids = productRepository.getProductIdsByCatalogIds(catalogIds);
@@ -81,4 +88,15 @@ public class ListQueryService {
         return productInCartDtoList;
     }
 
+    /**
+     * 取复杂结构商品列表
+     * @param aryProductId
+     * @param nextActivityExpire
+     * @param tradeIsolation
+     * @return
+     */
+    public List<ProductDetailDto> GetProductDetailList(List<String> aryProductId, int nextActivityExpire, boolean tradeIsolation)
+    {
+        return null;
+    }
 }
