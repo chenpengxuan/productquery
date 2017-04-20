@@ -1,5 +1,9 @@
 package com.ymatou.productquery.domain.model;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.mongodb.morphia.annotations.Property;
+
 import java.util.Date;
 import java.util.List;
 
@@ -7,63 +11,105 @@ import java.util.List;
  * Created by zhangyong on 2017/4/6.
  */
 public class Products {
-    private String spid;//	商品编号
-    private int ipid;//	商品数字编号
+    @Property("spid")
+    private String productId;//	商品编号
+    @Property("ipid")
+    private int prodId;//	商品数字编号
+    @Property("title")
     private String title;//	商品标题
-    private String intro;//	商品简介
-    private List<String> pics;//	商品主图列表
-    private Date start;//	商品开始有效期
-    private Date end;//	商品结束有效期
-    private String minp;//	最低规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
-    private String maxp;//	最高规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
-    private int sid;//	买手编号
-    private String sname;//	买手账号
-    private int bid;//	品牌编号
-    private String brand;//	品牌中文名称
-    private String ebrand;//	品牌英文名称
-    private int mcatid;//	一级分类编号
-    private String mcatname;//	一级分类名称
-    private int scatid;//	二级分类编号
-    private String scatname;//	二级分类名称
-    private int tcatid;//	三级分类编号
-    private String tcatname;//	三级分类名称
-    private int ctype;//	备货方式
-    private int deliv;//	发货方式
-    private int bonded;//	保税区
-    private int tariffy;//	是否包税
-    private int shipping;//	是否包邮
-    private int country;//	国家编号
-    private boolean newdesc;//	是否新图文描述
-    private int localr;//	本土退货
-    private boolean noreason;//	7天无理由退货
+    @Property("intro")
+    private String introduction;//	商品简介
+    @Property("pics")
+    private List<String> picList;//	商品主图列表
+    @Property("start")
+    private Date validStart;//	商品开始有效期
+    @Property("end")
+    private Date validEnd;//	商品结束有效期
+    @Property("minp")
+    private String minCatalogPrice;//	最低规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
+    @Property("maxp")
+    private String maxCatalogPrice;//	最高规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
+    @Property("sid")
+    private int sellerId;//	买手编号
+    @Property("sname")
+    private String sellerName;//	买手账号
+    @Property("bid")
+    private int brandId;//	品牌编号
+    @Property("brand")
+    private String brandName;//	品牌中文名称
+    @Property("ebrand")
+    private String brandEnName;//	品牌英文名称
+    @Property("mcatid")
+    private int masterCategoryId;//	一级分类编号
+    @Property("mcatname")
+    private String masterCategoryName;//	一级分类名称
+    @Property("scatid")
+    private int secondCategoryId;//	二级分类编号
+    @Property("scatname")
+    private String secondCategoryName;//	二级分类名称
+    @Property("tcatid")
+    private int thirdCategoryId;//	三级分类编号
+    @Property("tcatname")
+    private String thirdCategoryName;//	三级分类名称
+    @Property("ctype")
+    private int catalogType;//	备货方式
+    @Property("deliv")
+    private int deliveryMethod;//	发货方式
+    @Property("bonded")
+    private int bondedArea;//	保税区
+    @Property("tariffy")
+    private int isTariffy;//	是否包税
+    @Property("shipping")
+    private int isShipping;//	是否包邮
+    @Property("country")
+    private int countryId;//	国家编号
+    @Property("newdesc")
+    private boolean isNewDesc;//	是否新图文描述
+    @JsonProperty("localr")
+    private int localReturn;//	本土退货
+    @Property("noreason")
+    private boolean noReasonReturn;//	7天无理由退货
+    @Property("action")
     private int action;//	商品状态
-    private Date addtime;//	发布时间
-    private boolean risk;//	砍单风险提醒
-    private String pcode;//	商品备案号（保税商品）
-    private boolean isnew;//	是否新品
-    private Date newstart;//	新品有效开始时间
-    private Date newend;//	新品有效结束时间
-    private boolean istop;//	是否买手热推商品
-    private String ver;//	最新快照版本号
-    private boolean ispsp;//	是否psp商品 0不是 1是
-    private Date verupdate;//	快照更新时间
+    @Property("addtime")
+    private Date addTime;//	发布时间
+    @Property("risk")
+    private boolean noticeRisk;//	砍单风险提醒
+    @Property("pcode")
+    private String productCode;//	商品备案号（保税商品）
+    @Property("isnew")
+    private boolean isNewProduct;//	是否新品
+    @Property("newstart")
+    private Date newStartTime;//	新品有效开始时间
+    @Property("newend")
+    private Date newEndTime;//	新品有效结束时间
+    @Property("istop")
+    private boolean isTopProduct;//	是否买手热推商品
+    @Property("ver")
+    private String version;//	最新快照版本号
+    @Property("ispsp")
+    private boolean isPspProduct;//	是否psp商品 0不是 1是
+    @Property("verupdate")
+    private Date versionUpdateTime;//	快照更新时间
+    @Property("grade")
     private String grade;//	商品等级
-    private List<String> sizepics;//	尺码表
+    @Property("sizepics")
+    private List<String> sizePicList;//	尺码表
 
-    public String getSpid() {
-        return spid;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setSpid(String spid) {
-        this.spid = spid;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public int getIpid() {
-        return ipid;
+    public int getProdId() {
+        return prodId;
     }
 
-    public void setIpid(int ipid) {
-        this.ipid = ipid;
+    public void setProdId(int prodId) {
+        this.prodId = prodId;
     }
 
     public String getTitle() {
@@ -74,196 +120,212 @@ public class Products {
         this.title = title;
     }
 
-    public String getIntro() {
-        return intro;
+    public String getIntroduction() {
+        return introduction;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
-    public List<String> getPics() {
-        return pics;
+    public List<String> getPicList() {
+        return picList;
     }
 
-    public void setPics(List<String> pics) {
-        this.pics = pics;
+    public void setPicList(List<String> picList) {
+        this.picList = picList;
     }
 
-    public Date getStart() {
-        return start;
+    public Date getValidStart() {
+        return validStart;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
+    public void setValidStart(Date validStart) {
+        this.validStart = validStart;
     }
 
-    public Date getEnd() {
-        return end;
+    public Date getValidEnd() {
+        return validEnd;
     }
 
-    public void setEnd(Date end) {
-        this.end = end;
+    public void setValidEnd(Date validEnd) {
+        this.validEnd = validEnd;
     }
 
-    public String getMinp() {
-        return minp;
+    public String getMinCatalogPrice() {
+        return minCatalogPrice;
     }
 
-    public void setMinp(String minp) {
-        this.minp = minp;
+    public void setMinCatalogPrice(String minCatalogPrice) {
+        this.minCatalogPrice = minCatalogPrice;
     }
 
-    public String getMaxp() {
-        return maxp;
+    public String getMaxCatalogPrice() {
+        return maxCatalogPrice;
     }
 
-    public void setMaxp(String maxp) {
-        this.maxp = maxp;
+    public void setMaxCatalogPrice(String maxCatalogPrice) {
+        this.maxCatalogPrice = maxCatalogPrice;
     }
 
-    public int getSid() {
-        return sid;
+    public int getSellerId() {
+        return sellerId;
     }
 
-    public void setSid(int sid) {
-        this.sid = sid;
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 
-    public String getSname() {
-        return sname;
+    public String getSellerName() {
+        return sellerName;
     }
 
-    public void setSname(String sname) {
-        this.sname = sname;
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
     }
 
-    public int getBid() {
-        return bid;
+    public int getBrandId() {
+        return brandId;
     }
 
-    public void setBid(int bid) {
-        this.bid = bid;
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
-    public String getEbrand() {
-        return ebrand;
+    public String getBrandEnName() {
+        return brandEnName;
     }
 
-    public void setEbrand(String ebrand) {
-        this.ebrand = ebrand;
+    public void setBrandEnName(String brandEnName) {
+        this.brandEnName = brandEnName;
     }
 
-    public int getMcatid() {
-        return mcatid;
+    public int getMasterCategoryId() {
+        return masterCategoryId;
     }
 
-    public void setMcatid(int mcatid) {
-        this.mcatid = mcatid;
+    public void setMasterCategoryId(int masterCategoryId) {
+        this.masterCategoryId = masterCategoryId;
     }
 
-    public String getMcatname() {
-        return mcatname;
+    public String getMasterCategoryName() {
+        return masterCategoryName;
     }
 
-    public void setMcatname(String mcatname) {
-        this.mcatname = mcatname;
+    public void setMasterCategoryName(String masterCategoryName) {
+        this.masterCategoryName = masterCategoryName;
     }
 
-    public int getScatid() {
-        return scatid;
+    public int getSecondCategoryId() {
+        return secondCategoryId;
     }
 
-    public void setScatid(int scatid) {
-        this.scatid = scatid;
+    public void setSecondCategoryId(int secondCategoryId) {
+        this.secondCategoryId = secondCategoryId;
     }
 
-    public String getScatname() {
-        return scatname;
+    public String getSecondCategoryName() {
+        return secondCategoryName;
     }
 
-    public void setScatname(String scatname) {
-        this.scatname = scatname;
+    public void setSecondCategoryName(String secondCategoryName) {
+        this.secondCategoryName = secondCategoryName;
     }
 
-    public int getTcatid() {
-        return tcatid;
+    public int getThirdCategoryId() {
+        return thirdCategoryId;
     }
 
-    public void setTcatid(int tcatid) {
-        this.tcatid = tcatid;
+    public void setThirdCategoryId(int thirdCategoryId) {
+        this.thirdCategoryId = thirdCategoryId;
     }
 
-    public String getTcatname() {
-        return tcatname;
+    public String getThirdCategoryName() {
+        return thirdCategoryName;
     }
 
-    public void setTcatname(String tcatname) {
-        this.tcatname = tcatname;
+    public void setThirdCategoryName(String thirdCategoryName) {
+        this.thirdCategoryName = thirdCategoryName;
     }
 
-    public int getCtype() {
-        return ctype;
+    public int getCatalogType() {
+        return catalogType;
     }
 
-    public void setCtype(int ctype) {
-        this.ctype = ctype;
+    public void setCatalogType(int catalogType) {
+        this.catalogType = catalogType;
     }
 
-    public int getDeliv() {
-        return deliv;
+    public int getDeliveryMethod() {
+        return deliveryMethod;
     }
 
-    public void setDeliv(int deliv) {
-        this.deliv = deliv;
+    public void setDeliveryMethod(int deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
     }
 
-    public int getBonded() {
-        return bonded;
+    public int getBondedArea() {
+        return bondedArea;
     }
 
-    public void setBonded(int bonded) {
-        this.bonded = bonded;
+    public void setBondedArea(int bondedArea) {
+        this.bondedArea = bondedArea;
     }
 
-    public int getTariffy() {
-        return tariffy;
+    public int getIsTariffy() {
+        return isTariffy;
     }
 
-    public void setTariffy(int tariffy) {
-        this.tariffy = tariffy;
+    public void setIsTariffy(int isTariffy) {
+        this.isTariffy = isTariffy;
     }
 
-    public int getShipping() {
-        return shipping;
+    public int getIsShipping() {
+        return isShipping;
     }
 
-    public void setShipping(int shipping) {
-        this.shipping = shipping;
+    public void setIsShipping(int isShipping) {
+        this.isShipping = isShipping;
     }
 
-    public int getCountry() {
-        return country;
+    public int getCountryId() {
+        return countryId;
     }
 
-    public void setCountry(int country) {
-        this.country = country;
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
     }
 
-    public int getLocalr() {
-        return localr;
+    public boolean isNewDesc() {
+        return isNewDesc;
     }
 
-    public void setLocalr(int localr) {
-        this.localr = localr;
+    public void setNewDesc(boolean newDesc) {
+        isNewDesc = newDesc;
+    }
+
+    public int getLocalReturn() {
+        return localReturn;
+    }
+
+    public void setLocalReturn(int localReturn) {
+        this.localReturn = localReturn;
+    }
+
+    public boolean isNoReasonReturn() {
+        return noReasonReturn;
+    }
+
+    public void setNoReasonReturn(boolean noReasonReturn) {
+        this.noReasonReturn = noReasonReturn;
     }
 
     public int getAction() {
@@ -274,100 +336,84 @@ public class Products {
         this.action = action;
     }
 
-    public Date getAddtime() {
-        return addtime;
+    public Date getAddTime() {
+        return addTime;
     }
 
-    public void setAddtime(Date addtime) {
-        this.addtime = addtime;
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
-    public String getPcode() {
-        return pcode;
+    public boolean isNoticeRisk() {
+        return noticeRisk;
     }
 
-    public void setPcode(String pcode) {
-        this.pcode = pcode;
+    public void setNoticeRisk(boolean noticeRisk) {
+        this.noticeRisk = noticeRisk;
     }
 
-    public Date getNewstart() {
-        return newstart;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setNewstart(Date newstart) {
-        this.newstart = newstart;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
-    public Date getNewend() {
-        return newend;
+    public boolean isNewProduct() {
+        return isNewProduct;
     }
 
-    public void setNewend(Date newend) {
-        this.newend = newend;
+    public void setNewProduct(boolean newProduct) {
+        isNewProduct = newProduct;
     }
 
-    public boolean isNewdesc() {
-        return newdesc;
+    public Date getNewStartTime() {
+        return newStartTime;
     }
 
-    public void setNewdesc(boolean newdesc) {
-        this.newdesc = newdesc;
+    public void setNewStartTime(Date newStartTime) {
+        this.newStartTime = newStartTime;
     }
 
-    public boolean isNoreason() {
-        return noreason;
+    public Date getNewEndTime() {
+        return newEndTime;
     }
 
-    public void setNoreason(boolean noreason) {
-        this.noreason = noreason;
+    public void setNewEndTime(Date newEndTime) {
+        this.newEndTime = newEndTime;
     }
 
-    public boolean isRisk() {
-        return risk;
+    public boolean isTopProduct() {
+        return isTopProduct;
     }
 
-    public void setRisk(boolean risk) {
-        this.risk = risk;
+    public void setTopProduct(boolean topProduct) {
+        isTopProduct = topProduct;
     }
 
-    public boolean isnew() {
-        return isnew;
+    public String getVersion() {
+        return version;
     }
 
-    public void setIsnew(boolean isnew) {
-        this.isnew = isnew;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
-    public boolean istop() {
-        return istop;
+    public boolean isPspProduct() {
+        return isPspProduct;
     }
 
-    public void setIstop(boolean istop) {
-        this.istop = istop;
+    public void setPspProduct(boolean pspProduct) {
+        isPspProduct = pspProduct;
     }
 
-    public boolean ispsp() {
-        return ispsp;
+    public Date getVersionUpdateTime() {
+        return versionUpdateTime;
     }
 
-    public void setIspsp(boolean ispsp) {
-        this.ispsp = ispsp;
-    }
-
-    public String getVer() {
-        return ver;
-    }
-
-    public void setVer(String ver) {
-        this.ver = ver;
-    }
-
-    public Date getVerupdate() {
-        return verupdate;
-    }
-
-    public void setVerupdate(Date verupdate) {
-        this.verupdate = verupdate;
+    public void setVersionUpdateTime(Date versionUpdateTime) {
+        this.versionUpdateTime = versionUpdateTime;
     }
 
     public String getGrade() {
@@ -378,12 +424,11 @@ public class Products {
         this.grade = grade;
     }
 
-    public List<String> getSizepics() {
-        return sizepics;
+    public List<String> getSizePicList() {
+        return sizePicList;
     }
 
-    public void setSizepics(List<String> sizepics) {
-        this.sizepics = sizepics;
+    public void setSizePicList(List<String> sizePicList) {
+        this.sizePicList = sizePicList;
     }
-
 }

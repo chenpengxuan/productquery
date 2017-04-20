@@ -1,34 +1,39 @@
 package com.ymatou.productquery.domain.model;
 
+import org.mongodb.morphia.annotations.Property;
+
 /**
  * Created by zhangyong on 2017/4/6.
  */
 public class ActivityCatalogInfo {
-    private String cid;
-    private int stock;
-    private double price;
+    @Property("cid")
+    private String catalogId;
+    @Property("stock")
+    private int activityStock;
+    @Property("price")
+    private double activityPrice;
 
-    public String getCid() {
-        return cid;
+    public String getCatalogId() {
+        return catalogId;
     }
 
-    public void setCid(String cid) {
-        this.cid = cid;
+    public void setCatalogId(String catalogId) {
+        this.catalogId = catalogId;
     }
 
-    public int getStock() {
-        return stock;
+    public int getActivityStock() {
+        return activityStock;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setActivityStock(int activityStock) {
+        this.activityStock = activityStock;
     }
 
-    public double getPrice() {
-        return price;
+    public double getActivityPrice() {
+        return activityPrice;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setActivityPrice(double activityPrice) {
+        this.activityPrice = activityPrice;
     }
 }

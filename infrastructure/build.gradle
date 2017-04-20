@@ -52,8 +52,9 @@ dependencies {
     compile "com.ymatou.messagebus:messagebus-facade:${messagebusVersion}"
     compile "com.ymatou.messagebus:messagebus-facade-model:${messagebusVersion}"
 
-//    compile "org.springframework.data:spring-data-mongodb:${springdatamongodbversion}"
     compile "org.mongodb.morphia:morphia:${morphiaversion}"
+    compile "org.apache.commons:commons-lang3:${commonsLang3Version}"
+    compile "commons-beanutils:commons-beanutils:${beanutilsversion}"
 }
 
 

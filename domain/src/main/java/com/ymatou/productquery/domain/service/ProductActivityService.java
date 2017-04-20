@@ -26,7 +26,7 @@ public class ProductActivityService {
         if (activityProducts == null || catalog == null) {
             return null;
         }
-        if (activityProducts.getCatalogs().stream().filter(t -> t.getCid().equals(catalog.getCid())).findFirst().orElse(null).getStock() > 0) {
+        if (activityProducts.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(null).getActivityStock() > 0) {
             return activityProducts;
         } else return null;
     }
@@ -43,11 +43,11 @@ public class ProductActivityService {
             return null;
         }
         Date now = new Date();
-        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getStart().before(now) && t.getEnd().after(now)).collect(Collectors.toList());
+        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getStartTime().before(now) && t.getEndTime().after(now)).collect(Collectors.toList());
         Collections.sort(activityProducts, new Comparator<ActivityProducts>() {
             @Override
             public int compare(ActivityProducts o1, ActivityProducts o2) {
-                return o1.getStart().compareTo(o2.getStart());
+                return o1.getStartTime().compareTo(o2.getStartTime());
             }
         });
 

@@ -19,7 +19,7 @@ public class ProductStatusService {
         }
         Date now = new Date();
         if (liveProduct != null) {
-            return now.after(liveProduct.getStart()) && now.before(liveProduct.getEnd()) && liveProduct.getStatus() == 1
+            return now.after(liveProduct.getStartTime()) && now.before(liveProduct.getEndTime()) && liveProduct.getSellStatus() == 1
                     ? ProductStatusEnum.Available : ProductStatusEnum.Disable;
         }
         return now.after(validStart)&&now.before(validEnd)

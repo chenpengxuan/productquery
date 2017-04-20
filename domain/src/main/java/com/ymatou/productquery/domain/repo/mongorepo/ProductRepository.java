@@ -1,6 +1,7 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.mongodb.MongoClient;
+import com.ymatou.productquery.domain.model.Catalogs;
 import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by zhangyong on 2017/4/17.
@@ -73,9 +75,33 @@ public class ProductRepository extends MongoRepository {
     public List<Products> getProductsByProductIds(List<String> productIdList) {
         Datastore datastore = this.getDatastore(this.dbName);
         return datastore.find(Products.class).disableValidation()
-                .field("spid").in(productIdList)
-                .project("sid", true)
-                .project("_id", false).asList();
+                .field("spid").in(productIdList).asList();
+    }
+
+    /**
+     * 根据productids查询Catalogs
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<Catalogs> getCatalogsByProductIds(List<String> productIdList) {
+        Datastore datastore = this.getDatastore(this.dbName);
+        return datastore.find(Catalogs.class).disableValidation()
+                .field("spid").in(productIdList).asList();
+    }
+
+    /**
+     * 根据catalogid查catalogs取productid
+     *
+     * @param catalogIdList
+     * @return
+     */
+    public List<String> getProductIdsByCatalogIds(List<String> catalogIdList) {
+        Datastore datastore = this.getDatastore(this.dbName);
+        List<Catalogs> query = datastore.find(Catalogs.class).disableValidation()
+                .field("cid").in(catalogIdList)
+                .project("spid", true).asList();
+        return query.stream().map(t -> t.getProductId()).distinct().collect(Collectors.toList());
     }
 
 }

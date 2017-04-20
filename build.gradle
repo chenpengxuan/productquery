@@ -78,13 +78,13 @@ allprojects {
         kryoVersion = "3.0.3"
         kryoSerializersVersion = "0.37"
         morphiaversion = "1.3.2"
-        springdatamongodbversion="1.9.2.RELEASE"
-
+        springdatamongodbversion = "1.9.2.RELEASE"
         dubboxVersion = "2.8.4"
         zookeeperVersion = "3.4.8"
 
         zkclientVersion = "0.1"
         commonsLang3Version = "3.4"
+        beanutilsversion = "1.9.2"
         disconfVersion = "2.6.40"
         commonsIoVersion = "2.4"
 

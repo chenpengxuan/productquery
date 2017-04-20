@@ -1,90 +1,101 @@
 package com.ymatou.productquery.domain.model;
 
+import org.mongodb.morphia.annotations.Property;
+
 import java.util.List;
 
 /**
  * Created by zhangyong on 2017/4/6.
  */
 public class ProductDescExtra {
-    private	String	spid	;//	商品编号
-    private	String	desc	;//	图文描述 - 文字部分
-    private	List<String>	descpics	;//	图文描述 - 图片部分
-    private	List<String>	sizepics	;//	尺码表
-    private	String	notice	;//	买家须知文本
-    private	List<String>	notipics	;//	买家须知图片列表
-    private	String	intro	;//	买手介绍文本
-    private	List<String>	intropics	;//	买家须知图片列表
-    private List<ProductDescPropertyInfo> props	;//	商品属性列表
+    @Property("spid")
+    private String productId;//	商品编号
+    @Property("desc")
+    private String descText;//	图文描述 - 文字部分
+    @Property("descpics")
+    private List<String> descPicList;//	图文描述 - 图片部分
+    @Property("sizepics")
+    private List<String> sizePicList;//	尺码表
+    @Property("notice")
+    private String noticeText;//	买家须知文本
+    @Property("notipics")
+    private List<String> noticePicList;//	买家须知图片列表
+    @Property("intro")
+    private String sellerInfoText;//	买手介绍文本
+    @Property("intropics")
+    private List<String> sellerIntroPicList;//	买家须知图片列表
+    @Property("props")
+    private List<ProductDescPropertyInfo> propertyList;//	商品属性列表
 
-    public String getSpid() {
-        return spid;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setSpid(String spid) {
-        this.spid = spid;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescText() {
+        return descText;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescText(String descText) {
+        this.descText = descText;
     }
 
-    public List<String> getDescpics() {
-        return descpics;
+    public List<String> getDescPicList() {
+        return descPicList;
     }
 
-    public void setDescpics(List<String> descpics) {
-        this.descpics = descpics;
+    public void setDescPicList(List<String> descPicList) {
+        this.descPicList = descPicList;
     }
 
-    public List<String> getSizepics() {
-        return sizepics;
+    public List<String> getSizePicList() {
+        return sizePicList;
     }
 
-    public void setSizepics(List<String> sizepics) {
-        this.sizepics = sizepics;
+    public void setSizePicList(List<String> sizePicList) {
+        this.sizePicList = sizePicList;
     }
 
-    public String getNotice() {
-        return notice;
+    public String getNoticeText() {
+        return noticeText;
     }
 
-    public void setNotice(String notice) {
-        this.notice = notice;
+    public void setNoticeText(String noticeText) {
+        this.noticeText = noticeText;
     }
 
-    public List<String> getNotipics() {
-        return notipics;
+    public List<String> getNoticePicList() {
+        return noticePicList;
     }
 
-    public void setNotipics(List<String> notipics) {
-        this.notipics = notipics;
+    public void setNoticePicList(List<String> noticePicList) {
+        this.noticePicList = noticePicList;
     }
 
-    public String getIntro() {
-        return intro;
+    public String getSellerInfoText() {
+        return sellerInfoText;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
+    public void setSellerInfoText(String sellerInfoText) {
+        this.sellerInfoText = sellerInfoText;
     }
 
-    public List<String> getIntropics() {
-        return intropics;
+    public List<String> getSellerIntroPicList() {
+        return sellerIntroPicList;
     }
 
-    public void setIntropics(List<String> intropics) {
-        this.intropics = intropics;
+    public void setSellerIntroPicList(List<String> sellerIntroPicList) {
+        this.sellerIntroPicList = sellerIntroPicList;
     }
 
-    public List<ProductDescPropertyInfo> getProps() {
-        return props;
+    public List<ProductDescPropertyInfo> getPropertyList() {
+        return propertyList;
     }
 
-    public void setProps(List<ProductDescPropertyInfo> props) {
-        this.props = props;
+    public void setPropertyList(List<ProductDescPropertyInfo> propertyList) {
+        this.propertyList = propertyList;
     }
 }

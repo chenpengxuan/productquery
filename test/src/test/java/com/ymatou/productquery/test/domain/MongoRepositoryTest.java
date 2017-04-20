@@ -19,9 +19,6 @@ import java.util.List;
 @SpringBootTest(classes = ProductQueryApplication.class)// 指定我们SpringBoot工程的Application启动类
 public class MongoRepositoryTest {
 
-    @Resource(name = "mongoRepo")
-    private ProductRepository mongoRepository;
-
     @Resource
     private ProductRepository productRepository;
 

@@ -1,6 +1,7 @@
 package com.ymatou.productquery.domain.model;
 
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
 import java.util.List;
@@ -11,93 +12,32 @@ import java.util.List;
 public class ActivityProducts {
 
     private ObjectId _id;
-    private String spid;
-
-    private int aid;
-
-    private String aname;
-    private int inaid;
-    private Date start;
-    private Date end;
-    private Double market;
-    private int alimit;
-    private int plimit;
-    private boolean isolation;
-    private boolean nbuyer;
-    private boolean part;
-    private List<ActivityCatalogInfo> catalogs;
-
-    public ObjectId getId() {
-        return _id;
-    }
-
-    public void setId(ObjectId _id) {
-        this._id = _id;
-    }
-
-    public int getAid() {
-        return aid;
-    }
-
-    public void setAid(int aid) {
-        this.aid = aid;
-    }
-
-    public String getAname() {
-        return aname;
-    }
-
-    public void setAname(String aname) {
-        this.aname = aname;
-    }
-
-    public int getInaid() {
-        return inaid;
-    }
-
-    public void setInaid(int inaid) {
-        this.inaid = inaid;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public Double getMarket() {
-        return market;
-    }
-
-    public void setMarket(Double market) {
-        this.market = market;
-    }
-
-    public int getAlimit() {
-        return alimit;
-    }
-
-    public void setAlimit(int alimit) {
-        this.alimit = alimit;
-    }
-
-    public int getPlimit() {
-        return plimit;
-    }
-
-    public void setPlimit(int plimit) {
-        this.plimit = plimit;
-    }
+    @Property("spid")
+    private String productId;
+    @Property("aid")
+    private int activityId;
+    @Property("aname")
+    private String activityName;
+    @Property("inaid")
+    private int productInActivityId;
+    @Property("start")
+    private Date startTime;
+    @Property("end")
+    private Date endTime;
+    @Property("market")
+    private Double marketPrice;
+    @Property("alimit")
+    private int activityLimit;
+    @Property("plimit")
+    private int productLimit;
+    @Property("isolation")
+    private boolean isTradeIsolation;
+    @Property("nbuyer")
+    private boolean isNewBuyer;
+    @Property("part")
+    private boolean isPartCatalogs;
+    @Property("catalogs")
+    private List<ActivityCatalogInfo> activityCatalogList;
 
     public ObjectId get_id() {
         return _id;
@@ -107,44 +47,108 @@ public class ActivityProducts {
         this._id = _id;
     }
 
-    public boolean isolation() {
-        return isolation;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setIsolation(boolean isolation) {
-        this.isolation = isolation;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public boolean isNbuyer() {
-        return nbuyer;
+    public int getActivityId() {
+        return activityId;
     }
 
-    public void setNbuyer(boolean nbuyer) {
-        this.nbuyer = nbuyer;
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 
-    public boolean isPart() {
-        return part;
+    public String getActivityName() {
+        return activityName;
     }
 
-    public void setPart(boolean part) {
-        this.part = part;
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
-    public List<ActivityCatalogInfo> getCatalogs() {
-        return catalogs;
+    public int getProductInActivityId() {
+        return productInActivityId;
     }
 
-    public void setCatalogs(List<ActivityCatalogInfo> catalogs) {
-        this.catalogs = catalogs;
+    public void setProductInActivityId(int productInActivityId) {
+        this.productInActivityId = productInActivityId;
     }
 
-    public String getSpid() {
-        return spid;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setSpid(String spid) {
-        this.spid = spid;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(Double marketPrice) {
+        this.marketPrice = marketPrice;
+    }
+
+    public int getActivityLimit() {
+        return activityLimit;
+    }
+
+    public void setActivityLimit(int activityLimit) {
+        this.activityLimit = activityLimit;
+    }
+
+    public int getProductLimit() {
+        return productLimit;
+    }
+
+    public void setProductLimit(int productLimit) {
+        this.productLimit = productLimit;
+    }
+
+    public boolean isTradeIsolation() {
+        return isTradeIsolation;
+    }
+
+    public void setTradeIsolation(boolean tradeIsolation) {
+        isTradeIsolation = tradeIsolation;
+    }
+
+    public boolean isNewBuyer() {
+        return isNewBuyer;
+    }
+
+    public void setNewBuyer(boolean newBuyer) {
+        isNewBuyer = newBuyer;
+    }
+
+    public boolean isPartCatalogs() {
+        return isPartCatalogs;
+    }
+
+    public void setPartCatalogs(boolean partCatalogs) {
+        isPartCatalogs = partCatalogs;
+    }
+
+    public List<ActivityCatalogInfo> getActivityCatalogList() {
+        return activityCatalogList;
+    }
+
+    public void setActivityCatalogList(List<ActivityCatalogInfo> activityCatalogList) {
+        this.activityCatalogList = activityCatalogList;
     }
 }
 

@@ -1,156 +1,176 @@
 package com.ymatou.productquery.domain.model;
 
+import org.mongodb.morphia.annotations.Property;
+
 import java.util.Date;
 
 /**
  * Created by zhangyong on 2017/4/6.
  */
 public class LiveProducts {
-    private	String spid;
-    private int lid;
-    private int sid;
-    private Date start;
-    private Date end;
-    private Date add;
-    private String brand;
-    private String ebrand;
-    private int bid;
-    private int mcatid;
-    private String mcatname;
-    private int scatid;
-    private String scatname;
-    private int tcatid;
-    private String tcatname;
-    private int status;
+    @Property("spid")
+    private	String productId;
+    @Property("lid")
+    private int liveId;
+    @Property("sid")
+    private int sellerId;
+    @Property("start")
+    private Date startTime;
+    @Property("end")
+    private Date endTime;
+    @Property("add")
+    private Date addTime;
+    @Property("brand")
+    private String brandName;
+    @Property("ebrand")
+    private String brandEnName;
+    @Property("bid")
+    private int brandId;
+    @Property("mcatid")
+    private int masterCategoryId;
+    @Property("mcatname")
+    private String masterCategoryName;
+    @Property("scatid")
+    private int categoryId;
+    @Property("scatname")
+    private String categoryName;
+    @Property("tcatid")
+    private int thirdCategoryId;
+    @Property("tcatname")
+    private String thirdCategoryName;
+    @Property("status")
+    private int sellStatus;
+    @Property("istop")
     private boolean istop;
-    private int sort;
+    @Property("sort")
+    private int readyPutawayProductSort;
 
-    public String getSpid() {
-        return spid;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setSpid(String spid) {
-        this.spid = spid;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public int getLid() {
-        return lid;
+    public int getLiveId() {
+        return liveId;
     }
 
-    public void setLid(int lid) {
-        this.lid = lid;
+    public void setLiveId(int liveId) {
+        this.liveId = liveId;
     }
 
-    public int getSid() {
-        return sid;
+    public int getSellerId() {
+        return sellerId;
     }
 
-    public void setSid(int sid) {
-        this.sid = sid;
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
     }
 
-    public Date getStart() {
-        return start;
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
     }
 
-    public Date getEnd() {
-        return end;
+    public Date getEndTime() {
+        return endTime;
     }
 
-    public void setEnd(Date end) {
-        this.end = end;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 
-    public Date getAdd() {
-        return add;
+    public Date getAddTime() {
+        return addTime;
     }
 
-    public void setAdd(Date add) {
-        this.add = add;
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
     }
 
-    public String getBrand() {
-        return brand;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
-    public String getEbrand() {
-        return ebrand;
+    public String getBrandEnName() {
+        return brandEnName;
     }
 
-    public void setEbrand(String ebrand) {
-        this.ebrand = ebrand;
+    public void setBrandEnName(String brandEnName) {
+        this.brandEnName = brandEnName;
     }
 
-    public int getBid() {
-        return bid;
+    public int getBrandId() {
+        return brandId;
     }
 
-    public void setBid(int bid) {
-        this.bid = bid;
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
     }
 
-    public int getMcatid() {
-        return mcatid;
+    public int getMasterCategoryId() {
+        return masterCategoryId;
     }
 
-    public void setMcatid(int mcatid) {
-        this.mcatid = mcatid;
+    public void setMasterCategoryId(int masterCategoryId) {
+        this.masterCategoryId = masterCategoryId;
     }
 
-    public String getMcatname() {
-        return mcatname;
+    public String getMasterCategoryName() {
+        return masterCategoryName;
     }
 
-    public void setMcatname(String mcatname) {
-        this.mcatname = mcatname;
+    public void setMasterCategoryName(String masterCategoryName) {
+        this.masterCategoryName = masterCategoryName;
     }
 
-    public int getScatid() {
-        return scatid;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setScatid(int scatid) {
-        this.scatid = scatid;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getScatname() {
-        return scatname;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setScatname(String scatname) {
-        this.scatname = scatname;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
-    public int getTcatid() {
-        return tcatid;
+    public int getThirdCategoryId() {
+        return thirdCategoryId;
     }
 
-    public void setTcatid(int tcatid) {
-        this.tcatid = tcatid;
+    public void setThirdCategoryId(int thirdCategoryId) {
+        this.thirdCategoryId = thirdCategoryId;
     }
 
-    public String getTcatname() {
-        return tcatname;
+    public String getThirdCategoryName() {
+        return thirdCategoryName;
     }
 
-    public void setTcatname(String tcatname) {
-        this.tcatname = tcatname;
+    public void setThirdCategoryName(String thirdCategoryName) {
+        this.thirdCategoryName = thirdCategoryName;
     }
 
-    public int getStatus() {
-        return status;
+    public int getSellStatus() {
+        return sellStatus;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setSellStatus(int sellStatus) {
+        this.sellStatus = sellStatus;
     }
 
     public boolean istop() {
@@ -161,11 +181,11 @@ public class LiveProducts {
         this.istop = istop;
     }
 
-    public int getSort() {
-        return sort;
+    public int getReadyPutawayProductSort() {
+        return readyPutawayProductSort;
     }
 
-    public void setSort(int sort) {
-        this.sort = sort;
+    public void setReadyPutawayProductSort(int readyPutawayProductSort) {
+        this.readyPutawayProductSort = readyPutawayProductSort;
     }
 }

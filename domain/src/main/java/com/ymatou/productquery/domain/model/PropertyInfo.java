@@ -1,12 +1,14 @@
 package com.ymatou.productquery.domain.model;
 
+import org.mongodb.morphia.annotations.Property;
+
 /**
  * Created by zhangyong on 2017/4/6.
  */
 public class PropertyInfo {
-    private	String name	;//	  属性名称
-    private	String value	;//	  属性值
-    private	String pic	;//	  属性图
+    private String name;//	  属性名称
+    private String value;//	  属性值
+    private String pic;//	  属性图
 
     public String getName() {
         return name;
