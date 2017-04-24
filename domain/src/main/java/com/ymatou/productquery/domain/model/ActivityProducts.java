@@ -38,6 +38,8 @@ public class ActivityProducts {
     private boolean isPartCatalogs;
     @Property("catalogs")
     private List<ActivityCatalogInfo> activityCatalogList;
+    @Property("updatetime")
+    private Date updatetime;
 
     public ObjectId get_id() {
         return _id;
@@ -149,6 +151,14 @@ public class ActivityProducts {
 
     public void setActivityCatalogList(List<ActivityCatalogInfo> activityCatalogList) {
         this.activityCatalogList = activityCatalogList;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }
 

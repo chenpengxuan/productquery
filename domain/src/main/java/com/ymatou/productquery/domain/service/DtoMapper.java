@@ -7,7 +7,6 @@ import com.ymatou.productquery.model.res.ProductActivityCartDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import com.ymatou.productquery.model.res.PropertyDto;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -54,7 +53,7 @@ public class DtoMapper {
         result.setSku(catalog.getSku());
         result.setPreSale(catalog.isPriceSale());
         result.setPspProduct(product.isPspProduct());
-        result.setProperties(getCatalogPropertyList(catalog.getPropertyList()));
+        result.setProperties(getCatalogPropertyList(catalog.getProps()));
         return result;
     }
 
@@ -93,13 +92,15 @@ public class DtoMapper {
             return null;
         }
         List<PropertyDto> propertyDtoList = new ArrayList<>();
-        for (PropertyInfo pro : propertyInfoList) {
-            PropertyDto prodto = new PropertyDto();
-            prodto.setPropertyValue(pro.getValue());
-            prodto.setPropertyName(pro.getName());
-            prodto.setPropertyPictureUrl(pro.getPic());
-            propertyDtoList.add(prodto);
-        }
+        propertyInfoList.forEach(t -> {
+                    PropertyDto prodto = new PropertyDto();
+                    prodto.setPropertyValue(t.getValue());
+                    prodto.setPropertyName(t.getName());
+                    prodto.setPropertyPictureUrl(t.getPic());
+                    propertyDtoList.add(prodto);
+                }
+        );
+
         return propertyDtoList;
     }
 

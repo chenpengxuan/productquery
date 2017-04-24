@@ -56,13 +56,13 @@ public class ActivityProdutRepository extends MongoRepository {
     /**
      * 获取新增活动商品信息列表
      *
-     * @param newestActivityObjectId 最新主键
+     * @param newestProductInActivityId 最新
      * @return
      */
-    public List<ActivityProducts> getActivityProductList(ObjectId newestActivityObjectId) {
+    public List<ActivityProducts> getNewestActivityProductIdList(int newestProductInActivityId) {
         Datastore datastore = this.getDatastore(this.dbName);
         return datastore.find(ActivityProducts.class).disableValidation()
-                .field("_id").greaterThan(newestActivityObjectId)
+                .field("inaid").greaterThan(newestProductInActivityId)
                 .asList();
     }
 }

@@ -1,7 +1,9 @@
 package com.ymatou.productquery.domain.model;
 
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Property;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,26 +12,38 @@ import java.util.List;
 public class Catalogs {
     @Property("spid")
     private String productId;//	商品编号
+
     @Property("cid")
     private String catalogId;//	规格编号
+
     @Property("sid")
     private int sellerId;//	买手编号
+
     @Property("sku")
     private String sku;//	sku
+
     @Property("presale")
     private boolean isPriceSale;//	是否预售规格
+
     @Property("earnest")
     private Double earnest;//	定金
+
     @Property("price")
     private Double price;//	原价
+
     @Property("newp")
     private Double newPrice;//	新客价
+
     @Property("vip")
     private Double vipPrice;//	VIP价
+
     @Property("stock")
     private int stock;//	规格库存
-    @Property("props")
-    private List<PropertyInfo> propertyList;//	规格属性列表
+
+    private List<PropertyInfo> props;//	规格属性列表
+
+    @Property("updatetime")
+    private Date updatetime;
 
     public String getProductId() {
         return productId;
@@ -111,11 +125,19 @@ public class Catalogs {
         this.stock = stock;
     }
 
-    public List<PropertyInfo> getPropertyList() {
-        return propertyList;
+    public List<PropertyInfo> getProps() {
+        return props;
     }
 
-    public void setPropertyList(List<PropertyInfo> propertyList) {
-        this.propertyList = propertyList;
+    public void setProps(List<PropertyInfo> props) {
+        this.props = props;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

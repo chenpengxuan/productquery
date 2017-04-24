@@ -1,6 +1,6 @@
 package com.ymatou.productquery.domain.model;
 
-import org.mongodb.morphia.annotations.Property;
+import org.mongodb.morphia.annotations.Embedded;
 
 /**
  * Created by zhangyong on 2017/4/6.

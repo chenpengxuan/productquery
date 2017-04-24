@@ -95,6 +95,8 @@ public class Products {
     private String grade;//	商品等级
     @Property("sizepics")
     private List<String> sizePicList;//	尺码表
+    @Property("updatetime")
+    private Date updatetime;
 
     public String getProductId() {
         return productId;
@@ -430,5 +432,13 @@ public class Products {
 
     public void setSizePicList(List<String> sizePicList) {
         this.sizePicList = sizePicList;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

@@ -1,16 +1,16 @@
 package com.ymatou.productquery.domain.service;
 
+import com.google.common.collect.Lists;
 import com.ymatou.productquery.domain.model.*;
-import com.ymatou.productquery.domain.repo.mongorepo.ActivityProdutRepository;
-import com.ymatou.productquery.domain.repo.mongorepo.LiveProductRepository;
-import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
+import com.ymatou.productquery.domain.repo.mongorepo.*;
+import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.model.res.ProductDetailDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.ymatou.productquery.domain.cache.Cache;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -28,8 +28,18 @@ public class ListQueryService {
     @Autowired
     private ActivityProdutRepository activityProdutRepository;
 
+    @Autowired
+    private ProductTimeStampRepository productTimeStampRepository;
+
+    @Autowired
+    private Cache cache;
+
+    @Autowired
+    private BizProps bizProps;
+
     /**
-     *  购物车中商品列表
+     * 购物车中商品列表
+     *
      * @param catalogIds
      * @param tradeIsolation
      * @return
@@ -90,13 +100,26 @@ public class ListQueryService {
 
     /**
      * 取复杂结构商品列表
-     * @param aryProductId
+     *
+     * @param productIds
      * @param nextActivityExpire
      * @param tradeIsolation
      * @return
      */
-    public List<ProductDetailDto> GetProductDetailList(List<String> aryProductId, int nextActivityExpire, boolean tradeIsolation)
-    {
+    public List<ProductDetailDto> GetProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
+        List<ProductDetailDto> productDetailDtoList = new ArrayList<>();
+        List<ProductTimeStamp> updateStampMap = productTimeStampRepository
+                .getTimeStampByProductIds(productIds, Lists.newArrayList("cut", "aut"));
+        List<Products> productsList;
+        List<Catalogs> catalogsList;
+        if (bizProps.isUseCache()) {
+            productsList = cache.getProductsByProductIds(productIds, updateStampMap);
+            //catalogslist
+        } else {
+            productsList = productRepository.getProductsByProductIds(productIds);
+            catalogsList = productRepository.getCatalogsByProductIds(productIds);
+        }
+
         return null;
     }
 }

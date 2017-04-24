@@ -2,6 +2,8 @@ package com.ymatou.productquery.infrastructure.util.CacheUtil;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheStats;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.ymatou.productquery.infrastructure.config.props.CacheProps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ public class CacheManager {
 
     private static final int CACHE_SIZE_UNIT = 10000;
 
+    public ConcurrentMap getActivityProductCacheFactory() {
+        return activityProductCacheFactory;
+    }
+
     /**
      * 预期活动商品缓存数量
      */
@@ -55,6 +61,15 @@ public class CacheManager {
             default:
                 break;
         }
+    }
+
+    /**
+     * 获取缓存统计信息
+     *
+     * @return
+     */
+    public CacheStats getCacheStats() {
+        return cacheFactory.stats();
     }
 
     /**
@@ -88,8 +103,10 @@ public class CacheManager {
             if (!checkCacheValidFunc.apply(queryParam, cacheResult)) {
                 Z tempData = repositoryFunc.apply(queryParam);
                 cacheResult = updateDataFunc.apply(cacheResult, tempData);
-                cacheFactory.put(cacheKey, cacheResult);
             }
+        }
+        if (cacheResult != null) {
+            cacheFactory.put(cacheKey, cacheResult);
         }
         return cacheResult;
     }
@@ -102,7 +119,8 @@ public class CacheManager {
      * @param <V>
      */
     public <K, V> V get(K cacheKey) {
-        return (V) cacheFactory.getIfPresent(cacheKey);
+        return
+                Optional.ofNullable((V) cacheFactory.getIfPresent(cacheKey)).orElse(null);
     }
 
     /**
@@ -114,7 +132,8 @@ public class CacheManager {
      * @return
      */
     public <K, V> V getActivityProduct(K cacheKey) {
-        return (V) activityProductCacheFactory.get(cacheKey);
+        return
+                Optional.ofNullable((V) activityProductCacheFactory.get(cacheKey)).orElse(null);
     }
 
     /**
@@ -182,7 +201,9 @@ public class CacheManager {
      * @param <K>
      */
     public <K> void deleteActivityProduct(K cacheKey) {
-        activityProductCacheFactory.remove(cacheKey);
+        if (activityProductCacheFactory.keySet().contains(cacheKey)) {
+            activityProductCacheFactory.remove(cacheKey);
+        }
     }
 
     /**
@@ -204,8 +225,8 @@ public class CacheManager {
      * @param <V>
      * @return
      */
-    public <K, V> List<V> get(List<K> cacheKeyList) {
-        return (List<V>) cacheFactory.getAllPresent(cacheKeyList);
+    public <K, V> Map<K, V> get(List<K> cacheKeyList) {
+        return (Map<K, V>) cacheFactory.getAllPresent(cacheKeyList);
     }
 
     /**
@@ -260,7 +281,7 @@ public class CacheManager {
         List<V> cacheResultList = new ArrayList<>();
 
         Map<K, List<V>> cacheResultMap = cacheFactory.getAllPresent(cacheKeyMap.values());
-        cacheResultList.addAll(Arrays.asList((V[]) cacheResultMap.values().toArray()));
+        cacheResultList.addAll(Lists.newArrayList((V[]) cacheResultMap.values().toArray()));
 
         Set<K> cachedKeyList = cacheResultMap.keySet();
         //过滤参数列表将没有命中和业务缓存数据失效的数据一起重新查询数据
@@ -312,7 +333,7 @@ public class CacheManager {
         List<V> cacheResultList = new ArrayList<>();
 
         if (!queryParamWithCacheKeyMap.isEmpty()) {
-            List<K> paramList = Arrays.asList();
+            List<K> paramList = Lists.newArrayList();
             queryParamWithCacheKeyMap.keySet().stream().forEach(x -> paramList.addAll(x));
             Z repositoryResultList = repositoryFunc
                     .apply(paramList);
