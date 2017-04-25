@@ -126,13 +126,16 @@ public class Cache {
                 return cacheList;
             }
         } else {
-            return cacheList
-                    .stream()
-                    .map(c -> processActivityProductCache(c, activityProductStampMap.stream().filter(t -> t.getSpid().equals(c.getProductId())).findFirst().orElse(null))
-                    )
-                    .collect(Collectors.toList());
+
+            List<ActivityProducts> activityProductsList = new ArrayList<>();
+            cacheList.forEach(c -> {
+                activityProductsList.addAll(processActivityProductCache(c, activityProductStampMap.stream()
+                        .filter(t -> t.getSpid().equals(c.getProductId())).findFirst().orElse(null)));
+            });
+            return activityProductsList;
         }
     }
+
 
     /**
      * 初始化活动商品缓存
@@ -189,7 +192,8 @@ public class Cache {
      * @param activityProduct
      * @return
      */
-    private ActivityProducts processActivityProductCache(ActivityProducts activityProduct, ProductTimeStamp activityProductUpdateTime) {
+    private List<ActivityProducts> processActivityProductCache(ActivityProducts activityProduct, ProductTimeStamp activityProductUpdateTime) {
+        List<ActivityProducts> result = new ArrayList<>();
         Long startTime = activityProduct.getStartTime().getTime();
         Long endTime = activityProduct.getEndTime().getTime();
         Long now = new Date().getTime();
@@ -199,7 +203,7 @@ public class Cache {
         //当活动商品发生变更时，有可能从mongo中根据限定条件取出来是空，所以先把productId取出来
         String activityProductId = activityProduct.getProductId();
         if (Long.compare(activityProductStamp, updateStamp) != 0) {
-            activityProduct = activityProdutRepository.getActivityProductByProductId(activityProduct.getProductId()).get(1);
+            result = activityProdutRepository.getActivityProductByProductId(activityProduct.getProductId());
 
             if (activityProduct != null) {
                 cacheManager.putActivityProduct(activityProduct.getProductId(), activityProduct);
@@ -217,7 +221,7 @@ public class Cache {
         else if (now < startTime) {
             return null;
         }
-        return activityProduct;
+        return result;
     }
 
     /**
