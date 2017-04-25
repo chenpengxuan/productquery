@@ -106,6 +106,8 @@ public class Cache {
      * ActivityProducts缓存放的是正在进行以及即将进行的活动商品
      *
      * @param productIdList
+     * @param activityProductStampMap
+     * @param nextActivityExpire
      * @return
      */
     public Map<String, Tuple<ActivityProducts, ActivityProducts>> getActivityProductList(List<String> productIdList,
