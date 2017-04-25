@@ -8,7 +8,7 @@ logs/
 /**/*.iml
 /**.idea
 /.idea
-
+/web/src/main/resources/disconf.properties
 build
 classes
 gradle
