@@ -1,6 +1,5 @@
 package com.ymatou.productquery.domain.service;
 
-import com.google.common.collect.Lists;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
@@ -109,17 +108,21 @@ public class ListQueryService {
     public List<ProductDetailDto> GetProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
         List<ProductDetailDto> productDetailDtoList = new ArrayList<>();
         List<ProductTimeStamp> updateStampMap = productTimeStampRepository
-                .getTimeStampByProductIds(productIds, Lists.newArrayList("cut", "aut"));
+                .getTimeStampByProductIds(productIds, "cut,sut");
         List<Products> productsList;
         List<Catalogs> catalogsList;
         if (bizProps.isUseCache()) {
             productsList = cache.getProductsByProductIds(productIds, updateStampMap);
-            //catalogslist
+            catalogsList = cache.getCatalogsByProductIds(productIds, updateStampMap);
         } else {
             productsList = productRepository.getProductsByProductIds(productIds);
             catalogsList = productRepository.getCatalogsByProductIds(productIds);
         }
 
+        List<LiveProducts> liveProductsList = liveProductRepository.getLiveProductList(productIds);
+        List<ActivityProducts> activityProductsList = activityProdutRepository.getActivityProductList(productIds);
+
         return null;
     }
+
 }

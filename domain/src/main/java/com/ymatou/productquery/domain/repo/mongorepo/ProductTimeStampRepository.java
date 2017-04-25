@@ -56,13 +56,13 @@ public class ProductTimeStampRepository extends MongoRepository {
      * 根据ProductIdList查询ProudctTimeStamp
      *
      * @param productIdList
-     * @param stampKeyList
+     * @param stampKeys
      * @return
      */
-    public List<ProductTimeStamp> getTimeStampByProductIds(List<String> productIdList, List<String> stampKeyList) {
+    public List<ProductTimeStamp> getTimeStampByProductIds(List<String> productIdList, String stampKeys) {
         Datastore datastore = this.getDatastore(this.dbName);
         Query<ProductTimeStamp> query = datastore.find(ProductTimeStamp.class).disableValidation()
                 .field("spid").in(productIdList);
-        return query.retrievedFields(true, (String[]) stampKeyList.toArray()).asList();
+        return query.retrievedFields(true, stampKeys.split(",")).asList();
     }
 }

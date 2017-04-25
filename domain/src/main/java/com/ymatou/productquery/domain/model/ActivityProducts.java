@@ -14,32 +14,45 @@ public class ActivityProducts {
     private ObjectId _id;
     @Property("spid")
     private String productId;
+
     @Property("aid")
     private int activityId;
+
     @Property("aname")
     private String activityName;
+
     @Property("inaid")
     private int productInActivityId;
+
     @Property("start")
     private Date startTime;
+
     @Property("end")
     private Date endTime;
+
     @Property("market")
     private Double marketPrice;
+
     @Property("alimit")
     private int activityLimit;
+
     @Property("plimit")
     private int productLimit;
+
     @Property("isolation")
     private boolean isTradeIsolation;
+
     @Property("nbuyer")
     private boolean isNewBuyer;
+
     @Property("part")
     private boolean isPartCatalogs;
+
     @Property("catalogs")
     private List<ActivityCatalogInfo> activityCatalogList;
+
     @Property("updatetime")
-    private Date updatetime;
+    private Date updateTime;
 
     public ObjectId get_id() {
         return _id;
@@ -153,12 +166,12 @@ public class ActivityProducts {
         this.activityCatalogList = activityCatalogList;
     }
 
-    public Date getUpdatetime() {
-        return updatetime;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
 

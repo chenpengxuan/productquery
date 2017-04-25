@@ -5,9 +5,11 @@ import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.query.FindOptions;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +21,8 @@ public class ActivityProdutRepository extends MongoRepository {
     private MongoClient mongoClient;
 
     private final String dbName = "YmtProducts";
+
+    private final FindOptions limitOne = new FindOptions().limit(1);
 
     /**
      * 获取到MongoClient
@@ -38,8 +42,24 @@ public class ActivityProdutRepository extends MongoRepository {
      */
     public List<ActivityProducts> getActivityProductList(List<String> productIdList) {
         Datastore datastore = this.getDatastore(this.dbName);
+        Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
-                .field("spid").in(productIdList).asList();
+                .field("spid").in(productIdList)
+                .field("end").greaterThan(now).asList();
+    }
+
+    /**
+     * 根据productId查询活动商品
+     *
+     * @param productId
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductByProductId(String productId) {
+        Datastore datastore = this.getDatastore(this.dbName);
+        Date now = new Date();
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").equal(productId)
+                .field("end").greaterThan(now).asList();
     }
 
     /**
@@ -49,7 +69,9 @@ public class ActivityProdutRepository extends MongoRepository {
      */
     public List<ActivityProducts> getAllValidActivityProductList() {
         Datastore datastore = this.getDatastore(this.dbName);
+        Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
+                .field("end").greaterThan(now)
                 .asList();
     }
 

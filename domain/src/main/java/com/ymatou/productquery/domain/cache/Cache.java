@@ -1,10 +1,7 @@
 package com.ymatou.productquery.domain.cache;
 
 import com.google.common.cache.CacheStats;
-import com.ymatou.productquery.domain.model.ActivityProducts;
-import com.ymatou.productquery.domain.model.Catalogs;
-import com.ymatou.productquery.domain.model.ProductTimeStamp;
-import com.ymatou.productquery.domain.model.Products;
+import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.ActivityProdutRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
@@ -14,8 +11,6 @@ import com.ymatou.productquery.infrastructure.util.LogWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
@@ -86,6 +81,60 @@ public class Cache {
     }
 
     /**
+     * 根据productid列表查询liveproducts
+     *
+     * @param productIdList
+     * @param productUpdateTimeList
+     * @return
+     */
+    public List<LiveProducts> getLiveProductsByProductIds(List<String> productIdList, List<ProductTimeStamp> productUpdateTimeList) {
+        productIdList = productIdList.stream().distinct().collect(Collectors.toList());
+
+        List<LiveProducts> result = cacheManager.get(productIdList).values().stream().map(t -> (LiveProducts) t).collect(Collectors.toList());
+        return null;
+//        return processCatalogCache(productIdList, result, productUpdateTimeList);
+    }
+
+    /**
+     * 获取活动商品信息列表
+     * ActivityProducts缓存放的是正在进行以及即将进行的活动商品
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductList(List<String> productIdList, List<ProductTimeStamp> activityProductStampMap) {
+        productIdList = productIdList
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+        //从缓存中获取数据
+        List<ActivityProducts> cacheList = cacheManager.getActivityProduct(productIdList);
+        if (cacheList != null && !cacheList.isEmpty()) {
+            //针对Lists.newArrayList创建的列表 排除空元素
+            cacheList.removeAll(Collections.singleton(null));
+        }
+
+        //如果缓存为空 则认为都不是活动商品
+        if (cacheList == null || cacheList.isEmpty()) {
+            //如果缓存为空，但是缓存容器没有满的情况下则认为不是活动商品
+            if (cacheManager.getActivityProductCacheFactory().size() < cacheProps.getActivityProductCacheSize()) {
+                return null;
+            } else {
+                cacheList = activityProdutRepository.getActivityProductList(productIdList);
+                logWrapper.recordErrorLog("活动商品缓存size需要扩容，超出容量的活动商品已改为从mongo查询，不影响正常业务");
+                return cacheList;
+            }
+        } else {
+            return cacheList
+                    .stream()
+                    .map(c -> processActivityProductCache(c, activityProductStampMap.stream().filter(t -> t.getSpid().equals(c.getProductId())).findFirst().orElse(null))
+                    )
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
      * 初始化活动商品缓存
      */
     public int initActivityProductCache() {
@@ -134,6 +183,51 @@ public class Cache {
         logWrapper.recordInfoLog("增量添加活动商品缓存已执行,新增{}条", newestActivityProductList.size());
     }
 
+    /**
+     * 缓存活动商品数据处理逻辑
+     *
+     * @param activityProduct
+     * @return
+     */
+    private ActivityProducts processActivityProductCache(ActivityProducts activityProduct, ProductTimeStamp activityProductUpdateTime) {
+        Long startTime = activityProduct.getStartTime().getTime();
+        Long endTime = activityProduct.getEndTime().getTime();
+        Long now = new Date().getTime();
+        Long updateStamp = activityProductUpdateTime != null ? activityProductUpdateTime.getAut().getTime() : 0L;
+        Long activityProductStamp = activityProduct.getUpdateTime() != null
+                ? activityProduct.getUpdateTime().getTime() : -1L;
+        //当活动商品发生变更时，有可能从mongo中根据限定条件取出来是空，所以先把productId取出来
+        String activityProductId = activityProduct.getProductId();
+        if (Long.compare(activityProductStamp, updateStamp) != 0) {
+            activityProduct = activityProdutRepository.getActivityProductByProductId(activityProduct.getProductId()).get(1);
+
+            if (activityProduct != null) {
+                cacheManager.putActivityProduct(activityProduct.getProductId(), activityProduct);
+                startTime = activityProduct.getStartTime().getTime();
+                endTime = activityProduct.getEndTime().getTime();
+            }
+        }
+
+        //过期的活动商品
+        if (now > endTime) {
+            cacheManager.deleteActivityProduct(activityProductId);
+            return null;
+        }
+        //活动商品数据发生变化，取数据重新刷缓存
+        else if (now < startTime) {
+            return null;
+        }
+        return activityProduct;
+    }
+
+    /**
+     * 商品缓存数据处理
+     *
+     * @param productIdList
+     * @param cacheProductList
+     * @param productUpdateTimeList
+     * @return
+     */
     private List<Products> processProductCache(List<String> productIdList, List<Products> cacheProductList, List<ProductTimeStamp> productUpdateTimeList) {
         List<Products> result = new ArrayList<>();
         if (cacheProductList == null || cacheProductList.isEmpty()) {
