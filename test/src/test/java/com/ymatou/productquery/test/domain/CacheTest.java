@@ -54,6 +54,6 @@ public class CacheTest {
 
         List<ProductTimeStamp> updateStampMap = productTimeStampRepository
                 .getTimeStampByProductIds(productids, "aut");
-        List<ActivityProducts> activityProductsList = cache.getActivityProductList(productids, updateStampMap);
+        //List<ActivityProducts> activityProductsList = cache.getActivityProductList(productids, updateStampMap);
     }
 }

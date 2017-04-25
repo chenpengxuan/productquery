@@ -2,10 +2,7 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.model.BizException;
-import com.ymatou.productquery.model.res.LiveProductCartDto;
-import com.ymatou.productquery.model.res.ProductActivityCartDto;
-import com.ymatou.productquery.model.res.ProductInCartDto;
-import com.ymatou.productquery.model.res.PropertyDto;
+import com.ymatou.productquery.model.res.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,6 +52,19 @@ public class DtoMapper {
         result.setPspProduct(product.isPspProduct());
         result.setProperties(getCatalogPropertyList(catalog.getProps()));
         return result;
+    }
+
+    public static LiveProductCartDto toLiveProductCartDto(LiveProducts model) {
+        if (model == null) {
+            return null;
+        }
+        LiveProductCartDto lp = new LiveProductCartDto();
+        try {
+            BeanUtils.copyProperties(lp, model);
+            return lp;
+        } catch (Exception e) {
+            throw new BizException("line 146:BeanUtils.copyProperties fail,liveid" + model.getLiveId(), e);
+        }
     }
 
     private static String getSnapshotVersion(String version) {
@@ -123,30 +133,5 @@ public class DtoMapper {
     }
 
 
-//    public static LiveProductCartDto toLiveProductCartDto(LiveProducts model) {
-//        if (model == null) {
-//            return null;
-//        }
-//        LiveProductCartDto lp = new LiveProductCartDto();
-//        lp.setLiveId(model.getLiveId());
-//        lp.setLiveName("");
-//        lp.setStartTime(model.getStartTime());
-//        lp.setEndTime(model.getEndTime());
-//        lp.setSellStatus(model.getSellStatus());
-//        return lp;
-//    }
-
-    public static LiveProductCartDto toLiveProductCartDto(LiveProducts model) {
-        if (model == null) {
-            return null;
-        }
-        LiveProductCartDto lp = new LiveProductCartDto();
-        try {
-            BeanUtils.copyProperties(lp, model);
-            return lp;
-        } catch (Exception e) {
-            throw new BizException("line 146:BeanUtils.copyProperties fail,liveid" + model.getLiveId(), e);
-        }
-    }
 
 }

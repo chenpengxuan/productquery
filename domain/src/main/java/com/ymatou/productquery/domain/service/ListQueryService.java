@@ -3,6 +3,7 @@ package com.ymatou.productquery.domain.service;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
+import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.res.ProductDetailDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,19 +109,35 @@ public class ListQueryService {
     public List<ProductDetailDto> GetProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
         List<ProductDetailDto> productDetailDtoList = new ArrayList<>();
         List<ProductTimeStamp> updateStampMap = productTimeStampRepository
-                .getTimeStampByProductIds(productIds, "cut,sut");
+                .getTimeStampByProductIds(productIds, "cut,sut,lut,aut");
         List<Products> productsList;
         List<Catalogs> catalogsList;
+        List<LiveProducts> liveProductsList;
+        Map<String,Tuple<ActivityProducts,ActivityProducts>> activityProductsList;
         if (bizProps.isUseCache()) {
             productsList = cache.getProductsByProductIds(productIds, updateStampMap);
             catalogsList = cache.getCatalogsByProductIds(productIds, updateStampMap);
+            liveProductsList = cache.getLiveProductsByProductIds(productIds, updateStampMap);
+            activityProductsList = cache.getActivityProductList(productIds, updateStampMap,nextActivityExpire);
+
         } else {
             productsList = productRepository.getProductsByProductIds(productIds);
             catalogsList = productRepository.getCatalogsByProductIds(productIds);
+            liveProductsList = liveProductRepository.getLiveProductList(productIds);
+            activityProductsList = activityProdutRepository.getValidAndNextActivityProductByProductId(productIds,nextActivityExpire);
         }
-
-        List<LiveProducts> liveProductsList = liveProductRepository.getLiveProductList(productIds);
-        List<ActivityProducts> activityProductsList = activityProdutRepository.getActivityProductList(productIds);
+        for (String pid : productIds) {
+            ProductDetailDto productDetailDto;
+            Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+            if (product == null) {
+                continue;
+            }
+//            List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
+//            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts, catalog);
+//            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
+//                productDetailDto = DtoMapper.
+//            }
+        }
 
         return null;
     }
