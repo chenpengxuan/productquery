@@ -2,7 +2,7 @@ package com.ymatou.productquery.domain.cache;
 
 import com.google.common.cache.CacheStats;
 import com.ymatou.productquery.domain.model.*;
-import com.ymatou.productquery.domain.repo.mongorepo.ActivityProdutRepository;
+import com.ymatou.productquery.domain.repo.mongorepo.ActivityProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.infrastructure.config.props.CacheProps;
@@ -39,7 +39,7 @@ public class Cache {
     private ProductRepository productRepository;
 
     @Autowired
-    private ActivityProdutRepository activityProdutRepository;
+    private ActivityProductRepository activityProductRepository;
 
     /**
      * 获取缓存统计信息
@@ -121,7 +121,7 @@ public class Cache {
             if (cacheManager.getActivityProductCacheFactory().size() < cacheProps.getActivityProductCacheSize()) {
                 return null;
             } else {
-                cacheList = activityProdutRepository.getActivityProductList(productIdList);
+                cacheList = activityProductRepository.getActivityProductList(productIdList);
                 logWrapper.recordErrorLog("活动商品缓存size需要扩容，超出容量的活动商品已改为从mongo查询，不影响正常业务");
                 return cacheList;
             }
@@ -141,7 +141,7 @@ public class Cache {
      * 初始化活动商品缓存
      */
     public int initActivityProductCache() {
-        List<ActivityProducts> activityProductList = activityProdutRepository.getAllValidActivityProductList();
+        List<ActivityProducts> activityProductList = activityProductRepository.getAllValidActivityProductList();
         cacheManager.putActivityProduct(activityProductList
                 .stream()
                 .collect(Collectors.toMap(ActivityProducts::getProductId, y -> y, (key1, key2) -> key2))
@@ -173,7 +173,7 @@ public class Cache {
                 latestActivityProduct.getProductInActivityId() : 0;
 
         //获取新增的mongo活动商品信息
-        List<ActivityProducts> newestActivityProductList = activityProdutRepository
+        List<ActivityProducts> newestActivityProductList = activityProductRepository
                 .getNewestActivityProductIdList(newestCacheProductInActivityId);
 
         //批量添加至缓存
@@ -203,7 +203,7 @@ public class Cache {
         //当活动商品发生变更时，有可能从mongo中根据限定条件取出来是空，所以先把productId取出来
         String activityProductId = activityProduct.getProductId();
         if (Long.compare(activityProductStamp, updateStamp) != 0) {
-            result = activityProdutRepository.getActivityProductByProductId(activityProduct.getProductId());
+            result = activityProductRepository.getActivityProductByProductId(activityProduct.getProductId());
 
             if (activityProduct != null) {
                 cacheManager.putActivityProduct(activityProduct.getProductId(), activityProduct);

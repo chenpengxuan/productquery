@@ -3,7 +3,6 @@ package com.ymatou.productquery.domain.repo.mongorepo;
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
 import org.springframework.stereotype.Component;
@@ -16,13 +15,13 @@ import java.util.List;
  * Created by zhangyong on 2017/4/19.
  */
 @Component
-public class ActivityProdutRepository extends MongoRepository {
+public class ActivityProductRepository extends MongoRepository {
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "YmtProducts";
+    private static final String dbName = "YmtProducts";
 
-    private final FindOptions limitOne = new FindOptions().limit(1);
+    private static final FindOptions limitOne = new FindOptions().limit(1);
 
     /**
      * 获取到MongoClient
@@ -41,11 +40,11 @@ public class ActivityProdutRepository extends MongoRepository {
      * @return
      */
     public List<ActivityProducts> getActivityProductList(List<String> productIdList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
                 .field("spid").in(productIdList)
-                .field("end").greaterThan(now).asList();
+                .field("end").greaterThanOrEq(now).asList();
     }
 
     /**
@@ -55,11 +54,11 @@ public class ActivityProdutRepository extends MongoRepository {
      * @return
      */
     public List<ActivityProducts> getActivityProductByProductId(String productId) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
                 .field("spid").equal(productId)
-                .field("end").greaterThan(now).asList();
+                .field("end").greaterThanOrEq(now).asList();
     }
 
     /**
@@ -68,10 +67,10 @@ public class ActivityProdutRepository extends MongoRepository {
      * @return
      */
     public List<ActivityProducts> getAllValidActivityProductList() {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
-                .field("end").greaterThan(now)
+                .field("end").greaterThanOrEq(now)
                 .asList();
     }
 
@@ -82,7 +81,7 @@ public class ActivityProdutRepository extends MongoRepository {
      * @return
      */
     public List<ActivityProducts> getNewestActivityProductIdList(int newestProductInActivityId) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(ActivityProducts.class).disableValidation()
                 .field("inaid").greaterThan(newestProductInActivityId)
                 .asList();

@@ -35,10 +35,6 @@ public class ActivityCacheSchedule {
     @Autowired
     private LogWrapper logWrapper;
 
-    private ScheduledFuture<?> future;
-
-    private ScheduledFuture<?> futureRefreshActivity;
-
     private static int recordCount;
 
     private static String cronSetting;

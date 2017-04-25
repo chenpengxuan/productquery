@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by zhangyong on 2017/4/20.
  */
-public class GetProductDetailListByProductIdListRequest {
+public class GetProductDetailListByProductIdListRequest  extends BaseRequest {
     // <summary>
     // 商品编号列表
     // </summary>

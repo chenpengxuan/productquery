@@ -24,20 +24,10 @@ public class MongoDataSource {
     @Autowired
     private MongoProps mongoProps;
 
-    @Bean("productMongoUri")
-    public MongoClientURI getMongoClientURI() {
-        return new MongoClientURI(mongoProps.getMongoProductUrl());
-    }
-
     @Bean("productMongoClient")
     public MongoClient getMongoClient() {
         MongoClientURI mongoClientURI = new MongoClientURI(mongoProps.getMongoProductUrl());
         return new MongoClient(mongoClientURI);
-    }
-
-    @Bean("historyProductMongoUri")
-    public MongoClientURI getHistoryMongoClientURI() {
-        return new MongoClientURI(mongoProps.getMongoHistoryProductUrl());
     }
 
     @Bean("historyProductMongoClient")

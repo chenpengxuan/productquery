@@ -4,7 +4,6 @@ import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.Catalogs;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,14 +43,8 @@ public class ProductActivityService {
         }
         Date now = new Date();
         List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getStartTime().before(now) && t.getEndTime().after(now)).collect(Collectors.toList());
-        Collections.sort(activityProducts, new Comparator<ActivityProducts>() {
-            @Override
-            public int compare(ActivityProducts o1, ActivityProducts o2) {
-                return o1.getStartTime().compareTo(o2.getStartTime());
-            }
-        });
-
-        return activityProducts.stream().findFirst().orElse(null);
+        return Collections.min(activityProducts, (o1,o2) ->
+                o1.getStartTime().compareTo(o2.getStartTime()));
     }
 
 }
