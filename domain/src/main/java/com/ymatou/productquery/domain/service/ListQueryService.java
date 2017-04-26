@@ -76,8 +76,8 @@ public class ListQueryService {
 
             List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId().equals(productId)).collect(Collectors.toList());
             ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(tempActivityProductList, catalog);
-            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getActivityCatalogList() != null)) {
-                ActivityCatalogInfo activityCatalogInfo = activityProduct.getActivityCatalogList().stream()
+            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getCatalogs() != null)) {
+                ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream()
                         .filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
                 if (activityCatalogInfo != null) {
                     if (activityCatalogInfo.getActivityStock() > 0) {

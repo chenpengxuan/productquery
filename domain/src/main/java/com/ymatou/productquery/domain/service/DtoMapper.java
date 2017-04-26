@@ -122,8 +122,8 @@ public class DtoMapper {
         }
         if (activityProduct != null) {
 
-            if (activityProduct.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
-                return activityProduct.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityStock();
+            if (activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
+                return activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityStock();
             }
         }
         return catalog.getStock();
@@ -135,8 +135,8 @@ public class DtoMapper {
         }
         if (activityProduct != null) {
 
-            if (activityProduct.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
-                return activityProduct.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityPrice();
+            if (activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
+                return activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityPrice();
             }
         }
         return catalog.getPrice();
@@ -175,7 +175,7 @@ public class DtoMapper {
         pa.setPromotionType(3);
         pa.setProductActivityLimitNumber(model.getProductLimit());
         pa.setProductInActivityId(model.getProductInActivityId());
-        pa.setActivityCatalogList(model.getActivityCatalogList().stream().map(t -> t.getCatalogId()).collect(Collectors.toList()));
+        pa.setActivityCatalogList(model.getCatalogs().stream().map(t -> t.getCatalogId()).collect(Collectors.toList()));
         pa.setNewBuyer(model.isNewBuyer());
         return pa;
     }
