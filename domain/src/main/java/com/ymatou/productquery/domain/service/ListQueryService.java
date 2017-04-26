@@ -5,6 +5,7 @@ import com.ymatou.productquery.domain.repo.mongorepo.*;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.res.ProductDetailDto;
+import com.ymatou.productquery.model.res.ProductHistoryDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,9 @@ public class ListQueryService {
 
     @Autowired
     private ProductTimeStampRepository productTimeStampRepository;
+
+    @Autowired
+    private HistoryProductRepository historyProductRepository;
 
     @Autowired
     private Cache cache;
@@ -72,7 +76,8 @@ public class ListQueryService {
             List<ActivityProducts> activityProductses = activityProductsList.stream().filter(t -> t.getProductId().equals(productid)).collect(Collectors.toList());
             ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProductses, catalog);
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getActivityCatalogList() != null)) {
-                ActivityCatalogInfo activityCatalogInfo = activityProduct.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
+                ActivityCatalogInfo activityCatalogInfo = activityProduct.getActivityCatalogList().stream()
+                        .filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
                 if (activityCatalogInfo != null) {
                     if (activityCatalogInfo.getActivityStock() > 0) {
                         productInCartDto = DtoMapper.toProductInCartDto(product, catalog, activityProduct, catalogsList);
@@ -92,7 +97,8 @@ public class ListQueryService {
                 productInCartDto.setValidStart(liveProduct.getStartTime());
                 productInCartDto.setValidEnd(liveProduct.getEndTime());
             }
-            productInCartDto.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart(), product.getValidEnd(), liveProduct, activityProduct));
+            productInCartDto.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart()
+                    , product.getValidEnd(), liveProduct, activityProduct));
             productInCartDtoList.add(productInCartDto);
         }
         return productInCartDtoList;
@@ -113,18 +119,18 @@ public class ListQueryService {
         List<Products> productsList;
         List<Catalogs> catalogsList;
         List<LiveProducts> liveProductsList;
-        Map<String,Tuple<ActivityProducts,ActivityProducts>> activityProductsList;
+        Map<String, Tuple<ActivityProducts, ActivityProducts>> activityProductsList;
         if (bizProps.isUseCache()) {
             productsList = cache.getProductsByProductIds(productIds, updateStampMap);
             catalogsList = cache.getCatalogsByProductIds(productIds, updateStampMap);
             liveProductsList = cache.getLiveProductsByProductIds(productIds, updateStampMap);
-            activityProductsList = cache.getActivityProductList(productIds, updateStampMap,nextActivityExpire);
+            activityProductsList = cache.getActivityProductList(productIds, updateStampMap, nextActivityExpire);
 
         } else {
             productsList = productRepository.getProductsByProductIds(productIds);
             catalogsList = productRepository.getCatalogsByProductIds(productIds);
             liveProductsList = liveProductRepository.getLiveProductList(productIds);
-            activityProductsList = activityProdutRepository.getValidAndNextActivityProductByProductId(productIds,nextActivityExpire);
+            activityProductsList = activityProdutRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
         }
         for (String pid : productIds) {
             ProductDetailDto productDetailDto;
@@ -139,6 +145,29 @@ public class ListQueryService {
 //            }
         }
 
+        return null;
+    }
+
+    /**
+     * 历史库中的商品列表
+     *
+     * @param productIds
+     * @return
+     */
+    public List<ProductHistoryDto> GetProductListByHistoryProductIdList(List<String> productIds) {
+//        List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
+//        List<String> notHisProductId = new ArrayList<>();
+//        List<ProductDetailModel> productDetailModelList=historyProductRepository.getHistoryProductListByProductIdList(productIds);
+//        if(productDetailModelList==null||productDetailModelList.isEmpty())
+//        {
+//            notHisProductId=productIds;
+//        }
+//        else
+//        {
+//            for (String pid:productIds) {
+//                ProductDetailModel  productDetail=
+//            }
+//        }
         return null;
     }
 
