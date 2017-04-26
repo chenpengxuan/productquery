@@ -10,19 +10,19 @@ import java.util.Date;
  * Created by zhangyong on 2017/4/13.
  */
 public class ProductStatusService {
-    public static ProductStatusEnum getProductStatus(int action, Date validStart, Date validEnd, LiveProducts liveProduct, ActivityProducts activityProduct) {
+    public static int getProductStatus(int action, Date validStart, Date validEnd, LiveProducts liveProduct, ActivityProducts activityProduct) {
         if (action == -1) {
-            return ProductStatusEnum.Deleted;
+            return ProductStatusEnum.Deleted.ordinal();
         }
         if (activityProduct != null) {
-            return ProductStatusEnum.Available;
+            return ProductStatusEnum.Available.ordinal();
         }
         Date now = new Date();
         if (liveProduct != null) {
             return now.after(liveProduct.getStartTime()) && now.before(liveProduct.getEndTime()) && liveProduct.getSellStatus() == 1
-                    ? ProductStatusEnum.Available : ProductStatusEnum.Disable;
+                    ? ProductStatusEnum.Available.ordinal() : ProductStatusEnum.Disable.ordinal();
         }
         return now.after(validStart)&&now.before(validEnd)
-                ?ProductStatusEnum.Available:ProductStatusEnum.Disable;
+                ?ProductStatusEnum.Available.ordinal():ProductStatusEnum.Disable.ordinal();
     }
 }

@@ -141,7 +141,7 @@ public class ProductInCartDto {
     //  2. 无效
     
     @JsonProperty("Status")
-    private ProductStatusEnum status;
+    private int status;
 
     
     // 商品的限购数量(0 为不限制购买数量)
@@ -377,11 +377,11 @@ public class ProductInCartDto {
         this.tariffType = tariffType;
     }
 
-    public ProductStatusEnum getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(ProductStatusEnum status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
