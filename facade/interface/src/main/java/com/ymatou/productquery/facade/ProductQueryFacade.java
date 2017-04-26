@@ -31,7 +31,6 @@ public interface ProductQueryFacade {
      * @return
      */
     BaseResponseNetAdapter getProductDetailByProductId(GetProductInfoByProductIdRequest request);
-    BaseResponseNetAdapter getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
 
     BaseResponseNetAdapter getProductListByHistoryProductIdList(GetProductListByHistoryProductIdListRequest request);
 }

@@ -2,10 +2,7 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.model.BizException;
-import com.ymatou.productquery.model.res.LiveProductCartDto;
-import com.ymatou.productquery.model.res.ProductActivityCartDto;
-import com.ymatou.productquery.model.res.ProductInCartDto;
-import com.ymatou.productquery.model.res.PropertyDto;
+import com.ymatou.productquery.model.res.*;
 import org.apache.commons.beanutils.BeanUtils;
 
 import java.util.ArrayList;
