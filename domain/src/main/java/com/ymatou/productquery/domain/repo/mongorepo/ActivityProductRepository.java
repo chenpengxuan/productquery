@@ -62,6 +62,45 @@ public class ActivityProductRepository extends MongoRepository {
     }
 
     /**
+     * 根据productid查询正在进行的以及即将开始的活动
+     *
+     * @param productId
+     * @return
+     */
+    public Tuple<ActivityProducts, ActivityProducts> getValidAndNextActivityProductByProductId(String productId, int nextActivityExpire) {
+        Datastore datastore = this.getDatastore(this.dbName);
+        Date now = new Date();
+        ActivityProducts valid = datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").equal(productId)
+                .field("end").greaterThanOrEq(now)
+                .field("start").lessThanOrEq(now)
+                .get(limitOne);
+        Calendar c = Calendar.getInstance();
+        c.setTime(now);
+        c.add(Calendar.DAY_OF_YEAR, nextActivityExpire);
+        ActivityProducts next = datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").equal(productId)
+                .field("start").lessThanOrEq(c.getTime())
+                .field("end").greaterThanOrEq(now)
+                .order(Sort.ascending("start"))
+                .get(limitOne);
+        return new Tuple<>(valid, next);
+    }
+
+    /**
+     * 根据productid查询正在进行的以及即将开始的活动
+     *
+     * @param productIdList
+     * @param nextActivityExpire
+     * @return
+     */
+    public Map<String, Tuple<ActivityProducts, ActivityProducts>> getValidAndNextActivityProductByProductId(List<String> productIdList, int nextActivityExpire) {
+        Map<String, Tuple<ActivityProducts, ActivityProducts>> stringTupleMap = new HashMap<>();
+        productIdList.forEach(t -> stringTupleMap.put(t, getValidAndNextActivityProductByProductId(t, nextActivityExpire)));
+        return stringTupleMap;
+    }
+
+    /**
      * 获取全部有效活动商品列表
      *
      * @return
