@@ -23,5 +23,7 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getCatalogListByTradeIsolation(GetCatalogListByTradeIsolationRequest request);
 
-    BaseResponseNetAdapter  getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
+    BaseResponseNetAdapter getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
+
+    BaseResponseNetAdapter getProductListByHistoryProductIdList(GetProductListByHistoryProductIdListRequest request);
 }

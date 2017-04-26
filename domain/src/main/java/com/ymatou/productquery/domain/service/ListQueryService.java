@@ -7,6 +7,7 @@ import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.res.ProductDetailDto;
 import com.ymatou.productquery.model.res.ProductHistoryDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
+import com.ymatou.productquery.model.res.ProductStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.ymatou.productquery.domain.cache.Cache;
@@ -155,20 +156,38 @@ public class ListQueryService {
      * @return
      */
     public List<ProductHistoryDto> GetProductListByHistoryProductIdList(List<String> productIds) {
-//        List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
-//        List<String> notHisProductId = new ArrayList<>();
-//        List<ProductDetailModel> productDetailModelList=historyProductRepository.getHistoryProductListByProductIdList(productIds);
-//        if(productDetailModelList==null||productDetailModelList.isEmpty())
-//        {
-//            notHisProductId=productIds;
-//        }
-//        else
-//        {
-//            for (String pid:productIds) {
-//                ProductDetailModel  productDetail=
-//            }
-//        }
-        return null;
+        List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
+        List<String> notHisProductId = new ArrayList<>();
+        List<ProductDetailModel> productDetailModelList = historyProductRepository.getHistoryProductListByProductIdList(productIds);
+        if (productDetailModelList == null || productDetailModelList.isEmpty()) {
+            notHisProductId = productIds;
+        } else {
+            for (String pid : productIds) {
+                ProductDetailModel productDetail = productDetailModelList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+                if (productDetail == null) {
+                    notHisProductId.add(pid);
+                    continue;
+                }
+                ProductHistoryDto productHistoryDto = DtoMapper.toProductHistoryDto(productDetail);
+                productHistoryDto.setStatus(ProductStatusEnum.Disable.ordinal());
+                productHistoryDtoList.add(productHistoryDto);
+            }
+        }
+        if (notHisProductId != null && !notHisProductId.isEmpty()) {
+            List<Products> productsList = productRepository.getProductsByProductIds(notHisProductId);
+            if (productsList != null) {
+                for (String pid : notHisProductId
+                        ) {
+                    Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+                    if (product == null) {
+                        continue;
+                    }
+                    ProductHistoryDto pr = DtoMapper.toProductHistoryDto(product);
+                    pr.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart(), product.getValidEnd(), null, null));
+                    productHistoryDtoList.add(pr);
+                }
+            }
+        }
+        return productHistoryDtoList;
     }
-
 }

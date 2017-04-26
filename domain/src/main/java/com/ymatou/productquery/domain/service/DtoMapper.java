@@ -53,6 +53,45 @@ public class DtoMapper {
         return result;
     }
 
+    /**
+     * 历史数据类型转换
+     *
+     * @param model
+     * @return
+     */
+    public static ProductHistoryDto toProductHistoryDto(ProductDetailModel model) {
+        if (model == null) {
+            return null;
+        }
+        ProductHistoryDto productHistoryDto = new ProductHistoryDto();
+        try {
+            BeanUtils.copyProperties(productHistoryDto, model);
+        } catch (Exception ex) {
+        }
+
+//        productHistoryDto.setProductId(model.getProductId());
+//        productHistoryDto.setTitle(model.getTitle());
+//        productHistoryDto.setMainPic(model.getPicList() != null ? model.getPicList().stream().findFirst().orElse("") : "");
+//        productHistoryDto.setTariffType(model.getTariffType());
+//        productHistoryDto.setFreeShipping(model.getFreight() <= 0);
+//        productHistoryDto.setDeliveryMethod(model.getDeliveryMethod());
+//        productHistoryDto.setLocalReturn(model.getLocalReturn());
+//        productHistoryDto.setValidEnd(model.getValidEnd());
+//        productHistoryDto.setValidStart(model.getValidStart());
+//        productHistoryDto.setPrice(model.getMinCatalogPrice());
+        return productHistoryDto;
+    }
+
+    public static ProductHistoryDto toProductHistoryDto(Products model) {
+        try {
+            ProductHistoryDto productHistoryDto = new ProductHistoryDto();
+            BeanUtils.copyProperties(productHistoryDto, model);
+            return productHistoryDto;
+        } catch (Exception ex) {
+            throw new BizException("line 146:BeanUtils.copyProperties fail,liveid" + model.getProductId(), ex);
+        }
+    }
+
     public static LiveProductCartDto toLiveProductCartDto(LiveProducts model) {
         if (model == null) {
             return null;
