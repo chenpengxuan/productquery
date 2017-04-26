@@ -29,7 +29,7 @@ public class GetProductListByHistoryProductIdListTest {
         List<String> productids = new ArrayList<>();
         productids.add("02AF38B2-851C-4BD3-8DC7-F8A5CA0CC7EA");
         productids.add("02aeb9f1-eca4-4492-97a2-5e20a69f1468");
-        productids.add("fd5e264b-d6a6-488d-9133-c928ca76f1bb");
+        productids.add("027f7fb8-17e4-4733-a4c1-549cdb70979d");
         GetProductListByHistoryProductIdListRequest request = new GetProductListByHistoryProductIdListRequest();
         request.setProductIdList(productids);
         BaseResponseNetAdapter response = productQueryFacade.getProductListByHistoryProductIdList(request);

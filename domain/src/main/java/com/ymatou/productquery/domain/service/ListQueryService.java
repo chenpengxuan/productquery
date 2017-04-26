@@ -131,7 +131,7 @@ public class ListQueryService {
             productsList = productRepository.getProductsByProductIds(productIds);
             catalogsList = productRepository.getCatalogsByProductIds(productIds);
             liveProductsList = liveProductRepository.getLiveProductList(productIds);
-            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds,nextActivityExpire);
+            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
         }
         for (String pid : productIds) {
             ProductDetailDto productDetailDto;
@@ -158,18 +158,18 @@ public class ListQueryService {
     public List<ProductHistoryDto> GetProductListByHistoryProductIdList(List<String> productIds) {
         List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
         List<String> notHisProductId = new ArrayList<>();
-        List<ProductDetailModel> productDetailModelList = historyProductRepository.getHistoryProductListByProductIdList(productIds);
+        List<HistoryProductModel> productDetailModelList = historyProductRepository.getHistoryProductListByProductIdList(productIds);
         if (productDetailModelList == null || productDetailModelList.isEmpty()) {
             notHisProductId = productIds;
         } else {
             for (String pid : productIds) {
-                ProductDetailModel productDetail = productDetailModelList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+                HistoryProductModel productDetail = productDetailModelList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
                 if (productDetail == null) {
                     notHisProductId.add(pid);
                     continue;
                 }
                 ProductHistoryDto productHistoryDto = DtoMapper.toProductHistoryDto(productDetail);
-                productHistoryDto.setStatus(ProductStatusEnum.Disable.ordinal());
+                productHistoryDto.setStatus(ProductStatusEnum.Disable.getCode());
                 productHistoryDtoList.add(productHistoryDto);
             }
         }

@@ -32,6 +32,7 @@ public class MongoDataSource {
 
     @Bean("historyProductMongoClient")
     public MongoClient getHistoryMongoClient() {
-        return new MongoClient(mongoProps.getMongoHistoryProductUrl());
+        MongoClientURI mongoClientURI=new MongoClientURI(mongoProps.getMongoHistoryProductUrl());
+        return new MongoClient(mongoClientURI);
     }
 }

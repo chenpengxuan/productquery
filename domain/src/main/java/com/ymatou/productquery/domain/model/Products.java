@@ -56,14 +56,14 @@ public class Products extends BaseInfo{
     @Property("bonded")
     private int bondedArea;//	保税区
     @Property("tariffy")
-    private int isTariffy;//	是否包税
+    private int tariffType;//	是否包税
     @Property("shipping")
-    private int isShipping;//	是否包邮
+    private int Freight;//	是否包邮
     @Property("country")
     private int countryId;//	国家编号
     @Property("newdesc")
     private boolean isNewDesc;//	是否新图文描述
-    @JsonProperty("localr")
+    @Property("localr")
     private int localReturn;//	本土退货
     @Property("noreason")
     private boolean noReasonReturn;//	7天无理由退货
@@ -270,20 +270,20 @@ public class Products extends BaseInfo{
         this.bondedArea = bondedArea;
     }
 
-    public int getIsTariffy() {
-        return isTariffy;
+    public int getTariffType() {
+        return tariffType;
     }
 
-    public void setIsTariffy(int isTariffy) {
-        this.isTariffy = isTariffy;
+    public void setTariffType(int tariffType) {
+        this.tariffType = tariffType;
     }
 
-    public int getIsShipping() {
-        return isShipping;
+    public int getFreight() {
+        return Freight;
     }
 
-    public void setIsShipping(int isShipping) {
-        this.isShipping = isShipping;
+    public void setFreight(int freight) {
+        this.Freight = freight;
     }
 
     public int getCountryId() {

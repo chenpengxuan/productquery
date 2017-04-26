@@ -1,6 +1,7 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.mongodb.MongoClient;
+import com.ymatou.productquery.domain.model.HistoryProductModel;
 import com.ymatou.productquery.domain.model.ProductDetailModel;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
@@ -35,9 +36,9 @@ public class HistoryProductRepository extends MongoRepository {
      * @param productIdList
      * @return
      */
-    public List<ProductDetailModel> getHistoryProductListByProductIdList(List<String> productIdList) {
+    public List<HistoryProductModel> getHistoryProductListByProductIdList(List<String> productIdList) {
         Datastore datastore = this.getDataStore(this.dbName);
-        return datastore.find(ProductDetailModel.class).disableValidation()
+        return datastore.find(HistoryProductModel.class).disableValidation()
                 .field("ProductId").in(productIdList).asList();
 
     }
