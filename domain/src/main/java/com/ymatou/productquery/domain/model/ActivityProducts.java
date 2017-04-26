@@ -1,6 +1,5 @@
 package com.ymatou.productquery.domain.model;
 
-import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
@@ -9,12 +8,7 @@ import java.util.List;
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class ActivityProducts {
-
-    private ObjectId _id;
-    @Property("spid")
-    private String productId;
-
+public class ActivityProducts extends BaseInfo{
     @Property("aid")
     private int activityId;
 
@@ -50,25 +44,6 @@ public class ActivityProducts {
 
     @Property("catalogs")
     private List<ActivityCatalogInfo> activityCatalogList;
-
-    @Property("updatetime")
-    private Date updateTime;
-
-    public ObjectId get_id() {
-        return _id;
-    }
-
-    public void set_id(ObjectId _id) {
-        this._id = _id;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
 
     public int getActivityId() {
         return activityId;
@@ -164,14 +139,6 @@ public class ActivityProducts {
 
     public void setActivityCatalogList(List<ActivityCatalogInfo> activityCatalogList) {
         this.activityCatalogList = activityCatalogList;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }
 

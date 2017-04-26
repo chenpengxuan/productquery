@@ -3,13 +3,14 @@ package com.ymatou.productquery.domain.repo.mongorepo;
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
+import com.ymatou.productquery.infrastructure.util.Tuple;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
+import org.mongodb.morphia.query.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by zhangyong on 2017/4/19.
@@ -68,20 +69,17 @@ public class ActivityProductRepository extends MongoRepository {
      * @return
      */
     public Tuple<ActivityProducts, ActivityProducts> getValidAndNextActivityProductByProductId(String productId, int nextActivityExpire) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         ActivityProducts valid = datastore.find(ActivityProducts.class).disableValidation()
                 .field("spid").equal(productId)
                 .field("end").greaterThanOrEq(now)
                 .field("start").lessThanOrEq(now)
                 .get(limitOne);
-        Calendar c = Calendar.getInstance();
-        c.setTime(now);
-        c.add(Calendar.DAY_OF_YEAR, nextActivityExpire);
+
         ActivityProducts next = datastore.find(ActivityProducts.class).disableValidation()
                 .field("spid").equal(productId)
-                .field("start").lessThanOrEq(c.getTime())
-                .field("end").greaterThanOrEq(now)
+                .field("start").greaterThan(now)
                 .order(Sort.ascending("start"))
                 .get(limitOne);
         return new Tuple<>(valid, next);

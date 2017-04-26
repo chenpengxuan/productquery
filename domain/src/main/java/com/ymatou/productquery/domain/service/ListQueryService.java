@@ -124,7 +124,7 @@ public class ListQueryService {
             productsList = productRepository.getProductsByProductIds(productIds);
             catalogsList = productRepository.getCatalogsByProductIds(productIds);
             liveProductsList = liveProductRepository.getLiveProductList(productIds);
-            activityProductsList = activityProdutRepository.getValidAndNextActivityProductByProductId(productIds,nextActivityExpire);
+            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds,nextActivityExpire);
         }
         for (String pid : productIds) {
             ProductDetailDto productDetailDto;

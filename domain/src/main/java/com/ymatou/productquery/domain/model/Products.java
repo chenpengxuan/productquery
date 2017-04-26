@@ -10,9 +10,7 @@ import java.util.List;
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class Products {
-    @Property("spid")
-    private String productId;//	商品编号
+public class Products extends BaseInfo{
     @Property("ipid")
     private int prodId;//	商品数字编号
     @Property("title")
@@ -95,16 +93,6 @@ public class Products {
     private String grade;//	商品等级
     @Property("sizepics")
     private List<String> sizePicList;//	尺码表
-    @Property("updatetime")
-    private Date updatetime;
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
 
     public int getProdId() {
         return prodId;
@@ -432,13 +420,5 @@ public class Products {
 
     public void setSizePicList(List<String> sizePicList) {
         this.sizePicList = sizePicList;
-    }
-
-    public Date getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
     }
 }

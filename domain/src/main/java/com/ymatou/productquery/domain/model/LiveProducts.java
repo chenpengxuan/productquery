@@ -1,6 +1,5 @@
 package com.ymatou.productquery.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
@@ -8,9 +7,7 @@ import java.util.Date;
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class LiveProducts {
-    @Property("spid")
-    private String productId;
+public class LiveProducts extends BaseInfo{
     @Property("lid")
     private int liveId;
     @Property("sid")
@@ -45,16 +42,6 @@ public class LiveProducts {
     private boolean istop;
     @Property("sort")
     private int readyPutawayProductSort;
-    @JsonProperty("updatetime")
-    private Date updatetime;
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
 
     public int getLiveId() {
         return liveId;
@@ -190,13 +177,5 @@ public class LiveProducts {
 
     public void setReadyPutawayProductSort(int readyPutawayProductSort) {
         this.readyPutawayProductSort = readyPutawayProductSort;
-    }
-
-    public Date getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
     }
 }
