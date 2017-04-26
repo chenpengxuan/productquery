@@ -23,6 +23,14 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getCatalogListByTradeIsolation(GetCatalogListByTradeIsolationRequest request);
 
+    BaseResponseNetAdapter  getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
+
+    /**
+     * 根据商品编号获取商品信息(对应商详页场景)
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductDetailByProductId(GetProductInfoByProductIdRequest request);
     BaseResponseNetAdapter getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
 
     BaseResponseNetAdapter getProductListByHistoryProductIdList(GetProductListByHistoryProductIdListRequest request);

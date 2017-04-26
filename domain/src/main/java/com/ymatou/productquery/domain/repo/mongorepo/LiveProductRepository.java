@@ -36,7 +36,7 @@ public class LiveProductRepository extends MongoRepository {
      * @return
      */
     public List<LiveProducts> getLiveProductList(List<String> productIdList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(LiveProducts.class).disableValidation()
                 .field("spid").in(productIdList).asList();
     }

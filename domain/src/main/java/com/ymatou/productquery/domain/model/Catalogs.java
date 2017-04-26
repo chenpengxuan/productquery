@@ -1,18 +1,13 @@
 package com.ymatou.productquery.domain.model;
 
-import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Property;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class Catalogs {
-    @Property("spid")
-    private String productId;//	商品编号
-
+public class Catalogs extends BaseInfo{
     @Property("cid")
     private String catalogId;//	规格编号
 
@@ -41,17 +36,6 @@ public class Catalogs {
     private int stock;//	规格库存
 
     private List<PropertyInfo> props;//	规格属性列表
-
-    @Property("updatetime")
-    private Date updatetime;
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
 
     public String getCatalogId() {
         return catalogId;
@@ -131,13 +115,5 @@ public class Catalogs {
 
     public void setProps(List<PropertyInfo> props) {
         this.props = props;
-    }
-
-    public Date getUpdatetime() {
-        return updatetime;
-    }
-
-    public void setUpdatetime(Date updatetime) {
-        this.updatetime = updatetime;
     }
 }

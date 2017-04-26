@@ -79,6 +79,14 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         return null;
     }
 
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByProductId:(?i:GetProductInfoByProductId)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getProductDetailByProductId(@BeanParam GetProductInfoByProductIdRequest request) {
+        return null;
+    }
+
     /**
      * 历史商品列表
      *

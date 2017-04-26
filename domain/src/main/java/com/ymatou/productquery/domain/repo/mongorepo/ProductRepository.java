@@ -40,7 +40,7 @@ public class ProductRepository extends MongoRepository {
      * @param product
      */
     public void insert(Products product) {
-        this.insertEntiy(this.dbName, product);
+        this.insertEntity(this.dbName, product);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ProductRepository extends MongoRepository {
             return new ArrayList<>();
         }
 
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
                 .field("spid").in(productIds)
                 .project("spid", true)
@@ -73,9 +73,33 @@ public class ProductRepository extends MongoRepository {
      * @return
      */
     public List<Products> getProductsByProductIds(List<String> productIdList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
                 .field("spid").in(productIdList).asList();
+    }
+
+    /**
+     * 根据ProductId查询Product
+     *
+     * @param productId
+     * @return
+     */
+    public List<Products> getProductByProductId(String productId) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        return datastore.find(Products.class).disableValidation()
+                .field("spid").equal(productId).asList();
+    }
+
+    /**
+     * 根据productId查询Catalogs
+     *
+     * @param productId
+     * @return
+     */
+    public List<Catalogs> getCatalogsByProductId(String productId) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        return datastore.find(Catalogs.class).disableValidation()
+                .field("spid").equal(productId).asList();
     }
 
     /**
@@ -85,7 +109,7 @@ public class ProductRepository extends MongoRepository {
      * @return
      */
     public List<Catalogs> getCatalogsByProductIds(List<String> productIdList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Catalogs.class).disableValidation()
                 .field("spid").in(productIdList).asList();
     }
@@ -97,7 +121,7 @@ public class ProductRepository extends MongoRepository {
      * @return
      */
     public List<String> getProductIdsByCatalogIds(List<String> catalogIdList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         List<Catalogs> query = datastore.find(Catalogs.class).disableValidation()
                 .field("cid").in(catalogIdList)
                 .project("spid", true).asList();

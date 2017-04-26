@@ -36,7 +36,7 @@ public class HistoryProductRepository extends MongoRepository {
      * @return
      */
     public List<ProductDetailModel> getHistoryProductListByProductIdList(List<String> productIdList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(ProductDetailModel.class).disableValidation()
                 .field("ProductId").in(productIdList).asList();
 

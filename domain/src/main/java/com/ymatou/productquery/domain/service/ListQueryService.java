@@ -28,7 +28,7 @@ public class ListQueryService {
     private LiveProductRepository liveProductRepository;
 
     @Autowired
-    private ActivityProdutRepository activityProdutRepository;
+    private ActivityProductRepository activityProductRepository;
 
     @Autowired
     private ProductTimeStampRepository productTimeStampRepository;
@@ -67,15 +67,15 @@ public class ListQueryService {
         }
 
         List<LiveProducts> liveProductsList = liveProductRepository.getLiveProductList(pids);
-        List<ActivityProducts> activityProductsList = activityProdutRepository.getActivityProductList(pids);
+        List<ActivityProducts> activityProductsList = activityProductRepository.getActivityProductList(pids);
         ProductInCartDto productInCartDto = new ProductInCartDto();
         for (String catalogId : catalogIds) {
             Catalogs catalog = catalogsList.stream().filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
-            String productid = catalog.getProductId();
-            Products product = productsList.stream().filter(t -> t.getProductId().equals(productid)).findFirst().orElse(null);
+            String productId = catalog.getProductId();
+            Products product = productsList.stream().filter(t -> t.getProductId().equals(productId)).findFirst().orElse(null);
 
-            List<ActivityProducts> activityProductses = activityProductsList.stream().filter(t -> t.getProductId().equals(productid)).collect(Collectors.toList());
-            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProductses, catalog);
+            List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId().equals(productId)).collect(Collectors.toList());
+            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(tempActivityProductList, catalog);
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getActivityCatalogList() != null)) {
                 ActivityCatalogInfo activityCatalogInfo = activityProduct.getActivityCatalogList().stream()
                         .filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
@@ -92,7 +92,7 @@ public class ListQueryService {
             } else {
                 productInCartDto = DtoMapper.toProductInCartDto(product, catalog, null, catalogsList);
             }
-            LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(productid)).findFirst().orElse(null);
+            LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(productId)).findFirst().orElse(null);
             if (liveProduct != null) {
                 productInCartDto.setLiveProduct(DtoMapper.toLiveProductCartDto(liveProduct));
                 productInCartDto.setValidStart(liveProduct.getStartTime());
@@ -131,7 +131,7 @@ public class ListQueryService {
             productsList = productRepository.getProductsByProductIds(productIds);
             catalogsList = productRepository.getCatalogsByProductIds(productIds);
             liveProductsList = liveProductRepository.getLiveProductList(productIds);
-            activityProductsList = activityProdutRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
+            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds,nextActivityExpire);
         }
         for (String pid : productIds) {
             ProductDetailDto productDetailDto;

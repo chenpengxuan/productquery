@@ -1,19 +1,16 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
+import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.ProductTimeStamp;
-import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
-import org.mongodb.morphia.query.Meta;
 import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhangyong on 2017/4/21.
@@ -24,7 +21,7 @@ public class ProductTimeStampRepository extends MongoRepository {
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "YmtProducts";
+    private final static String dbName = "YmtProducts";
 
     /**
      * 获取到MongoClient
@@ -46,10 +43,11 @@ public class ProductTimeStampRepository extends MongoRepository {
      * @return
      */
     public ProductTimeStamp getTimeStampByProductId(String productId, List<String> stampKeyList) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         Query<ProductTimeStamp> query = datastore.find(ProductTimeStamp.class).disableValidation()
                 .field("spid").equal(productId);
-        return query.retrievedFields(true, (String[]) stampKeyList.toArray()).get(limitOne);
+        stampKeyList.forEach(x -> query.project(x,true));
+        return query.get(limitOne);
     }
 
     /**
@@ -60,9 +58,11 @@ public class ProductTimeStampRepository extends MongoRepository {
      * @return
      */
     public List<ProductTimeStamp> getTimeStampByProductIds(List<String> productIdList, String stampKeys) {
-        Datastore datastore = this.getDatastore(this.dbName);
+        Datastore datastore = this.getDataStore(this.dbName);
         Query<ProductTimeStamp> query = datastore.find(ProductTimeStamp.class).disableValidation()
                 .field("spid").in(productIdList);
-        return query.retrievedFields(true, stampKeys.split(",")).asList();
+        String[] stampKeyList = stampKeys.split(",");
+        Lists.newArrayList(stampKeyList).forEach(x -> query.project(x,true));
+        return query.asList();
     }
 }

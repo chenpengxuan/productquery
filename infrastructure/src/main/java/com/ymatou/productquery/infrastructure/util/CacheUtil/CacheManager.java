@@ -160,7 +160,7 @@ public class CacheManager {
      * @param <V>
      */
     public <K, V> void putActivityProduct(K cacheKey, V cacheVal) {
-        synchronized (this) {
+        synchronized (CacheManager.class) {
             expectActivityCacheSize = activityProductCacheFactory.size() + 1;
         }
         if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
@@ -176,7 +176,7 @@ public class CacheManager {
      * @param <V>
      */
     public <K, V> void putActivityProduct(Map<K, V> cacheList) {
-        synchronized (this) {
+        synchronized (CacheManager.class) {
             expectActivityCacheSize = activityProductCacheFactory.size() + cacheList.size();
         }
         if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
@@ -334,13 +334,13 @@ public class CacheManager {
 
         if (!queryParamWithCacheKeyMap.isEmpty()) {
             List<K> paramList = Lists.newArrayList();
-            queryParamWithCacheKeyMap.keySet().stream().forEach(x -> paramList.addAll(x));
+            queryParamWithCacheKeyMap.keySet().forEach(paramList::addAll);
             Z repositoryResultList = repositoryFunc
                     .apply(paramList);
             List<V> result = updateDataFunc.apply(partialInvalidCacheDataList, repositoryResultList);
             cacheResultList.addAll(result);
 
-            queryParamWithCacheKeyMap.entrySet().stream().forEach(reload -> {
+            queryParamWithCacheKeyMap.entrySet().forEach(reload -> {
 
                 List<V> mapResult = mapperFunc.apply(reload.getKey(), result);
                 if (mapResult != null && !mapResult.isEmpty()) {
