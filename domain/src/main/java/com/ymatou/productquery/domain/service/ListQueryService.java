@@ -36,7 +36,7 @@ public class ListQueryService {
     private HistoryProductRepository historyProductRepository;
 
     @Autowired
-    private Cache cache;
+    private CommonQueryService commonQueryService;
 
     @Autowired
     private BizProps bizProps;
@@ -114,36 +114,41 @@ public class ListQueryService {
      */
     public List<ProductDetailDto> GetProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
         List<ProductDetailDto> productDetailDtoList = new ArrayList<>();
-        List<ProductTimeStamp> updateStampMap = productTimeStampRepository
-                .getTimeStampByProductIds(productIds, "cut,sut,lut,aut");
+//        List<ProductTimeStamp> updateStampMap = productTimeStampRepository
+//                .getTimeStampByProductIds(productIds, "cut,sut,lut,aut");
         List<Products> productsList;
         List<Catalogs> catalogsList;
         List<LiveProducts> liveProductsList;
-        Map<String, Tuple<ActivityProducts, ActivityProducts>> activityProductsList;
-        if (bizProps.isUseCache()) {
-            productsList = cache.getProductsByProductIds(productIds, updateStampMap);
-            catalogsList = cache.getCatalogsByProductIds(productIds, updateStampMap);
-            liveProductsList = cache.getLiveProductsByProductIds(productIds, updateStampMap);
-            activityProductsList = cache.getActivityProductList(productIds, updateStampMap, nextActivityExpire);
-
-        } else {
-            productsList = productRepository.getProductsByProductIds(productIds);
-            catalogsList = productRepository.getCatalogsByProductIds(productIds);
-            liveProductsList = liveProductRepository.getLiveProductList(productIds);
-            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
-        }
-//        for (String pid : productIds) {
-//            ProductDetailDto productDetailDto;
-//            Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
-//            if (product == null) {
-//                continue;
-//            }
-//            List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
-//            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts, catalog);
-//            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-//                productDetailDto = DtoMapper.
-//            }
+        List<ActivityProducts> activityProductsList;
+//        if (bizProps.isUseCache()) {
+//            productsList = cache.getProductsByProductIds(productIds, updateStampMap);
+//            catalogsList = cache.getCatalogsByProductIds(productIds, updateStampMap);
+//            liveProductsList = cache.getLiveProductsByProductIds(productIds, updateStampMap);
+//            activityProductsList = cache.getActivityProductList(productIds, updateStampMap, nextActivityExpire);
+//
+//        } else {
+//            productsList = productRepository.getProductsByProductIds(productIds);
+//            catalogsList = productRepository.getCatalogsByProductIds(productIds);
+//            liveProductsList = liveProductRepository.getLiveProductList(productIds);
+//            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
 //        }
+        productsList=commonQueryService.getProductListByProductIdList(productIds);
+        catalogsList=commonQueryService.
+                liveProductsList=commonQueryService.getl
+        activityProductsList=commonQueryService.getActivityProductListByProductIdList(productIds)
+        for (String pid : productIds) {
+            ProductDetailDto productDetailDto;
+            Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+            if (product == null) {
+                continue;
+            }
+            List<Catalogs> catalog = catalogsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
+            List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
+            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts, catalog);
+            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
+                productDetailDto = DtoMapper.
+            }
+        }
 
         return null;
     }
@@ -154,7 +159,7 @@ public class ListQueryService {
      * @param productIds
      * @return
      */
-    public List<ProductHistoryDto> GetProductListByHistoryProductIdList(List<String> productIds) {
+    public List<ProductHistoryDto> getProductListByHistoryProductIdList(List<String> productIds) {
         List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
         List<String> notHisProductId = new ArrayList<>();
         List<HistoryProductModel> productDetailModelList = historyProductRepository.getHistoryProductListByProductIdList(productIds);

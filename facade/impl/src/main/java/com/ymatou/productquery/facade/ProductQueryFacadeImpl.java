@@ -114,7 +114,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getProductListByHistoryProductIdList(GetProductListByHistoryProductIdListRequest request) {
-        List<ProductHistoryDto> productHistoryDtoList = listQueryService.GetProductListByHistoryProductIdList(request.getProductIdList());
+        List<ProductHistoryDto> productHistoryDtoList = listQueryService.getProductListByHistoryProductIdList(request.getProductIdList());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productHistoryDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);

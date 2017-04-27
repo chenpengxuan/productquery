@@ -7,7 +7,10 @@ import java.util.List;
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class Catalogs{
+public class Catalogs {
+    @Property("spid")
+    private String productId;
+
     @Property("cid")
     private String catalogId;//	规格编号
 
