@@ -40,6 +40,14 @@ public class Catalogs {
 
     private List<PropertyInfo> props;//	规格属性列表
 
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
     public String getCatalogId() {
         return catalogId;
     }
