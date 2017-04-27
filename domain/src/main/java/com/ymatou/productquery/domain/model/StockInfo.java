@@ -4,10 +4,10 @@ package com.ymatou.productquery.domain.model;
  * Created by zhangyong on 2017/4/11.
  */
 public class StockInfo {
-    private int ProductInActivityId ;
-    private String Reason ;
-    private int Stock ;
-    private StockTypeEnum StockType ;
+    private int ProductInActivityId;
+    private String Reason;
+    private int Stock;
+    private int StockType;
 
     public int getProductInActivityId() {
         return ProductInActivityId;
@@ -33,11 +33,11 @@ public class StockInfo {
         Stock = stock;
     }
 
-    public StockTypeEnum getStockType() {
+    public int getStockType() {
         return StockType;
     }
 
-    public void setStockType(StockTypeEnum stockType) {
+    public void setStockType(int stockType) {
         StockType = stockType;
     }
 }

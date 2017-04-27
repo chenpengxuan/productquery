@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.ymatou.productquery.domain.service.ListQueryService;
 import com.ymatou.productquery.model.req.*;
 import com.ymatou.productquery.model.res.BaseResponseNetAdapter;
+import com.ymatou.productquery.model.res.ProductHistoryDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -63,6 +64,12 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
 
+    /**
+     * 商品明细列表
+     *
+     * @param request
+     * @return
+     */
     @Override
     @POST
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDetailListByProductIdList:(?i:GetProductDetailListByProductIdList)}")
@@ -77,6 +84,16 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
      * @param request
      * @return
      */
+    /**
+     * 商品明细列表（交易隔离）
+     *
+     * @param request
+     * @return
+     */
+    public BaseResponseNetAdapter GetProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
+        return null;
+    }
+
     @Override
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByProductId:(?i:GetProductInfoByProductId)}")
@@ -84,4 +101,38 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     public BaseResponseNetAdapter getProductDetailByProductId(@BeanParam GetProductInfoByProductIdRequest request) {
         return null;
     }
+
+    /**
+     * 历史商品列表
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @POST
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductListByHistoryProductIdList:(?i:GetProductListByHistoryProductIdList)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public BaseResponseNetAdapter getProductListByHistoryProductIdList(GetProductListByHistoryProductIdListRequest request) {
+        List<ProductHistoryDto> productHistoryDtoList = listQueryService.GetProductListByHistoryProductIdList(request.getProductIdList());
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", productHistoryDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    public BaseResponseNetAdapter GetProductListByProductIdList(GetProductListByProductIdListRequest request) {
+        return null;
+    }
+
+    /**
+     * 商品列表服务(交易隔离)
+     *
+     * @param request
+     * @return
+     */
+    public BaseResponseNetAdapter GetProductListByTradeIsolation(GetProductListByTradeIsolationRequest request) {
+        return null;
+    }
+
+
 }

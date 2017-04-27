@@ -71,7 +71,7 @@ public class ProductHistoryDto {
 
     // 商品的售卖状态
     @JsonProperty("Status")
-    private ProductStatusEnum status;
+    private int status;
 
     public String getProductId() {
         return productId;
@@ -169,11 +169,11 @@ public class ProductHistoryDto {
         this.validEnd = validEnd;
     }
 
-    public ProductStatusEnum getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(ProductStatusEnum status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 }

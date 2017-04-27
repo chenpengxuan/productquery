@@ -1,5 +1,6 @@
 package com.ymatou.productquery.domain.service;
 
+import com.ymatou.productquery.domain.model.ActivityCatalogInfo;
 import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.Catalogs;
 
@@ -25,7 +26,9 @@ public class ProductActivityService {
         if (activityProducts == null || catalog == null) {
             return null;
         }
-        if (activityProducts.getActivityCatalogList().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(null).getActivityStock() > 0) {
+        ActivityCatalogInfo activityCatalogInfo = activityProducts.getCatalogs().stream().
+                filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(null);
+        if (activityCatalogInfo != null && activityCatalogInfo.getActivityStock() > 0) {
             return activityProducts;
         } else return null;
     }
@@ -42,8 +45,9 @@ public class ProductActivityService {
             return null;
         }
         Date now = new Date();
-        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getStartTime().before(now) && t.getEndTime().after(now)).collect(Collectors.toList());
-        return Collections.min(activityProducts, (o1,o2) ->
+        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getStartTime().before(now)
+                && t.getEndTime().after(now)).collect(Collectors.toList());
+        return Collections.min(activityProducts, (o1, o2) ->
                 o1.getStartTime().compareTo(o2.getStartTime()));
     }
 

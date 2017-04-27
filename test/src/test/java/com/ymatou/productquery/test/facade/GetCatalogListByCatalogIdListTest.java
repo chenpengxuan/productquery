@@ -27,9 +27,9 @@ public class GetCatalogListByCatalogIdListTest {
     @Test
     public void testWithoutActivityOrLive() {
         List<String> catalogs = new ArrayList<>();
-        catalogs.add("e5f78f4a-4f45-4bf1-8662-65eb8f8ccbd9");
-        catalogs.add("58aa4923-c05f-45f4-b9ee-dfb409eb709c");
-        catalogs.add("673db9d9-1e5e-447e-b7df-935bf7d4c47a");
+        catalogs.add("41e135e7-536c-46b2-9f89-8ce199f82517");
+//        catalogs.add("58aa4923-c05f-45f4-b9ee-dfb409eb709c");
+//        catalogs.add("673db9d9-1e5e-447e-b7df-935bf7d4c47a");
 
 
         GetCatalogListByCatalogIdListRequest request = new GetCatalogListByCatalogIdListRequest();

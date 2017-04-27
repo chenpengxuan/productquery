@@ -4,10 +4,10 @@ package com.ymatou.productquery.domain.model;
  * Created by zhangyong on 2017/4/11.
  */
 public class PriceInfo {
-    private double Price ;
-    private PriceTypeEnum PriceType ;
-    private int ProductInActivityId ;
-    private String Reason ;
+    private double Price;
+    private int PriceType;
+    private int ProductInActivityId;
+    private String Reason;
 
     public double getPrice() {
         return Price;
@@ -17,11 +17,11 @@ public class PriceInfo {
         Price = price;
     }
 
-    public PriceTypeEnum getPriceType() {
+    public int getPriceType() {
         return PriceType;
     }
 
-    public void setPriceType(PriceTypeEnum priceType) {
+    public void setPriceType(int priceType) {
         PriceType = priceType;
     }
 

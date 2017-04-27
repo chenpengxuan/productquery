@@ -48,8 +48,7 @@ public class ActivityProducts {
     @Property("part")
     private boolean isPartCatalogs;
 
-    @Property("catalogs")
-    private List<ActivityCatalogInfo> activityCatalogList;
+    private List<ActivityCatalogInfo> catalogs;
 
     public int getActivityId() {
         return activityId;
@@ -139,12 +138,12 @@ public class ActivityProducts {
         isPartCatalogs = partCatalogs;
     }
 
-    public List<ActivityCatalogInfo> getActivityCatalogList() {
-        return activityCatalogList;
+    public List<ActivityCatalogInfo> getCatalogs() {
+        return catalogs;
     }
 
-    public void setActivityCatalogList(List<ActivityCatalogInfo> activityCatalogList) {
-        this.activityCatalogList = activityCatalogList;
+    public void setCatalogs(List<ActivityCatalogInfo> catalogs) {
+        this.catalogs = catalogs;
     }
 
     public String getProductId() {

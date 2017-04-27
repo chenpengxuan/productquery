@@ -23,12 +23,54 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getCatalogListByTradeIsolation(GetCatalogListByTradeIsolationRequest request);
 
-    BaseResponseNetAdapter  getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
+
+    /**
+     * 商品明细列表
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request);
+
+    /**
+     * 商品明细列表（交易隔离）
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter GetProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request);
+
+    /**
+     * 历史商品列表
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductListByHistoryProductIdList(GetProductListByHistoryProductIdListRequest request);
+
+    /**
+     * 商品列表服务
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter GetProductListByProductIdList(GetProductListByProductIdListRequest request);
+
+    /**
+     * 商品列表服务(交易隔离)
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter GetProductListByTradeIsolation(GetProductListByTradeIsolationRequest request);
 
     /**
      * 根据商品编号获取商品信息(对应商详页场景)
+     *
      * @param request
      * @return
      */
     BaseResponseNetAdapter getProductDetailByProductId(GetProductInfoByProductIdRequest request);
+
+
 }

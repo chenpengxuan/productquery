@@ -12,17 +12,17 @@ import java.util.Date;
 public class ProductStatusService {
     public static int getProductStatus(int action, Date validStart, Date validEnd, LiveProducts liveProduct, ActivityProducts activityProduct) {
         if (action == -1) {
-            return ProductStatusEnum.Deleted.ordinal();
+            return ProductStatusEnum.Deleted.getCode();
         }
         if (activityProduct != null) {
-            return ProductStatusEnum.Available.ordinal();
+            return ProductStatusEnum.Available.getCode();
         }
         Date now = new Date();
         if (liveProduct != null) {
             return now.after(liveProduct.getStartTime()) && now.before(liveProduct.getEndTime()) && liveProduct.getSellStatus() == 1
-                    ? ProductStatusEnum.Available.ordinal() : ProductStatusEnum.Disable.ordinal();
+                    ? ProductStatusEnum.Available.getCode() : ProductStatusEnum.Disable.getCode();
         }
-        return now.after(validStart)&&now.before(validEnd)
-                ?ProductStatusEnum.Available.ordinal():ProductStatusEnum.Disable.ordinal();
+        return now.after(validStart) && now.before(validEnd)
+                ? ProductStatusEnum.Available.getCode() : ProductStatusEnum.Disable.getCode();
     }
 }
