@@ -72,6 +72,11 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         return null;
     }
 
+    /**
+     * 根据商品id获取商品详情
+     * @param request
+     * @return
+     */
     @Override
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByProductId:(?i:GetProductInfoByProductId)}")

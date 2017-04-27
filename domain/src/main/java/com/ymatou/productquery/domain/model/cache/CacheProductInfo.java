@@ -1,102 +1,224 @@
-package com.ymatou.productquery.domain.model;
+package com.ymatou.productquery.domain.model.cache;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.mongodb.morphia.annotations.Property;
+import com.ymatou.productquery.domain.model.Catalogs;
 
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by zhangyong on 2017/4/6.
+ * 缓存商品结构
+ * Created by chenpengxuan on 2017/4/26.
  */
-public class Products{
-    @Property("spid")
-    private String productId;
-    @Property("updatetime")
-    private Date updateTime;
-    @Property("ipid")
-    private int prodId;//	商品数字编号
-    @Property("title")
-    private String title;//	商品标题
-    @Property("intro")
-    private String introduction;//	商品简介
-    @Property("pics")
-    private List<String> picList;//	商品主图列表
-    @Property("start")
-    private Date validStart;//	商品开始有效期
-    @Property("end")
-    private Date validEnd;//	商品结束有效期
-    @Property("minp")
-    private String minCatalogPrice;//	最低规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
-    @Property("maxp")
-    private String maxCatalogPrice;//	最高规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
-    @Property("sid")
-    private int sellerId;//	买手编号
-    @Property("sname")
-    private String sellerName;//	买手账号
-    @Property("bid")
-    private int brandId;//	品牌编号
-    @Property("brand")
-    private String brandName;//	品牌中文名称
-    @Property("ebrand")
-    private String brandEnName;//	品牌英文名称
-    @Property("mcatid")
-    private int masterCategoryId;//	一级分类编号
-    @Property("mcatname")
-    private String masterCategoryName;//	一级分类名称
-    @Property("scatid")
-    private int secondCategoryId;//	二级分类编号
-    @Property("scatname")
-    private String secondCategoryName;//	二级分类名称
-    @Property("tcatid")
-    private int thirdCategoryId;//	三级分类编号
-    @Property("tcatname")
-    private String thirdCategoryName;//	三级分类名称
-    @Property("ctype")
-    private int catalogType;//	备货方式
-    @Property("deliv")
-    private int deliveryMethod;//	发货方式
-    @Property("bonded")
-    private int bondedArea;//	保税区
-    @Property("tariffy")
-    private int isTariffy;//	是否包税
-    @Property("shipping")
-    private int isShipping;//	是否包邮
-    @Property("country")
-    private int countryId;//	国家编号
-    @Property("newdesc")
-    private boolean isNewDesc;//	是否新图文描述
-    @JsonProperty("localr")
-    private int localReturn;//	本土退货
-    @Property("noreason")
-    private boolean noReasonReturn;//	7天无理由退货
-    @Property("action")
-    private int action;//	商品状态
-    @Property("addtime")
-    private Date addTime;//	发布时间
-    @Property("risk")
-    private boolean noticeRisk;//	砍单风险提醒
-    @Property("pcode")
-    private String productCode;//	商品备案号（保税商品）
-    @Property("isnew")
-    private boolean isNewProduct;//	是否新品
-    @Property("newstart")
-    private Date newStartTime;//	新品有效开始时间
-    @Property("newend")
-    private Date newEndTime;//	新品有效结束时间
-    @Property("istop")
-    private boolean isTopProduct;//	是否买手热推商品
-    @Property("ver")
-    private String version;//	最新快照版本号
-    @Property("ispsp")
-    private boolean isPspProduct;//	是否psp商品 0不是 1是
-    @Property("verupdate")
-    private Date versionUpdateTime;//	快照更新时间
-    @Property("grade")
-    private String grade;//	商品等级
-    @Property("sizepics")
-    private List<String> sizePicList;//	尺码表
+public class CacheProductInfo extends BaseCacheInfo{
+    /**
+     * 商品数字编号
+     */
+    private int prodId;	
+
+    /**
+     * 商品标题
+     */
+    private String title;	
+
+    /**
+     * 商品简介
+     */
+    private String introduction;	
+
+    /**
+     * 商品主图列表
+     */
+    private List<String> picList;	
+
+    /**
+     * 商品开始有效期
+     */
+    private Date validStart;	
+
+    /**
+     * 商品结束有效期
+     */
+    private Date validEnd;	
+
+    /**
+     * 最低规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
+     */
+    private String minCatalogPrice;	
+
+    /**
+     * 最高规格价(包括原价、新客价、vip价，如果为0也要填)数据示例：30.00,28.00,29.00
+     */
+    private String maxCatalogPrice;	
+
+    /**
+     * 买手编号
+     */
+    private int sellerId;	
+
+    /**
+     * 买手账号
+     */
+    private String sellerName;	
+
+    /**
+     * 品牌编号
+     */
+    private int brandId;	
+
+    /**
+     * 	品牌中文名称
+     */
+    private String brandName;
+
+    /**
+     * 品牌英文名称
+     */
+    private String brandEnName;	
+
+    /**
+     * 一级分类编号
+     */
+    private int masterCategoryId;	
+
+    /**
+     * 一级分类名称
+     */
+    private String masterCategoryName;	
+
+    /**
+     * 二级分类编号
+     */
+    private int secondCategoryId;	
+
+    /**
+     * 二级分类名称
+     */
+    private String secondCategoryName;	
+
+    /**
+     * 三级分类编号
+     */
+    private int thirdCategoryId;	
+
+    /**
+     * 三级分类名称
+     */
+    private String thirdCategoryName;	
+
+    /**
+     * 备货方式
+     */
+    private int catalogType;	
+
+    /**
+     * 发货方式
+     */
+    private int deliveryMethod;	
+
+    /**
+     * 保税区
+     */
+    private int bondedArea;	
+
+    /**
+     * 是否包税
+     */
+    private int isTariffy;	
+
+    /**
+     * 是否包邮
+     */
+    private int isShipping;	
+
+    /**
+     * 国家编号
+     */
+    private int countryId;	
+
+    /**
+     * 是否新图文描述
+     */
+    private boolean isNewDesc;	
+
+    /**
+     * 本土退货
+     */
+    private int localReturn;	
+
+    /**
+     * 7天无理由退货
+     */
+    private boolean noReasonReturn;	
+
+    /**
+     * 商品状态
+     */
+    private int action;	
+
+    /**
+     * 	发布时间
+     */
+    private Date addTime;
+
+    /**
+     * 砍单风险提醒
+     */
+    private boolean noticeRisk;	
+
+    /**
+     * 商品备案号（保税商品）
+     */
+    private String productCode;	
+
+    /**
+     * 是否新品
+     */
+    private boolean isNewProduct;	
+
+    /**
+     * 新品有效开始时间
+     */
+    private Date newStartTime;	
+
+    /**
+     * 新品有效结束时间
+     */
+    private Date newEndTime;	
+
+    /**
+     * 是否买手热推商品
+     */
+    private boolean isTopProduct;	
+
+    /**
+     * 最新快照版本号
+     */
+    private String version;	
+
+    /**
+     * 是否psp商品 0不是 1是
+     */
+    private boolean isPspProduct;	
+
+    /**
+     * 快照更新时间
+     */
+    private Date versionUpdateTime;	
+
+    /**
+     * 商品等级
+     */
+    private String grade;	
+
+    /**
+     * 尺码表
+     */
+    private List<String> sizePicList;
+
+    /**
+     * 规格列表
+     */
+    private List<Catalogs> catalogsList;
 
     public int getProdId() {
         return prodId;
@@ -426,19 +548,11 @@ public class Products{
         this.sizePicList = sizePicList;
     }
 
-    public String getProductId() {
-        return productId;
+    public List<Catalogs> getCatalogsList() {
+        return catalogsList;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setCatalogsList(List<Catalogs> catalogsList) {
+        this.catalogsList = catalogsList;
     }
 }

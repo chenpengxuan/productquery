@@ -9,7 +9,6 @@ import com.ymatou.productquery.model.res.ProductHistoryDto;
 import com.ymatou.productquery.model.res.ProductInCartDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.ymatou.productquery.domain.cache.Cache;
 
 import java.util.*;
 import java.util.stream.Collectors;

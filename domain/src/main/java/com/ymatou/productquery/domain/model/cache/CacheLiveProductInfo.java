@@ -1,50 +1,95 @@
-package com.ymatou.productquery.domain.model;
-
-import org.mongodb.morphia.annotations.Property;
+package com.ymatou.productquery.domain.model.cache;
 
 import java.util.Date;
 
 /**
- * Created by zhangyong on 2017/4/6.
+ * 缓存直播信息
+ * Created by chenpengxuan on 2017/4/26.
  */
-public class LiveProducts{
-    @Property("spid")
-    private String productId;
-    @Property("updatetime")
-    private Date updateTime;
-    @Property("lid")
+public class CacheLiveProductInfo extends BaseCacheInfo{
+    /**
+     * 直播id
+     */
     private int liveId;
-    @Property("sid")
+
+    /**
+     * 买手id
+     */
     private int sellerId;
-    @Property("start")
+
+    /**
+     * 直播商品开始时间
+     */
     private Date startTime;
-    @Property("end")
+
+    /**
+     * 直播商品结束时间
+     */
     private Date endTime;
-    @Property("add")
+
+    /**
+     * 直播商品添加时间
+     */
     private Date addTime;
-    @Property("brand")
+
+    /**
+     * 直播商品品牌名称
+     */
     private String brandName;
-    @Property("ebrand")
+
+    /**
+     * 直播商品英文名称
+     */
     private String brandEnName;
-    @Property("bid")
+
+    /**
+     * 直播商品品牌id
+     */
     private int brandId;
-    @Property("mcatid")
+
+    /**
+     * 一级类目id
+     */
     private int masterCategoryId;
-    @Property("mcatname")
+
+    /**
+     * 一级类目名称
+     */
     private String masterCategoryName;
-    @Property("scatid")
+
+    /**
+     * 二级类目id
+     */
     private int categoryId;
-    @Property("scatname")
+
+    /**
+     * 二级类目名称
+     */
     private String categoryName;
-    @Property("tcatid")
+
+    /**
+     * 三级类目id
+     */
     private int thirdCategoryId;
-    @Property("tcatname")
+
+    /**
+     * 三级类目名称
+     */
     private String thirdCategoryName;
-    @Property("status")
+
+    /**
+     * 售卖状态
+     */
     private int sellStatus;
-    @Property("istop")
+
+    /**
+     * 是否设置置顶
+     */
     private boolean istop;
-    @Property("sort")
+
+    /**
+     * 直播内商品排序
+     */
     private int readyPutawayProductSort;
 
     public int getLiveId() {
@@ -181,21 +226,5 @@ public class LiveProducts{
 
     public void setReadyPutawayProductSort(int readyPutawayProductSort) {
         this.readyPutawayProductSort = readyPutawayProductSort;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

@@ -1,7 +1,5 @@
 package com.ymatou.productquery.test.domain;
 
-import com.ymatou.productquery.domain.cache.Cache;
-import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.ProductTimeStamp;
 import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductTimeStampRepository;

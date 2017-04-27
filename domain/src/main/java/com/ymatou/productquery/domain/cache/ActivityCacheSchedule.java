@@ -27,9 +27,6 @@ public class ActivityCacheSchedule {
     private BizProps bizProps;
 
     @Autowired
-    private Cache cache;
-
-    @Autowired
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @Autowired

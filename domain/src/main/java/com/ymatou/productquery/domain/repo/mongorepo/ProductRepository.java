@@ -84,10 +84,10 @@ public class ProductRepository extends MongoRepository {
      * @param productId
      * @return
      */
-    public List<Products> getProductByProductId(String productId) {
+    public Products getProductByProductId(String productId) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
-                .field("spid").equal(productId).asList();
+                .field("spid").equal(productId).get();
     }
 
     /**

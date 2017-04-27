@@ -8,7 +8,13 @@ import java.util.List;
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class ActivityProducts extends BaseInfo{
+public class ActivityProducts {
+    @Property("spid")
+    private String productId;
+
+    @Property("updatetime")
+    private Date updateTime;
+
     @Property("aid")
     private int activityId;
 
@@ -139,6 +145,22 @@ public class ActivityProducts extends BaseInfo{
 
     public void setActivityCatalogList(List<ActivityCatalogInfo> activityCatalogList) {
         this.activityCatalogList = activityCatalogList;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }
 
