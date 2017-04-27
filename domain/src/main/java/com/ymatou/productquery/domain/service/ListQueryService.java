@@ -133,18 +133,18 @@ public class ListQueryService {
             liveProductsList = liveProductRepository.getLiveProductList(productIds);
             activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
         }
-        for (String pid : productIds) {
-            ProductDetailDto productDetailDto;
-            Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
-            if (product == null) {
-                continue;
-            }
+//        for (String pid : productIds) {
+//            ProductDetailDto productDetailDto;
+//            Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+//            if (product == null) {
+//                continue;
+//            }
 //            List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
 //            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts, catalog);
 //            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
 //                productDetailDto = DtoMapper.
 //            }
-        }
+//        }
 
         return null;
     }

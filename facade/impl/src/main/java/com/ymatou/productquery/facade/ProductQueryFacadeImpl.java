@@ -79,6 +79,16 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         return null;
     }
 
+    /**
+     * 商品明细列表（交易隔离）
+     *
+     * @param request
+     * @return
+     */
+    public BaseResponseNetAdapter GetProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
+        return null;
+    }
+
     @Override
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByProductId:(?i:GetProductInfoByProductId)}")
@@ -104,4 +114,20 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         productList.put("ProductList", productHistoryDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
+
+    public BaseResponseNetAdapter GetProductListByProductIdList(GetProductListByProductIdListRequest request) {
+        return null;
+    }
+
+    /**
+     * 商品列表服务(交易隔离)
+     *
+     * @param request
+     * @return
+     */
+    public BaseResponseNetAdapter GetProductListByTradeIsolation(GetProductListByTradeIsolationRequest request) {
+        return null;
+    }
+
+
 }
