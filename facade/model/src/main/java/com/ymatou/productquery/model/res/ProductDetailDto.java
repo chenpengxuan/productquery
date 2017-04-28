@@ -226,4 +226,372 @@ public class ProductDetailDto {
     // 直播商品
     @JsonProperty("LiveProduct")
     private ProductLiveDto liveProduct;
+
+    public int getProdId() {
+        return prodId;
+    }
+
+    public void setProdId(int prodId) {
+        this.prodId = prodId;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public List<String> getPicList() {
+        return picList;
+    }
+
+    public void setPicList(List<String> picList) {
+        this.picList = picList;
+    }
+
+    public Date getValidStart() {
+        return validStart;
+    }
+
+    public void setValidStart(Date validStart) {
+        this.validStart = validStart;
+    }
+
+    public Date getValidEnd() {
+        return validEnd;
+    }
+
+    public void setValidEnd(Date validEnd) {
+        this.validEnd = validEnd;
+    }
+
+    public int getLimitNum() {
+        return limitNum;
+    }
+
+    public void setLimitNum(int limitNum) {
+        this.limitNum = limitNum;
+    }
+
+    public Date getLimitNumStartTime() {
+        return limitNumStartTime;
+    }
+
+    public void setLimitNumStartTime(Date limitNumStartTime) {
+        this.limitNumStartTime = limitNumStartTime;
+    }
+
+    public int getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getSellerName() {
+        return sellerName;
+    }
+
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+
+    public String getBrandEnName() {
+        return brandEnName;
+    }
+
+    public void setBrandEnName(String brandEnName) {
+        this.brandEnName = brandEnName;
+    }
+
+    public int getMasterCategoryId() {
+        return masterCategoryId;
+    }
+
+    public void setMasterCategoryId(int masterCategoryId) {
+        this.masterCategoryId = masterCategoryId;
+    }
+
+    public String getMasterCategoryName() {
+        return masterCategoryName;
+    }
+
+    public void setMasterCategoryName(String masterCategoryName) {
+        this.masterCategoryName = masterCategoryName;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public int getThirdCategoryId() {
+        return thirdCategoryId;
+    }
+
+    public void setThirdCategoryId(int thirdCategoryId) {
+        this.thirdCategoryId = thirdCategoryId;
+    }
+
+    public String getThirdCategoryName() {
+        return thirdCategoryName;
+    }
+
+    public void setThirdCategoryName(String thirdCategoryName) {
+        this.thirdCategoryName = thirdCategoryName;
+    }
+
+    public int getCatalogType() {
+        return catalogType;
+    }
+
+    public void setCatalogType(int catalogType) {
+        this.catalogType = catalogType;
+    }
+
+    public int getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(int deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public int getBondedArea() {
+        return bondedArea;
+    }
+
+    public void setBondedArea(int bondedArea) {
+        this.bondedArea = bondedArea;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public int getTariffType() {
+        return tariffType;
+    }
+
+    public void setTariffType(int tariffType) {
+        this.tariffType = tariffType;
+    }
+
+    public boolean isFreeShipping() {
+        return isFreeShipping;
+    }
+
+    public void setFreeShipping(boolean freeShipping) {
+        isFreeShipping = freeShipping;
+    }
+
+    public int getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
+    }
+
+    public Date getAddTime() {
+        return addTime;
+    }
+
+    public void setAddTime(Date addTime) {
+        this.addTime = addTime;
+    }
+
+    public ProductStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatusEnum status) {
+        this.status = status;
+    }
+
+    public boolean isHasTextDescription() {
+        return hasTextDescription;
+    }
+
+    public void setHasTextDescription(boolean hasTextDescription) {
+        this.hasTextDescription = hasTextDescription;
+    }
+
+    public int getLocalReturn() {
+        return localReturn;
+    }
+
+    public void setLocalReturn(int localReturn) {
+        this.localReturn = localReturn;
+    }
+
+    public boolean isNoticeRisk() {
+        return noticeRisk;
+    }
+
+    public void setNoticeRisk(boolean noticeRisk) {
+        this.noticeRisk = noticeRisk;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public boolean isNoReasonReturn() {
+        return noReasonReturn;
+    }
+
+    public void setNoReasonReturn(boolean noReasonReturn) {
+        this.noReasonReturn = noReasonReturn;
+    }
+
+    public boolean isNewProduct() {
+        return isNewProduct;
+    }
+
+    public void setNewProduct(boolean newProduct) {
+        isNewProduct = newProduct;
+    }
+
+    public Date getNewStartTime() {
+        return newStartTime;
+    }
+
+    public void setNewStartTime(Date newStartTime) {
+        this.newStartTime = newStartTime;
+    }
+
+    public Date getNewEndTime() {
+        return newEndTime;
+    }
+
+    public void setNewEndTime(Date newEndTime) {
+        this.newEndTime = newEndTime;
+    }
+
+    public boolean isHotRecmd() {
+        return isHotRecmd;
+    }
+
+    public void setHotRecmd(boolean hotRecmd) {
+        isHotRecmd = hotRecmd;
+    }
+
+    public boolean isPspProduct() {
+        return isPspProduct;
+    }
+
+    public void setPspProduct(boolean pspProduct) {
+        isPspProduct = pspProduct;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public List<String> getSizePicList() {
+        return sizePicList;
+    }
+
+    public void setSizePicList(List<String> sizePicList) {
+        this.sizePicList = sizePicList;
+    }
+
+    public List<CatalogDto> getCatalogList() {
+        return catalogList;
+    }
+
+    public void setCatalogList(List<CatalogDto> catalogList) {
+        this.catalogList = catalogList;
+    }
+
+    public ProductActivityDto getProductActivity() {
+        return productActivity;
+    }
+
+    public void setProductActivity(ProductActivityDto productActivity) {
+        this.productActivity = productActivity;
+    }
+
+    public ProductActivityDto getNextActivity() {
+        return nextActivity;
+    }
+
+    public void setNextActivity(ProductActivityDto nextActivity) {
+        this.nextActivity = nextActivity;
+    }
+
+    public ProductLiveDto getLiveProduct() {
+        return liveProduct;
+    }
+
+    public void setLiveProduct(ProductLiveDto liveProduct) {
+        this.liveProduct = liveProduct;
+    }
 }

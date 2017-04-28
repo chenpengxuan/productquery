@@ -67,7 +67,7 @@ public class ProductActivityDto {
 
     // 活动促销类型
     @JsonProperty("PromotionType")
-    private PromotionTypeEnum promotionType;
+    private int promotionType;
 
 
     // 活动促销值
@@ -192,11 +192,11 @@ public class ProductActivityDto {
         this.activityProductLimit = activityProductLimit;
     }
 
-    public PromotionTypeEnum getPromotionType() {
+    public int getPromotionType() {
         return promotionType;
     }
 
-    public void setPromotionType(PromotionTypeEnum promotionType) {
+    public void setPromotionType(int promotionType) {
         this.promotionType = promotionType;
     }
 

@@ -165,7 +165,7 @@ public class ListQueryService {
             }
 
             //下一场活动
-            //ActivityProducts nextActivityProduct=ProductActivityService.getValidProductActivity()
+//            ActivityProducts nextActivityProduct=ProductActivityService.getValidProductActivity()
         }
 
         return null;
