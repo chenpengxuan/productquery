@@ -55,12 +55,12 @@ public class ListQueryService {
             return null;
         }
 
-        List<Products> productsList = productRepository.getProductsByProductIds(pids);
+        List<Products> productsList = productRepository.getProductListByProductIdList(pids);
         if (productsList == null || productsList.isEmpty()) {
             return null;
         }
 
-        List<Catalogs> catalogsList = productRepository.getCatalogsByProductIds(pids);
+        List<Catalogs> catalogsList = productRepository.getCatalogListByProductIdList(pids);
         if (catalogsList == null || catalogsList.isEmpty()) {
             return null;
         }
@@ -196,7 +196,7 @@ public class ListQueryService {
             }
         }
         if (notHisProductId != null && !notHisProductId.isEmpty()) {
-            List<Products> productsList = productRepository.getProductsByProductIds(notHisProductId);
+            List<Products> productsList = productRepository.getProductListByProductIdList(notHisProductId);
             if (productsList != null) {
                 for (String pid : notHisProductId
                         ) {
