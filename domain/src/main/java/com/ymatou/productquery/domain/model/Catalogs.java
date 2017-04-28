@@ -2,6 +2,7 @@ package com.ymatou.productquery.domain.model;
 
 import org.mongodb.morphia.annotations.Property;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,6 +11,9 @@ import java.util.List;
 public class Catalogs {
     @Property("spid")
     private String productId;
+
+    @Property("updatetime")
+    private Date updateTime;
 
     @Property("cid")
     private String catalogId;//	规格编号
@@ -126,5 +130,13 @@ public class Catalogs {
 
     public void setProps(List<PropertyInfo> props) {
         this.props = props;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

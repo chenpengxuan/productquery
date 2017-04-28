@@ -19,10 +19,10 @@ public class ProductStatusService {
         }
         Date now = new Date();
         if (liveProduct != null) {
-            return now.after(liveProduct.getStartTime()) && now.before(liveProduct.getEndTime()) && liveProduct.getSellStatus() == 1
+            return !now.before(liveProduct.getStartTime()) && !now.after(liveProduct.getEndTime()) && liveProduct.getSellStatus() == 1
                     ? ProductStatusEnum.Available.getCode() : ProductStatusEnum.Disable.getCode();
         }
-        return now.after(validStart) && now.before(validEnd)
+        return !now.before(validStart) && !now.after(validEnd)
                 ? ProductStatusEnum.Available.getCode() : ProductStatusEnum.Disable.getCode();
     }
 }

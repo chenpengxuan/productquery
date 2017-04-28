@@ -1,11 +1,14 @@
 package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.res.*;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.collections.functors.ExceptionClosure;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +55,52 @@ public class DtoMapper {
         result.setPspProduct(product.isPspProduct());
         result.setProperties(getCatalogPropertyList(catalog.getProps()));
         return result;
+    }
+
+    public static ProductDetailDto toProductDetailDto(Products products, List<Catalogs> catalogsList, ActivityProducts activityProducts) {
+        ProductDetailDto productDetailDto = new ProductDetailDto();
+        try {
+            BeanUtils.copyProperties(productDetailDto, products);
+        } catch (Exception ex) {
+            throw new BizException("line 62:BeanUtils.copyProperties fail,liveid:" + products.getProductId(), ex);
+        }
+        productDetailDto.setFreeShipping(products.getFreight() <= 0);
+        productDetailDto.setHasTextDescription(products.isNewDesc());
+        productDetailDto.setNewProduct(isNewestProduct(products.getNewStartTime(), products.getNewEndTime()));
+        productDetailDto.setHotRecmd(products.isTopProduct());
+        productDetailDto.setVersion(getSnapshotVersion(products.getVersion()));
+        productDetailDto.setCatalogList(toCatalogDtoList(catalogsList, activityProducts));
+        return productDetailDto;
+    }
+
+    /**
+     * 返回活动商品的最高价，最低价
+     *
+     * @param catalogDtoList
+     * @param activityProduct
+     * @return
+     */
+    public static Tuple<Double, Double> getMaxMinPrice(List<CatalogDto> catalogDtoList, ActivityProducts activityProduct) {
+        List<Double> activityPrices = activityProduct.getCatalogs().stream().map(t -> t.getActivityPrice()).collect(Collectors.toList());
+        return new Tuple<>(Collections.max(activityPrices), Collections.min(activityPrices));
+    }
+
+    /**
+     * @param model
+     * @return
+     */
+    public static ProductActivityDto toProductActivityDto(ActivityProducts model) {
+        ProductActivityDto productActivityDto = new ProductActivityDto();
+        try {
+            BeanUtils.copyProperties(productActivityDto, model);
+        } catch (Exception ex) {
+            throw new BizException("line 85:BeanUtils.copyProperties fail,liveid:" + model.getProductInActivityId(), ex);
+        }
+        productActivityDto.setPromotionType(3);
+        productActivityDto.setBeginTimeOfProductInActivity(model.getStartTime());
+        productActivityDto.setEndTimeOfProductInActivity(model.getEndTime());
+        productActivityDto.setCatalogList(model.getCatalogs().stream().map(t -> t.getCatalogId()).collect(Collectors.toList()));
+        return productActivityDto;
     }
 
     /**
@@ -113,6 +162,38 @@ public class DtoMapper {
         }
     }
 
+    private static List<CatalogDto> toCatalogDtoList(List<Catalogs> catalogsList, ActivityProducts activityProducts) {
+        List<CatalogDto> catalogDtoList = new ArrayList<>();
+        catalogsList.forEach(t ->
+        {
+            CatalogDto catalogDto = new CatalogDto();
+            try {
+                BeanUtils.copyProperties(catalogDto, t);
+            } catch (Exception ex) {
+                throw new BizException("line 142:BeanUtils.copyProperties fail,liveid:" + t.getCatalogId(), ex);
+            }
+            ActivityCatalogInfo activityCatalogInfo = activityProducts.getCatalogs().stream().
+                    filter(x -> x.getCatalogId().equals(t.getCatalogId())).findFirst().orElse(null);
+            if (activityCatalogInfo != null) {
+                catalogDto.setInActivity(true);
+                catalogDto.setActivityPrice(activityCatalogInfo.getActivityPrice());
+                catalogDto.setActivityStock(activityCatalogInfo.getActivityStock());
+            }
+            List<CatalogPropertyDto> catalogPropertyDtos = new ArrayList<>();
+            t.getProps().forEach(q -> {
+                CatalogPropertyDto catalogPropertyDto = new CatalogPropertyDto();
+                catalogPropertyDto.setName(q.getName());
+                catalogPropertyDto.setPicUrl(q.getPic());
+                catalogPropertyDto.setSort(1);
+                catalogPropertyDto.setValue(q.getValue());
+                catalogPropertyDtos.add(catalogPropertyDto);
+            });
+            catalogDto.setPropertyList(catalogPropertyDtos);
+            catalogDtoList.add(catalogDto);
+        });
+        return catalogDtoList;
+    }
+
     private static String getSnapshotVersion(String version) {
         return String.valueOf(Double.valueOf(version) / 1000);
     }
@@ -161,6 +242,18 @@ public class DtoMapper {
         );
 
         return propertyDtoList;
+    }
+
+    /**
+     * 验证新品商品
+     *
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private static boolean isNewestProduct(Date startTime, Date endTime) {
+        Date now = new Date();
+        return !now.before(startTime) && !now.after(endTime);
     }
 
     public static ProductActivityCartDto toProductActivityCartDto(ActivityProducts model) {
