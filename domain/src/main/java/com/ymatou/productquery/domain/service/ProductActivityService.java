@@ -54,10 +54,14 @@ public class ProductActivityService {
 
     public static ActivityProducts getNextProductActivity(List<ActivityProducts> activityProductsList, int nextActivityExpire, ActivityProducts activityProduct) {
         if (activityProduct != null) {
-//            ActivityProducts nextActivityPr= activityProductsList.stream().filter(t->!t.getEndTime().before(DateTime.now().toDate())
-//                    &&!t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate())
-//                    &&t.getProductInActivityId()!=activityProduct.getProductInActivityId()).min(activityProductsList,)
+            return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())
+                    && !t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate())
+                    && t.getProductInActivityId() != activityProduct.getProductInActivityId())
+                    .min((t1, t2) -> t1.getEndTime().compareTo(t2.getEndTime())).orElse(null);
+
         }
-        return null;
+        return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())
+                && !t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate()))
+                .min((t1, t2) -> t1.getEndTime().compareTo(t2.getEndTime())).orElse(null);
     }
 }
