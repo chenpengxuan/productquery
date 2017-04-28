@@ -112,7 +112,7 @@ public class ListQueryService {
      * @param tradeIsolation
      * @return
      */
-    public List<ProductDetailDto> GetProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
+    public List<ProductDetailDto> getProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
         List<ProductDetailDto> productDetailDtoList = new ArrayList<>();
 //        List<ProductTimeStamp> updateStampMap = productTimeStampRepository
 //                .getTimeStampByProductIds(productIds, "cut,sut,lut,aut");
@@ -132,22 +132,40 @@ public class ListQueryService {
 //            liveProductsList = liveProductRepository.getLiveProductList(productIds);
 //            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
 //        }
-        productsList=commonQueryService.getProductListByProductIdList(productIds);
-        catalogsList=commonQueryService.
-                liveProductsList=commonQueryService.getl
-        activityProductsList=commonQueryService.getActivityProductListByProductIdList(productIds)
+        productsList = commonQueryService.getProductListByProductIdList(productIds);
+        catalogsList = commonQueryService.getCatalogListByProductIdList(productIds);
+        liveProductsList = commonQueryService.getLiveProductListByProductId(productIds);
+        activityProductsList = commonQueryService.getActivityProductListByProductIdList(productIds);
         for (String pid : productIds) {
             ProductDetailDto productDetailDto;
             Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
             if (product == null) {
                 continue;
             }
-            List<Catalogs> catalog = catalogsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
+
+            List<Catalogs> catalogs = catalogsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
             List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
-            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts, catalog);
+            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
+
+            //活动
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-                productDetailDto = DtoMapper.
+                productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
+                productDetailDto.setProductActivity(DtoMapper.toProductActivityDto(activityProduct));
+                productDetailDto.setValidStart(activityProduct.getStartTime());
+                productDetailDto.setValidEnd(activityProduct.getEndTime());
+                Tuple<Double, Double> maxmin = DtoMapper.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
+                double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
+                double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
+                productDetailDto.getProductActivity().setMaxActivityPrice(max);
+                productDetailDto.getProductActivity().setMinActivityPrice(min);
             }
+            else
+            {
+                productDetailDto=DtoMapper.toProductDetailDto(product,catalogs,activityProduct);
+            }
+
+            //下一场活动
+            //ActivityProducts nextActivityProduct=ProductActivityService.getValidProductActivity()
         }
 
         return null;

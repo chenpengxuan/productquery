@@ -3,6 +3,7 @@ package com.ymatou.productquery.domain.service;
 import com.ymatou.productquery.domain.model.ActivityCatalogInfo;
 import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.Catalogs;
+import org.joda.time.DateTime;
 
 import java.util.Collections;
 import java.util.Date;
@@ -45,10 +46,18 @@ public class ProductActivityService {
             return null;
         }
         Date now = new Date();
-        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getStartTime().before(now)
-                && t.getEndTime().after(now)).collect(Collectors.toList());
+        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> !t.getStartTime().after(now)
+                && !t.getEndTime().before(now)).collect(Collectors.toList());
         return Collections.min(activityProducts, (o1, o2) ->
                 o1.getStartTime().compareTo(o2.getStartTime()));
     }
 
+    public static ActivityProducts getNextProductActivity(List<ActivityProducts> activityProductsList, int nextActivityExpire, ActivityProducts activityProduct) {
+        if (activityProduct != null) {
+//            ActivityProducts nextActivityPr= activityProductsList.stream().filter(t->!t.getEndTime().before(DateTime.now().toDate())
+//                    &&!t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate())
+//                    &&t.getProductInActivityId()!=activityProduct.getProductInActivityId()).min(activityProductsList,)
+        }
+        return null;
+    }
 }
