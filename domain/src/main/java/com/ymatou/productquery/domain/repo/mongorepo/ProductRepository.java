@@ -1,6 +1,7 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.mongodb.MongoClient;
+import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.Catalogs;
 import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,7 +74,7 @@ public class ProductRepository extends MongoRepository {
      * @param productIdList
      * @return
      */
-    public List<Products> getProductsByProductIds(List<String> productIdList) {
+    public List<Products> getProductListByProductIdList(List<String> productIdList) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
                 .field("spid").in(productIdList).asList();
@@ -84,7 +86,7 @@ public class ProductRepository extends MongoRepository {
      * @param productId
      * @return
      */
-    public Products getProductByProductId(String productId) {
+    public Products getProductInfoByProductId(String productId) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
                 .field("spid").equal(productId).get();
@@ -96,10 +98,34 @@ public class ProductRepository extends MongoRepository {
      * @param productId
      * @return
      */
-    public List<Catalogs> getCatalogsByProductId(String productId) {
+    public List<Catalogs> getCatalogListByProductId(String productId) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Catalogs.class).disableValidation()
                 .field("spid").equal(productId).asList();
+    }
+
+    /**
+     * 根据规格id列表获取规格信息列表
+     * @param catalogIdList
+     * @return
+     */
+    public List<Catalogs> getCatalogListByCatalogIdList(List<String> catalogIdList) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        return datastore.find(Catalogs.class).disableValidation()
+                .field("cid").equal(catalogIdList).asList();
+    }
+
+    /**
+     * 根据商品id列表获取活动商品列表
+     * @param productIdList
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").in(productIdList)
+                .field("end").greaterThanOrEq(new Date())
+                .asList();
     }
 
     /**
@@ -108,7 +134,7 @@ public class ProductRepository extends MongoRepository {
      * @param productIdList
      * @return
      */
-    public List<Catalogs> getCatalogsByProductIds(List<String> productIdList) {
+    public List<Catalogs> getCatalogListByProductIdList(List<String> productIdList) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Catalogs.class).disableValidation()
                 .field("spid").in(productIdList).asList();

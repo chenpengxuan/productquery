@@ -1,6 +1,5 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
-import com.google.common.collect.Lists;
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.ProductTimeStamp;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
@@ -54,15 +53,14 @@ public class ProductTimeStampRepository extends MongoRepository {
      * 根据ProductIdList查询ProudctTimeStamp
      *
      * @param productIdList
-     * @param stampKeys
+     * @param stampKeyList
      * @return
      */
-    public List<ProductTimeStamp> getTimeStampByProductIds(List<String> productIdList, String stampKeys) {
+    public List<ProductTimeStamp> getTimeStampByProductIds(List<String> productIdList, List<String> stampKeyList) {
         Datastore datastore = this.getDataStore(this.dbName);
         Query<ProductTimeStamp> query = datastore.find(ProductTimeStamp.class).disableValidation()
                 .field("spid").in(productIdList);
-        String[] stampKeyList = stampKeys.split(",");
-        Lists.newArrayList(stampKeyList).forEach(x -> query.project(x,true));
+        stampKeyList.forEach(x -> query.project(x,true));
         return query.asList();
     }
 }

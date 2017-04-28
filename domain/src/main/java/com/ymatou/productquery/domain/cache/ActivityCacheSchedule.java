@@ -45,14 +45,14 @@ public class ActivityCacheSchedule {
     public void init() {
         if (bizProps.isUseCache() && cacheProps.isUseActivityCache()) {
             //初始化活动商品缓存
-            recordCount = cache.initActivityProductCache();
-            logWrapper.recordInfoLog("初始化活动商品缓存已执行,新增{}条", recordCount);
-
-            cronSetting = bizProps.isUseCache() && cacheProps.isUseActivityCache() ? "0/" +
-                    cacheProps.getActivityProductFrequency() + " * * * * ?" : "";
-
-            //定时添加活动商品增量
-            scheduler();
+//            recordCount = cache.initActivityProductCache();
+//            logWrapper.recordInfoLog("初始化活动商品缓存已执行,新增{}条", recordCount);
+//
+//            cronSetting = bizProps.isUseCache() && cacheProps.isUseActivityCache() ? "0/" +
+//                    cacheProps.getActivityProductFrequency() + " * * * * ?" : "";
+//
+//            //定时添加活动商品增量
+//            scheduler();
         }
     }
 
@@ -61,9 +61,9 @@ public class ActivityCacheSchedule {
      */
     public void scheduler() {
         try {
-            threadPoolTaskScheduler.schedule(() ->
-                            cache.addNewestActivityProductCache(),
-                    new CronTrigger(cronSetting));
+//            threadPoolTaskScheduler.schedule(() ->
+//                            cache.addNewestActivityProductCache(),
+//                    new CronTrigger(cronSetting));
         } catch (Exception ex) {
             logWrapper.recordErrorLog("活动商品缓存定时任务发生异常", ex);
         }

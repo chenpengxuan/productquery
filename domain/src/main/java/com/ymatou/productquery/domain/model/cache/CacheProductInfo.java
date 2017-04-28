@@ -1,6 +1,8 @@
 package com.ymatou.productquery.domain.model.cache;
 
 import com.ymatou.productquery.domain.model.Catalogs;
+import com.ymatou.productquery.domain.model.Products;
+import com.ymatou.productquery.infrastructure.util.Utils;
 
 import java.util.Date;
 import java.util.List;
@@ -554,5 +556,15 @@ public class CacheProductInfo extends BaseCacheInfo{
 
     public void setCatalogsList(List<Catalogs> catalogsList) {
         this.catalogsList = catalogsList;
+    }
+
+    /**
+     * 数据转换器
+     * @return
+     */
+    public Products convertCacheDataToDto(){
+        Products products = new Products();
+        Utils.copyProperties(products,this);
+        return products;
     }
 }

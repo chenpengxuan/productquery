@@ -1,9 +1,11 @@
 package com.ymatou.productquery.domain.model;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ymatou.productquery.domain.model.cache.CacheProductInfo;
+import com.ymatou.productquery.infrastructure.util.Utils;
 import org.mongodb.morphia.annotations.Property;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 
@@ -440,5 +442,17 @@ public class Products{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 数据转换器
+     * @return
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
+    public CacheProductInfo convertDtoToCacheData(){
+        CacheProductInfo cacheProductInfo = new CacheProductInfo();
+        Utils.copyProperties(cacheProductInfo,this);
+        return cacheProductInfo;
     }
 }
