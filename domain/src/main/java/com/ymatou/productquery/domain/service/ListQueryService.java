@@ -1,13 +1,11 @@
 package com.ymatou.productquery.domain.service;
 
+import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.infrastructure.util.Tuple;
-import com.ymatou.productquery.model.res.ProductDetailDto;
-import com.ymatou.productquery.model.res.ProductHistoryDto;
-import com.ymatou.productquery.model.res.ProductInCartDto;
-import com.ymatou.productquery.model.res.ProductStatusEnum;
+import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +32,9 @@ public class ListQueryService {
 
     @Autowired
     private HistoryProductRepository historyProductRepository;
+
+    @Autowired
+    private CommonQueryService commonQueryService;
 
     @Autowired
     private CommonQueryService commonQueryService;
@@ -194,4 +195,6 @@ public class ListQueryService {
         }
         return productHistoryDtoList;
     }
+
+
 }

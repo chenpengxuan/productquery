@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  * 转换ProductInCartDto 对象
  */
 public class DtoMapper {
+
     public static ProductInCartDto toProductInCartDto(Products product, Catalogs catalog, ActivityProducts activityProduct, List<Catalogs> catalogsList) {
         ProductInCartDto result = new ProductInCartDto();
         result.setProductId(product.getProductId());
@@ -181,4 +182,5 @@ public class DtoMapper {
     }
 
 
+    
 }
