@@ -73,6 +73,16 @@ public class DtoMapper {
         return productDetailDto;
     }
 
+    public static ProductLiveDto toProductLiveDto(LiveProducts liveProduct) {
+        ProductLiveDto productLiveDto = new ProductLiveDto();
+        try {
+            BeanUtils.copyProperties(productLiveDto, liveProduct);
+        } catch (Exception ex) {
+            throw new BizException("line 62:BeanUtils.copyProperties fail,liveid:" + liveProduct.getLiveId(), ex);
+        }
+        return productLiveDto;
+    }
+
     /**
      * 返回活动商品的最高价，最低价
      *
@@ -275,5 +285,4 @@ public class DtoMapper {
     }
 
 
-    
 }

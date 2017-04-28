@@ -4,10 +4,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import com.ymatou.productquery.domain.service.ListQueryService;
 import com.ymatou.productquery.domain.service.ProductInListService;
 import com.ymatou.productquery.model.req.*;
-import com.ymatou.productquery.model.res.BaseResponseNetAdapter;
-import com.ymatou.productquery.model.res.ProductHistoryDto;
-import com.ymatou.productquery.model.res.ProductInCartDto;
-import com.ymatou.productquery.model.res.ProductInListDto;
+import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -81,7 +78,11 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request) {
-        return null;
+        List<ProductDetailDto> result = listQueryService.getProductDetailList(request.getProductIdList(),request.getNextActivityExpire(), true);
+
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", result);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
 
     /**

@@ -37,9 +37,6 @@ public class ListQueryService {
     private CommonQueryService commonQueryService;
 
     @Autowired
-    private CommonQueryService commonQueryService;
-
-    @Autowired
     private BizProps bizProps;
 
     /**
@@ -151,6 +148,7 @@ public class ListQueryService {
             //活动
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
                 productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
+
                 productDetailDto.setProductActivity(DtoMapper.toProductActivityDto(activityProduct));
                 productDetailDto.setValidStart(activityProduct.getStartTime());
                 productDetailDto.setValidEnd(activityProduct.getEndTime());
@@ -159,17 +157,36 @@ public class ListQueryService {
                 double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
                 productDetailDto.getProductActivity().setMaxActivityPrice(max);
                 productDetailDto.getProductActivity().setMinActivityPrice(min);
-            }
-            else
-            {
-                productDetailDto=DtoMapper.toProductDetailDto(product,catalogs,activityProduct);
+            } else {
+                productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
             }
 
             //下一场活动
-//            ActivityProducts nextActivityProduct=ProductActivityService.getValidProductActivity()
+            ActivityProducts nextActivityProduct = ProductActivityService.getNextProductActivity(activityProducts, nextActivityExpire, activityProduct);
+            if (nextActivityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
+                productDetailDto.setNextActivity(DtoMapper.toProductActivityDto(nextActivityProduct));
+                Tuple<Double, Double> maxmin = DtoMapper.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
+                double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
+                double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
+                productDetailDto.getNextActivity().setMaxActivityPrice(max);
+                productDetailDto.getNextActivity().setMinActivityPrice(min);
+            }
+
+            //直播
+            LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
+            productDetailDto.setLiveProduct(DtoMapper.toProductLiveDto(liveProduct));
+            if (liveProduct != null) {
+                productDetailDto.setValidStart(liveProduct.getStartTime());
+                productDetailDto.setValidEnd(liveProduct.getEndTime());
+            }
+
+            // 商品的状态
+            productDetailDto.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart()
+                    , product.getValidEnd(), liveProduct, activityProduct));
+            productDetailDtoList.add(productDetailDto);
         }
 
-        return null;
+        return productDetailDtoList;
     }
 
     /**

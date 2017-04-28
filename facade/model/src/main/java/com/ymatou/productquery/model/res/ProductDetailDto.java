@@ -145,7 +145,7 @@ public class ProductDetailDto {
 
     // 售卖状态
     @JsonProperty("Status")
-    private ProductStatusEnum status;
+    private int status;
 
 
     // 是否新结构化描述
@@ -459,11 +459,11 @@ public class ProductDetailDto {
         this.addTime = addTime;
     }
 
-    public ProductStatusEnum getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(ProductStatusEnum status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

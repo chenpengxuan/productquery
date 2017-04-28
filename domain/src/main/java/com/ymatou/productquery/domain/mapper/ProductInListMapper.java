@@ -49,7 +49,7 @@ public class ProductInListMapper {
         productDto.isAnyPreSale(getIsAnyPreSale(catalogs));
         productDto.isAllPreSale(getIsAnyPreSale(catalogs));
         productDto.isPspProduct(product.isPspProduct());
-
+//// FIXME: 2017/4/28 代做
         //productDto.setOwnProduct(product);
 
         return productDto;
