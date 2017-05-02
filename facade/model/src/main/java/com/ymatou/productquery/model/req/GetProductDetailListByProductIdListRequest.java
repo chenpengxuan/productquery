@@ -3,6 +3,7 @@ package com.ymatou.productquery.model.req;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -14,6 +15,7 @@ public class GetProductDetailListByProductIdListRequest  extends BaseRequest {
     // </summary>
     @JsonProperty("ProductIdList")
     @NotEmpty(message = "商品id不能为空")
+    @NotNull(message = "商品id不能为空")
     private List<String> productIdList;
 
     // <summary>

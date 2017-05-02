@@ -1,6 +1,7 @@
 package com.ymatou.productquery.facade;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.ymatou.productquery.domain.service.ItemQueryService;
 import com.ymatou.productquery.domain.service.ListQueryService;
 import com.ymatou.productquery.domain.service.ProductInListService;
 import com.ymatou.productquery.model.req.*;
@@ -25,6 +26,9 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
 
     @Autowired
     private ListQueryService listQueryService;
+
+    @Autowired
+    private ItemQueryService itemQueryService;
 
     @Autowired
     private ProductInListService productInListService;
@@ -95,7 +99,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
      */
     @Override
     @POST
-    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDetailListByProductIdList:(?i:GetProductDetailListByProductIdList)}")
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDetailListByTradeIsolation:(?i:GetProductDetailListByTradeIsolation)}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
@@ -116,8 +120,28 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByProductId:(?i:GetProductInfoByProductId)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getProductDetailByProductId(@BeanParam GetProductInfoByProductIdRequest request) {
-        return null;
+    public BaseResponseNetAdapter getProductInfoByProductId(@BeanParam GetProductInfoByProductIdRequest request) {
+        ProductDetailDto result = itemQueryService.getProductDetail(request.getProductId(), request.getNextActivityExpire(), false);
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("Product", result);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    /**
+     * 根据商品编号取交易隔离的商品信息
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByTradeIsolation:(?i:GetProductInfoByTradeIsolation)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getProductInfoByTradeIsolation(@BeanParam GetProductInfoByProductIdRequest request) {
+        ProductDetailDto result = itemQueryService.getProductDetail(request.getProductId(), request.getNextActivityExpire(), true);
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("Product", result);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
 
     /**
