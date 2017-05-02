@@ -82,6 +82,8 @@ public class ListQueryService {
             } else {
                 productInCartDto = DtoMapper.toProductInCartDto(product, catalog, null, catalogsList);
             }
+
+
             LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(productId)).findFirst().orElse(null);
             if (liveProduct != null) {
                 productInCartDto.setLiveProduct(DtoMapper.toLiveProductCartDto(liveProduct));

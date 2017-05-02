@@ -98,7 +98,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDetailListByProductIdList:(?i:GetProductDetailListByProductIdList)}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
-    public BaseResponseNetAdapter GetProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
+    public BaseResponseNetAdapter getProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
         List<ProductDetailDto> result = listQueryService.getProductDetailList(request.getProductIdList(), request.getNextActivityExpire(), true);
 
         Map<String, Object> productList = new HashMap<>();
@@ -149,7 +149,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductListByTradeIsolation:(?i:GetProductListByTradeIsolation)}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
-    public BaseResponseNetAdapter GetProductListByTradeIsolation(GetProductListByTradeIsolationRequest request) {
+    public BaseResponseNetAdapter getProductListByTradeIsolation(GetProductListByTradeIsolationRequest request) {
         List<ProductInListDto> productDtoList = productInListService.getProductList(request.getProductIdList(), true);
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
@@ -167,7 +167,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductListByProductIdList:(?i:GetProductListByProductIdList)}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
-    public BaseResponseNetAdapter GetProductListByProductIdList(GetProductListByProductIdListRequest request) {
+    public BaseResponseNetAdapter getProductListByProductIdList(GetProductListByProductIdListRequest request) {
         List<ProductInListDto> productDtoList = productInListService.getProductList(request.getProductIdList(), false);
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
