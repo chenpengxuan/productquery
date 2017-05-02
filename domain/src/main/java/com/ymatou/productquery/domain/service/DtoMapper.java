@@ -74,6 +74,9 @@ public class DtoMapper {
     }
 
     public static ProductLiveDto toProductLiveDto(LiveProducts liveProduct) {
+        if (liveProduct == null) {
+            return null;
+        }
         ProductLiveDto productLiveDto = new ProductLiveDto();
         try {
             BeanUtils.copyProperties(productLiveDto, liveProduct);
@@ -100,6 +103,9 @@ public class DtoMapper {
      * @return
      */
     public static ProductActivityDto toProductActivityDto(ActivityProducts model) {
+        if (model == null) {
+            return null;
+        }
         ProductActivityDto productActivityDto = new ProductActivityDto();
         try {
             BeanUtils.copyProperties(productActivityDto, model);
@@ -147,6 +153,9 @@ public class DtoMapper {
     }
 
     public static ProductHistoryDto toProductHistoryDto(Products model) {
+        if (model == null) {
+            return null;
+        }
         try {
             ProductHistoryDto productHistoryDto = new ProductHistoryDto();
             BeanUtils.copyProperties(productHistoryDto, model);
@@ -172,7 +181,38 @@ public class DtoMapper {
         }
     }
 
-    private static List<CatalogDto> toCatalogDtoList(List<Catalogs> catalogsList, ActivityProducts activityProducts) {
+    public static ProductDetailDto toProductDetailDto(HistoryProductModel historyProductModel) {
+        if (historyProductModel == null)
+            return null;
+        try {
+            ProductDetailDto productDetailDto = new ProductDetailDto();
+            BeanUtils.copyProperties(historyProductModel, productDetailDto);
+            productDetailDto.setStatus(ProductStatusEnum.Disable.getCode());
+            return productDetailDto;
+        } catch (Exception ex) {
+            throw new BizException("line 185:BeanUtils.copyProperties fail,productid:" + historyProductModel.getProductId(), ex);
+        }
+    }
+
+    public static ProductActivityCartDto toProductActivityCartDto(ActivityProducts model) {
+        if (model == null) {
+            return null;
+        }
+        ProductActivityCartDto pa = new ProductActivityCartDto();
+        pa.setActivityId(model.getActivityId());
+        pa.setActivityName(model.getActivityName());
+        pa.setProductActivityStartTime(model.getStartTime());
+        pa.setProductActivityEndTime(model.getEndTime());
+        pa.setActivityLimitNumber(model.getActivityLimit());
+        pa.setPromotionType(3);
+        pa.setProductActivityLimitNumber(model.getProductLimit());
+        pa.setProductInActivityId(model.getProductInActivityId());
+        pa.setActivityCatalogList(model.getCatalogs().stream().map(t -> t.getCatalogId()).collect(Collectors.toList()));
+        pa.setNewBuyer(model.isNewBuyer());
+        return pa;
+    }
+
+    private static List<CatalogDto> toCatalogDtoList(List<Catalogs> catalogsList, ActivityProducts activityProduct) {
         List<CatalogDto> catalogDtoList = new ArrayList<>();
         catalogsList.forEach(t ->
         {
@@ -182,23 +222,29 @@ public class DtoMapper {
             } catch (Exception ex) {
                 throw new BizException("line 142:BeanUtils.copyProperties fail,liveid:" + t.getCatalogId(), ex);
             }
-            ActivityCatalogInfo activityCatalogInfo = activityProducts.getCatalogs().stream().
-                    filter(x -> x.getCatalogId().equals(t.getCatalogId())).findFirst().orElse(null);
-            if (activityCatalogInfo != null) {
-                catalogDto.setInActivity(true);
-                catalogDto.setActivityPrice(activityCatalogInfo.getActivityPrice());
-                catalogDto.setActivityStock(activityCatalogInfo.getActivityStock());
+            if (activityProduct != null) {
+                ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream().
+                        filter(x -> x.getCatalogId().equals(t.getCatalogId())).findFirst().orElse(null);
+                if (activityCatalogInfo != null) {
+                    catalogDto.setInActivity(true);
+                    catalogDto.setActivityPrice(activityCatalogInfo.getActivityPrice());
+                    catalogDto.setActivityStock(activityCatalogInfo.getActivityStock());
+                }
             }
+            // 规格属性
             List<CatalogPropertyDto> catalogPropertyDtos = new ArrayList<>();
-            t.getProps().forEach(q -> {
-                CatalogPropertyDto catalogPropertyDto = new CatalogPropertyDto();
-                catalogPropertyDto.setName(q.getName());
-                catalogPropertyDto.setPicUrl(q.getPic());
-                catalogPropertyDto.setSort(1);
-                catalogPropertyDto.setValue(q.getValue());
-                catalogPropertyDtos.add(catalogPropertyDto);
-            });
+            if (t.getProps() != null && !t.getProps().isEmpty()) {
+                t.getProps().forEach(q -> {
+                    CatalogPropertyDto catalogPropertyDto = new CatalogPropertyDto();
+                    catalogPropertyDto.setName(q.getName());
+                    catalogPropertyDto.setPicUrl(q.getPic());
+                    catalogPropertyDto.setSort(1);
+                    catalogPropertyDto.setValue(q.getValue());
+                    catalogPropertyDtos.add(catalogPropertyDto);
+                });
+            }
             catalogDto.setPropertyList(catalogPropertyDtos);
+
             catalogDtoList.add(catalogDto);
         });
         return catalogDtoList;
@@ -264,24 +310,6 @@ public class DtoMapper {
     private static boolean isNewestProduct(Date startTime, Date endTime) {
         Date now = new Date();
         return !now.before(startTime) && !now.after(endTime);
-    }
-
-    public static ProductActivityCartDto toProductActivityCartDto(ActivityProducts model) {
-        ProductActivityCartDto pa = new ProductActivityCartDto();
-        if (model == null) {
-            return pa;
-        }
-        pa.setActivityId(model.getActivityId());
-        pa.setActivityName(model.getActivityName());
-        pa.setProductActivityStartTime(model.getStartTime());
-        pa.setProductActivityEndTime(model.getEndTime());
-        pa.setActivityLimitNumber(model.getActivityLimit());
-        pa.setPromotionType(3);
-        pa.setProductActivityLimitNumber(model.getProductLimit());
-        pa.setProductInActivityId(model.getProductInActivityId());
-        pa.setActivityCatalogList(model.getCatalogs().stream().map(t -> t.getCatalogId()).collect(Collectors.toList()));
-        pa.setNewBuyer(model.isNewBuyer());
-        return pa;
     }
 
 

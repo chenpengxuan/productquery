@@ -34,7 +34,7 @@ public class Catalogs {
     private Double price;//	原价
 
     @Property("newp")
-    private Double newPrice;//	新客价
+    private Double newGuestPrice;//	新客价
 
     @Property("vip")
     private Double vipPrice;//	VIP价
@@ -100,12 +100,12 @@ public class Catalogs {
         this.price = price;
     }
 
-    public Double getNewPrice() {
-        return newPrice;
+    public Double getNewGuestPrice() {
+        return newGuestPrice;
     }
 
-    public void setNewPrice(Double newPrice) {
-        this.newPrice = newPrice;
+    public void setNewGuestPrice(Double newGuestPrice) {
+        this.newGuestPrice = newGuestPrice;
     }
 
     public Double getVipPrice() {

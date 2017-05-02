@@ -8,6 +8,7 @@ import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.ArraySlice;
+import org.mongodb.morphia.query.FindOptions;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,6 +27,8 @@ public class ProductRepository extends MongoRepository {
     private MongoClient mongoClient;
 
     private final String dbName = "YmtProducts";
+
+    private final FindOptions limitOne = new FindOptions().limit(1);
 
     /**
      * 获取到MongoClient
@@ -106,7 +109,7 @@ public class ProductRepository extends MongoRepository {
     public Products getProductInfoByProductId(String productId) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
-                .field("spid").equal(productId).get();
+                .field("spid").equal(productId).get(limitOne);
     }
 
     /**
