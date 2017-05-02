@@ -305,4 +305,57 @@ public class ProductInListService {
 
         return stockDtoList;
     }
+
+    /**
+     * 取商品图文描述扩展信息
+     * @param productId
+     * @return
+     */
+    public ProductDescExtraDto getProductDescExtra(String productId)
+    {
+        ProductDescExtra descExtra = commonQueryService.getProductDescExtra(productId);
+        if(descExtra == null) {
+            return null;
+        }
+
+        ProductDescExtraDto dto = new ProductDescExtraDto();
+
+        dto.setProductId(descExtra.getProductId());
+        dto.setDescText(descExtra.getDescText());
+        dto.setDescPicList(descExtra.getDescPicList());
+        dto.setSizePicList(descExtra.getSizePicList());
+        dto.setNoticeText(descExtra.getNoticeText());
+        dto.setNoticePicList(descExtra.getNoticePicList());
+        dto.setSellerIntroText(descExtra.getSellerInfoText());
+        dto.setSellerIntroPicList(descExtra.getSellerIntroPicList());
+        dto.setDescPropertyDtoList(getDescPropertyDtoList(descExtra.getPropertyList()));
+
+        return dto;
+    }
+
+
+    /**
+     * 商品属性对象转换
+     * @param descPropertyInfoList
+     * @return
+     */
+    private List<DescPropertyDto> getDescPropertyDtoList(List<ProductDescPropertyInfo> descPropertyInfoList)
+    {
+        if(descPropertyInfoList == null || descPropertyInfoList.isEmpty()) {
+            return null;
+        }
+
+        List<DescPropertyDto> dtoList = new ArrayList<>();
+        descPropertyInfoList.stream().forEach(c->{
+            DescPropertyDto dto = new DescPropertyDto();
+            dto.setKey(c.getKey());
+            dto.setValue(c.getValue());
+
+            dtoList.add(dto);
+        });
+
+        return dtoList;
+    }
+
+
 }

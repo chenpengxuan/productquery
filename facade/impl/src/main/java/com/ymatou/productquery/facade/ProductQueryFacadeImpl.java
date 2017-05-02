@@ -262,5 +262,20 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         return BaseResponseNetAdapter.newSuccessInstance(stockList);
     }
 
-
+    /**
+     * 取秒杀商品的活动库存量
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDescExtraByProductId:(?i:GetProductDescExtraByProductId)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getProductDescExtraByProductId(GetProductDescExtraByProductIdRequest request) {
+        ProductDescExtraDto descExtraDto = productInListService.getProductDescExtra(request.getProductId());
+        Map<String, Object> descExtra = new HashMap<>();
+        descExtra.put("ProductDescExtra", descExtraDto);
+        return BaseResponseNetAdapter.newSuccessInstance(descExtra);
+    }
 }
