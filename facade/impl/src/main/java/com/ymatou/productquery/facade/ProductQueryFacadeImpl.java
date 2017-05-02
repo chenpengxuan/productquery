@@ -176,6 +176,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
 
     /**
      * 取直播中置顶商品列表
+     *
      * @param request
      * @return
      */
@@ -192,6 +193,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
 
     /**
      * 取买手新品列表
+     *
      * @param request
      * @return
      */
@@ -209,6 +211,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
 
     /**
      * 买手热推商品列表
+     *
      * @param request
      * @return
      */
@@ -242,7 +245,22 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
 
-
+    /**
+     * 取秒杀商品的活动库存量
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetSecKillProductActivityStock:(?i:GetSecKillProductActivityStock)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request) {
+        List<SecKillProductActivityStockDto> stockDtoList = productInListService.getSecKillProductActivityStockList(request.getProductId(), request.getActivityId());
+        Map<String, Object> stockList = new HashMap<>();
+        stockList.put("StockList", stockDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(stockList);
+    }
 
 
 }

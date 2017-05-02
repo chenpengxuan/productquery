@@ -2,10 +2,7 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
-import com.ymatou.productquery.model.res.ProductInListDto;
-import com.ymatou.productquery.model.res.ProductStatusEnum;
-import com.ymatou.productquery.model.res.RecmdProductIdDto;
-import com.ymatou.productquery.model.res.TopProductInLiveDto;
+import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -267,5 +264,45 @@ public class ProductInListService {
             });
         }
         return recmdProductList;
+    }
+
+    /**
+     * 取秒杀商品的活动库存量
+     * @param productId
+     * @param activityId
+     * @return
+     */
+    public List<SecKillProductActivityStockDto> getSecKillProductActivityStockList(String productId, int activityId) {
+        List<String> productIdList = new ArrayList<>();
+        productIdList.add(productId);
+
+        List<SecKillProductActivityStockDto> stockDtoList = new ArrayList<>();
+
+        Products product = commonQueryService.getProductByProductId(productId);
+        List<ActivityProducts> activityProductList = commonQueryService.getActivityProductListByProductIdList(productIdList);
+
+        if(product == null || activityProductList == null || activityProductList.isEmpty()) {
+            return null;
+        }
+
+        ActivityProducts activityProduct = activityProductList.stream()
+                .filter(a-> a.getActivityId() == activityId).findFirst().orElse(null);
+
+        if(activityProduct == null || activityProduct.getCatalogs() == null || activityProduct.getCatalogs().isEmpty()) {
+            return null;
+        }
+
+        activityProduct.getCatalogs().stream().forEach(c->{
+            SecKillProductActivityStockDto dto = new SecKillProductActivityStockDto();
+            dto.setProductId(activityProduct.getProductId());
+            dto.setActivityId(activityProduct.getActivityId());
+            dto.setProductActivityId(activityProduct.getProductInActivityId());
+            dto.setCatalogId(c.getCatalogId());
+            dto.setActivityStock(c.getActivityStock());
+
+            stockDtoList.add(dto);
+        });
+
+        return stockDtoList;
     }
 }

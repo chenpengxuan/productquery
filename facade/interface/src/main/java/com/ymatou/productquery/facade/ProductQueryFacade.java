@@ -100,4 +100,11 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getSellerRecommendProductList(GetSellerRecommendProductListRequest request);
 
+    /**
+     * 取秒杀商品的活动库存量
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request);
+
 }
