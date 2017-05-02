@@ -9,6 +9,7 @@ import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductTimeStampRepository;
 import com.ymatou.productquery.infrastructure.util.CacheUtil.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,7 +18,8 @@ import java.util.stream.Collectors;
  * 活动商品缓存相关
  * Created by chenpengxuan on 2017/4/28.
  */
-public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,CacheActivityProductInfo>{
+@Component("activityCacheProcessor")
+public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts, CacheActivityProductInfo> {
     @Autowired
     private ProductRepository productRepository;
 
@@ -29,20 +31,21 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
 
     /**
      * 根据商品id列表获取活动商品信息列表
+     *
      * @param productIdList
      * @return
      */
     public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
         List<CacheActivityProductInfo> cacheActivityProductInfoList = Lists.newArrayList
                 (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT).values())
-                .stream().map(x -> ((CacheActivityProductInfo)x)).collect(Collectors.toList());
+                .stream().map(x -> ((CacheActivityProductInfo) x)).collect(Collectors.toList());
 
         List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
                 .getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
 
-        Map<String,Date> productTimeStampMap = new HashMap<>();
-        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(),x.getProductUpdateTime()));
-        return processCacheInfo(productIdList,cacheActivityProductInfoList,productTimeStampMap);
+        Map<String, Date> productTimeStampMap = new HashMap<>();
+        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getProductUpdateTime()));
+        return processCacheInfo(productIdList, cacheActivityProductInfoList, productTimeStampMap);
     }
 
     @Override
@@ -52,15 +55,15 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
 
     @Override
     protected List<ActivityProducts> processNoneCache(List<String> productIdList) {
-        if(productIdList != null && !productIdList.isEmpty()){
+        if (productIdList != null && !productIdList.isEmpty()) {
             productIdList.removeAll(Collections.singleton(null));
             productIdList = productIdList.stream().distinct().collect(Collectors.toList());
         }
 
         List<ActivityProducts> activityProductsList = productRepository.getActivityProductListByProductIdList(productIdList);
-        if(activityProductsList != null && !activityProductsList.isEmpty()){
-            Map<String,CacheActivityProductInfo> cacheActivityProductInfoMap = new HashMap<>();
-            activityProductsList.forEach(x -> cacheActivityProductInfoMap.put(x.getProductId(),x.convertDtoToCacheData()));
+        if (activityProductsList != null && !activityProductsList.isEmpty()) {
+            Map<String, CacheActivityProductInfo> cacheActivityProductInfoMap = new HashMap<>();
+            activityProductsList.forEach(x -> cacheActivityProductInfoMap.put(x.getProductId(), x.convertDtoToCacheData()));
             cacheManager.put(cacheActivityProductInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
             return activityProductsList;
         }
@@ -86,7 +89,7 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
                 Map<String, CacheActivityProductInfo> cacheInfoMap = new HashMap<>();
                 reloadProducts.forEach(rp -> {
 
-                    cacheInfoMap.put(rp.getProductId(),rp.convertDtoToCacheData());
+                    cacheInfoMap.put(rp.getProductId(), rp.convertDtoToCacheData());
                 });
                 cacheManager.put(cacheInfoMap, CacheManager.CacheInfoTypeEnum.PRODUCT);
                 result.addAll(reloadProducts);
