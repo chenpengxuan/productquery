@@ -66,7 +66,7 @@ public class GetCatalogListByCatalogIdListTest {
     }
 
     @Test
-    void testWithoutActivityOrLiveTradeIsolation() {
+    public void testWithoutActivityOrLiveTradeIsolation() {
         List<String> catalogs = new ArrayList<>();
         catalogs.add("dc03f90e-1fba-4525-948e-93afd1eced63");
         catalogs.add("7d5aba06-e200-4023-b21c-d421f956e77c");

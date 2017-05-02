@@ -9,6 +9,7 @@ import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductTimeStampRepository;
 import com.ymatou.productquery.infrastructure.util.CacheUtil.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Created by chenpengxuan on 2017/5/2.
  */
+@Component("liveCacheProcessor")
 public class LiveCacheProcessor  extends BaseCacheProcessor<LiveProducts,CacheLiveProductInfo>{
     @Autowired
     private CacheManager cacheManager;
