@@ -33,7 +33,7 @@ public class CommonQueryService {
     @Resource(name = "catalogCacheProcessor")
     private CatalogCacheProcessor catalogCacheProcessor;
 
-    @Resource(name="liveCacheProcessor")
+    @Resource(name = "liveCacheProcessor")
     private LiveCacheProcessor liveCacheProcessor;
 
     @Autowired
@@ -105,9 +105,9 @@ public class CommonQueryService {
      * @return
      */
     public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
-        if(bizProps.isUseCache()){
+        if (bizProps.isUseCache()) {
             return activityCacheProcessor.getActivityProductListByProductIdList(productIdList);
-        }else{
+        } else {
             return productRepository.getActivityProductListByProductIdList(productIdList);
         }
     }
@@ -119,56 +119,74 @@ public class CommonQueryService {
      * @return
      */
     public List<LiveProducts> getLiveProductListByProductId(List<String> productIdList) {
-        if(bizProps.isUseCache()){
+        if (bizProps.isUseCache()) {
             return liveCacheProcessor.getProductInfoByProductIdList(productIdList);
-        }else{
+        } else {
             return productRepository.getLiveProductListByProductIdList(productIdList);
         }
     }
 
     /**
      * 取直播中置顶商品列表
+     *
      * @param liveId
      * @return
      */
-    List<String> getTopProductIdListByLiveId(int liveId){return null;}
+    List<String> getTopProductIdListByLiveId(int liveId) {
+        return productRepository.getTopLiveProductIdList(liveId);
+    }
 
     /**
      * 买手热推商品列表
+     *
      * @param sellerId
      * @return
      */
-    List<String> getHotRecmdProductIdListBySellerId(int sellerId){return null;}
+    List<String> getHotRecmdProductIdListBySellerId(int sellerId) {
+        return productRepository.getHotRecmdProductList(sellerId);
+    }
 
     /**
      * 取买手新品列表
+     *
      * @param sellerId
      * @param curPage
      * @param pageSize
      * @return
      */
-    List<String> getNewestProductIdList(int sellerId, int curPage, int pageSize){return null;}
+    List<String> getNewestProductIdList(int sellerId, int curPage, int pageSize) {
+        return productRepository.getNewestProductList(sellerId, curPage, pageSize);
+    }
 
     /**
      * 取商品图文描述扩展
+     *
      * @param productId
      * @return
      */
-    ProductDescExtra getProductDescExtra(String productId){return null;}
+    ProductDescExtra getProductDescExtra(String productId) {
+        return productRepository.getProductDescExtra(productId);
+    }
 
     /**
      * 取买手的置顶商品编号列表
+     *
      * @param sellerIdList
      * @return
      */
-    List<String> getTopLiveProductIdListBySellerIdList(List<Integer> sellerIdList){return null;}
+    List<String> getTopLiveProductIdListBySellerIdList(List<Integer> sellerIdList) {
+        return productRepository.getTopLiveProductIdListBySellerIdList(sellerIdList);
+    }
 
     /**
      * 取买手的活动商品编号列表
+     *
      * @param sellerIdList
      * @return
      */
-    List<String> getActivityProductIdListBySellerIdList(List<Integer> sellerIdList){return null;}
+    List<String> getActivityProductIdListBySellerIdList(List<Integer> sellerIdList) {
+        return productRepository.getActivityProductIdListBySellerIdList(sellerIdList);
+    }
 
     /**
      * 查询历史商品
@@ -177,7 +195,6 @@ public class CommonQueryService {
      * @return
      */
     public List<HistoryProductModel> getHistoryProductListByProductIdList(List<String> productIdList) {
-       return historyProductRepository.getHistoryProductListByProductIdList(productIdList);
+        return historyProductRepository.getHistoryProductListByProductIdList(productIdList);
     }
-
 }
