@@ -4,6 +4,7 @@ import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.model.res.ProductInListDto;
 import com.ymatou.productquery.model.res.ProductStatusEnum;
+import com.ymatou.productquery.model.res.TopProductInLiveDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -171,4 +172,12 @@ public class ProductInListService {
                 ? ProductStatusEnum.Available : ProductStatusEnum.Disable;
     }
 
+    /**
+     * 取直播中置顶商品列表
+     * @param liveId
+     * @return
+     */
+    public List<TopProductInLiveDto> getTopProductListByLiveId(int liveId) {
+        return null;
+    }
 }

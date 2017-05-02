@@ -2,10 +2,7 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.cache.CatalogCacheProcessor;
 import com.ymatou.productquery.domain.cache.ProductCacheProcessor;
-import com.ymatou.productquery.domain.model.ActivityProducts;
-import com.ymatou.productquery.domain.model.Catalogs;
-import com.ymatou.productquery.domain.model.LiveProducts;
-import com.ymatou.productquery.domain.model.Products;
+import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,4 +107,34 @@ public class CommonQueryService {
     }
 
 
+    /**
+     * 取直播中置顶商品编号列表
+     * @param liveId
+     * @return
+     */
+    List<String> getTopProductFromLive(int liveId)  { return null;}
+
+    /**
+     * 取新品的商品编号列表
+     * @param sellerId
+     * @param curPage
+     * @param pageSize
+     * @return
+     */
+    List<String> getNewestProductList(int sellerId, int curPage, int pageSize){return null;}
+
+    /**
+     * 取买手热推商品列表
+     * @param sellerId
+     * @return
+     */
+    List<String> getHotRecmdProductList(int sellerId){return null;}
+
+
+    /**
+     * 取商品图文描述扩展
+     * @param productId
+     * @return
+     */
+    ProductDescExtra getProductDescExtra(String productId) {return null;}
 }
