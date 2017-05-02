@@ -173,4 +173,94 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         productList.put("ProductList", productDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
+
+    /**
+     * 取直播中置顶商品列表
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetTopProductListByLiveId:(?i:GetTopProductListByLiveId)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getTopProductListByLiveId(GetTopProductListByLiveIdRequest request) {
+        List<TopProductInLiveDto> productDtoList = productInListService.getTopProductListByLiveId(request.getLiveId());
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", productDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    /**
+     * 取买手新品列表
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetNewestProductList:(?i:GetNewestProductList)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getNewestProductList(GetNewestProductListBySellerIdRequest request) {
+        List<ProductInListDto> productDtoList = productInListService
+                .getNewestProductListBySellerId(request.getSellerId(), request.getCurPage(), request.getPageSize());
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", productDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    /**
+     * 买手热推商品列表
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetHotRecmdProductListBySellerId:(?i:GetHotRecmdProductListBySellerId)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getHotRecmdProductListBySellerId(GetHotRecmdProductListBySellerIdRequest request) {
+        List<ProductInListDto> productDtoList = productInListService.getHotRecmdProductListBySellerId(request.getSellerId());
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", productDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+
+    /**
+     * 买手推荐的商品列表
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @POST
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetSellerRecommendProductList:(?i:GetSellerRecommendProductList)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public BaseResponseNetAdapter getSellerRecommendProductList(GetSellerRecommendProductListRequest request) {
+        List<RecmdProductIdDto> productDtoList = productInListService.getSellerRecommendProductList(request.getSellerIdList());
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", productDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    /**
+     * 取秒杀商品的活动库存量
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @GET
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetSecKillProductActivityStock:(?i:GetSecKillProductActivityStock)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request) {
+        List<SecKillProductActivityStockDto> stockDtoList = productInListService.getSecKillProductActivityStockList(request.getProductId(), request.getActivityId());
+        Map<String, Object> stockList = new HashMap<>();
+        stockList.put("StockList", stockDtoList);
+        return BaseResponseNetAdapter.newSuccessInstance(stockList);
+    }
+
+
 }

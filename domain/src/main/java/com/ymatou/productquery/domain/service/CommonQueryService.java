@@ -4,10 +4,8 @@ import com.ymatou.productquery.domain.cache.ActivityCacheProcessor;
 import com.ymatou.productquery.domain.cache.CatalogCacheProcessor;
 import com.ymatou.productquery.domain.cache.LiveCacheProcessor;
 import com.ymatou.productquery.domain.cache.ProductCacheProcessor;
-import com.ymatou.productquery.domain.model.ActivityProducts;
-import com.ymatou.productquery.domain.model.Catalogs;
-import com.ymatou.productquery.domain.model.LiveProducts;
-import com.ymatou.productquery.domain.model.Products;
+import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.domain.repo.mongorepo.HistoryProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +38,9 @@ public class CommonQueryService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private HistoryProductRepository historyProductRepository;
 
     /**
      * 根据商品id列表获取商品信息
@@ -124,4 +125,59 @@ public class CommonQueryService {
             return productRepository.getLiveProductListByProductIdList(productIdList);
         }
     }
+
+    /**
+     * 取直播中置顶商品列表
+     * @param liveId
+     * @return
+     */
+    List<String> getTopProductIdListByLiveId(int liveId){return null;}
+
+    /**
+     * 买手热推商品列表
+     * @param sellerId
+     * @return
+     */
+    List<String> getHotRecmdProductIdListBySellerId(int sellerId){return null;}
+
+    /**
+     * 取买手新品列表
+     * @param sellerId
+     * @param curPage
+     * @param pageSize
+     * @return
+     */
+    List<String> getNewestProductIdList(int sellerId, int curPage, int pageSize){return null;}
+
+    /**
+     * 取商品图文描述扩展
+     * @param productId
+     * @return
+     */
+    ProductDescExtra getProductDescExtra(String productId){return null;}
+
+    /**
+     * 取买手的置顶商品编号列表
+     * @param sellerIdList
+     * @return
+     */
+    List<String> getTopLiveProductIdListBySellerIdList(List<Integer> sellerIdList){return null;}
+
+    /**
+     * 取买手的活动商品编号列表
+     * @param sellerIdList
+     * @return
+     */
+    List<String> getActivityProductIdListBySellerIdList(List<Integer> sellerIdList){return null;}
+
+    /**
+     * 查询历史商品
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<HistoryProductModel> getHistoryProductListByProductIdList(List<String> productIdList) {
+       return historyProductRepository.getHistoryProductListByProductIdList(productIdList);
+    }
+
 }
