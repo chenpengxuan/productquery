@@ -5,6 +5,7 @@ import com.ymatou.productquery.domain.service.ListQueryService;
 import com.ymatou.productquery.domain.service.ProductInListService;
 import com.ymatou.productquery.model.req.*;
 import com.ymatou.productquery.model.res.*;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -78,7 +79,27 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getProductDetailListByProductIdList(GetProductDetailListByProductIdListRequest request) {
-        List<ProductDetailDto> result = listQueryService.getProductDetailList(request.getProductIdList(),request.getNextActivityExpire(), true);
+        List<ProductDetailDto> result = listQueryService.getProductDetailList(request.getProductIdList(), request.getNextActivityExpire(), false);
+
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", result);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+
+    /**
+     * 商品明细列表（交易隔离）
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @POST
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDetailListByProductIdList:(?i:GetProductDetailListByProductIdList)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public BaseResponseNetAdapter GetProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
+        List<ProductDetailDto> result = listQueryService.getProductDetailList(request.getProductIdList(), request.getNextActivityExpire(), true);
 
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", result);
@@ -87,19 +108,10 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
 
     /**
      * 根据商品id获取商品详情
-     * @param request
-     * @return
-     */
-    /**
-     * 商品明细列表（交易隔离）
      *
      * @param request
      * @return
      */
-    public BaseResponseNetAdapter GetProductDetailListByTradeIsolation(GetProductDetailListByTradeIsolationRequest request) {
-        return null;
-    }
-
     @Override
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByProductId:(?i:GetProductInfoByProductId)}")
