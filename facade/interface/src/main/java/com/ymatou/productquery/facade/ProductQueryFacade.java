@@ -70,7 +70,14 @@ public interface ProductQueryFacade {
      * @param request
      * @return
      */
-    BaseResponseNetAdapter getProductDetailByProductId(GetProductInfoByProductIdRequest request);
+    BaseResponseNetAdapter getProductInfoByProductId(GetProductInfoByProductIdRequest request);
+
+    /**
+     * 根据商品编号取交易隔离的商品信息
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductInfoByTradeIsolation(GetProductInfoByProductIdRequest request);
 
     /**
      * 取直播中置顶商品列表
