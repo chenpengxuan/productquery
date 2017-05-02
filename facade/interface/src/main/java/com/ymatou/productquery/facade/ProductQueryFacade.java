@@ -114,4 +114,12 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request);
 
+    /**
+     * 取商品图文描述扩展信息
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductDescExtraByProductId (GetProductDescExtraByProductIdRequest request);
+
+
 }
