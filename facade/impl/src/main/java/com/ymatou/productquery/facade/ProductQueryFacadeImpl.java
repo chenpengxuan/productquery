@@ -137,7 +137,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductInfoByTradeIsolation:(?i:GetProductInfoByTradeIsolation)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getProductInfoByTradeIsolation(@BeanParam GetProductInfoByProductIdRequest request) {
+    public BaseResponseNetAdapter getProductInfoByTradeIsolation(@BeanParam GetProductInfoByTradeIsolationRequest request) {
         ProductDetailDto result = itemQueryService.getProductDetail(request.getProductId(), request.getNextActivityExpire(), true);
         Map<String, Object> productList = new HashMap<>();
         productList.put("Product", result);

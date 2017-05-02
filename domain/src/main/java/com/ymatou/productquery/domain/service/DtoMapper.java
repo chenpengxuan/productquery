@@ -39,7 +39,7 @@ public class DtoMapper {
         result.setDeliveryMethod(product.getDeliveryMethod());
         result.setBondedArea(product.getBondedArea());
         result.setWeight(0d);
-        result.setFreeShipping(product.getFreight() <= 0);
+        result.setFreeShipping(product.getIsFreeShipping() <= 0);
         result.setTariffType(product.getTariffType());
         result.setLimitNumber(0);
         result.setLimitStartTime(new Date(1900, 1, 1));
@@ -64,7 +64,7 @@ public class DtoMapper {
         } catch (Exception ex) {
             throw new BizException("line 62:BeanUtils.copyProperties fail,liveid:" + products.getProductId(), ex);
         }
-        productDetailDto.setFreeShipping(products.getFreight() <= 0);
+        productDetailDto.setFreeShipping(products.getIsFreeShipping() <= 0);
         productDetailDto.setHasTextDescription(products.isNewDesc());
         productDetailDto.setNewProduct(isNewestProduct(products.getNewStartTime(), products.getNewEndTime()));
         productDetailDto.setHotRecmd(products.isTopProduct());
@@ -160,7 +160,7 @@ public class DtoMapper {
             ProductHistoryDto productHistoryDto = new ProductHistoryDto();
             BeanUtils.copyProperties(productHistoryDto, model);
             productHistoryDto.setMainPic(model.getPicList() != null ? model.getPicList().stream().findFirst().orElse("") : "");
-            productHistoryDto.setFreeShipping(model.getFreight() <= 0);
+            productHistoryDto.setFreeShipping(model.getIsFreeShipping() <= 0);
             productHistoryDto.setPrice(Double.parseDouble(model.getMinCatalogPrice().split(",")[0]));
             return productHistoryDto;
         } catch (Exception ex) {

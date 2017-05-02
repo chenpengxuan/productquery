@@ -77,7 +77,7 @@ public interface ProductQueryFacade {
      * @param request
      * @return
      */
-    BaseResponseNetAdapter getProductInfoByTradeIsolation(GetProductInfoByProductIdRequest request);
+    BaseResponseNetAdapter getProductInfoByTradeIsolation(GetProductInfoByTradeIsolationRequest request);
 
     /**
      * 取直播中置顶商品列表
