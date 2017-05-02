@@ -1,5 +1,8 @@
 package com.ymatou.productquery.domain.model.cache;
 
+import com.ymatou.productquery.domain.model.LiveProducts;
+import com.ymatou.productquery.infrastructure.util.Utils;
+
 import java.util.Date;
 
 /**
@@ -226,5 +229,15 @@ public class CacheLiveProductInfo extends BaseCacheInfo{
 
     public void setReadyPutawayProductSort(int readyPutawayProductSort) {
         this.readyPutawayProductSort = readyPutawayProductSort;
+    }
+
+    /**
+     * 数据转换器
+     * @return
+     */
+    public LiveProducts convertCacheDataToDto(){
+        LiveProducts liveProducts = new LiveProducts();
+        Utils.copyProperties(liveProducts,this);
+        return liveProducts;
     }
 }

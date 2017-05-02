@@ -1,5 +1,7 @@
 package com.ymatou.productquery.domain.model;
 
+import com.ymatou.productquery.domain.model.cache.CacheLiveProductInfo;
+import com.ymatou.productquery.infrastructure.util.Utils;
 import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
@@ -197,5 +199,15 @@ public class LiveProducts{
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 数据转换器
+     * @return
+     */
+    public CacheLiveProductInfo convertDtoToCacheData(){
+        CacheLiveProductInfo cacheLiveProductInfo = new CacheLiveProductInfo();
+        Utils.copyProperties(cacheLiveProductInfo,this);
+        return cacheLiveProductInfo;
     }
 }
