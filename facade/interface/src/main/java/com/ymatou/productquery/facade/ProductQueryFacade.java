@@ -72,5 +72,32 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getProductDetailByProductId(GetProductInfoByProductIdRequest request);
 
+    /**
+     * 取直播中置顶商品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getTopProductListByLiveId(GetTopProductListByLiveIdRequest request);
+
+    /**
+     * 取买手新品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getNewestProductList(GetNewestProductListBySellerIdRequest request);
+
+    /**
+     * 买手热推商品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getHotRecmdProductListBySellerId(GetHotRecmdProductListBySellerIdRequest request);
+
+    /**
+     * 买手推荐的商品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getSellerRecommendProductList(GetSellerRecommendProductListRequest request);
 
 }

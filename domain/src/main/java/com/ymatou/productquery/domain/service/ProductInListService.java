@@ -4,6 +4,7 @@ import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.model.res.ProductInListDto;
 import com.ymatou.productquery.model.res.ProductStatusEnum;
+import com.ymatou.productquery.model.res.RecmdProductIdDto;
 import com.ymatou.productquery.model.res.TopProductInLiveDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -178,6 +179,93 @@ public class ProductInListService {
      * @return
      */
     public List<TopProductInLiveDto> getTopProductListByLiveId(int liveId) {
-        return null;
+        List<String> topProductIdList = commonQueryService.getTopProductIdListByLiveId(liveId);
+        if (topProductIdList == null || topProductIdList.isEmpty()) {
+            return null;
+        }
+
+        List<ProductInListDto> productList = getProductList(topProductIdList, false);
+        if (productList == null || productList.isEmpty()) {
+            return null;
+        }
+
+        List<TopProductInLiveDto> topProductList = new ArrayList<>();
+        productList.stream().forEach(product -> {
+            TopProductInLiveDto topProduct = new TopProductInLiveDto();
+            topProduct.setLiveId(product.getLiveId());
+            topProduct.setProductId(product.getProductId());
+            topProduct.setPicUrl(product.getMainPic());
+            topProduct.setPrice(product.getMinPrice());
+            topProduct.isPspProduct(product.getIsPspProduct());
+            topProductList.add(topProduct);
+        });
+
+        return topProductList;
+    }
+
+    /**
+     * 取买手新品列表
+     * @param sellerId
+     * @param curPage
+     * @param pageSize
+     * @return
+     */
+    public List<ProductInListDto> getNewestProductListBySellerId(int sellerId, int curPage, int pageSize) {
+        List<String> newestProductIdList = commonQueryService.getNewestProductIdList(sellerId, curPage, pageSize);
+        if(newestProductIdList == null || newestProductIdList.isEmpty()) {
+            return null;
+        }
+
+        return getProductList(newestProductIdList, false);
+    }
+
+    /**
+     * 取买手热推商品列表
+     * @param sellerId
+     * @return
+     */
+    public List<ProductInListDto> getHotRecmdProductListBySellerId(int sellerId) {
+        List<String> hotRecmdProductIdList = commonQueryService.getHotRecmdProductIdListBySellerId(sellerId);
+        if(hotRecmdProductIdList == null || hotRecmdProductIdList.isEmpty()) {
+            return null;
+        }
+
+        return getProductList(hotRecmdProductIdList, false);
+    }
+
+    /**
+     * 取买手置顶商品和活动商品编号列表
+     * @param sellerIdList
+     * @return
+     */
+
+    public List<RecmdProductIdDto> getSellerRecommendProductList(List<Integer> sellerIdList) {
+        List<String> topLiveProductIdList = commonQueryService.getTopLiveProductIdListBySellerIdList(sellerIdList);
+        List<String> activityProductIdList = commonQueryService.getActivityProductIdListBySellerIdList(sellerIdList);
+
+        List<RecmdProductIdDto> recmdProductList = new ArrayList<>();
+
+        if(topLiveProductIdList != null && !topLiveProductIdList.isEmpty()) {
+            topLiveProductIdList.stream().forEach(id -> {
+                RecmdProductIdDto dto = new RecmdProductIdDto();
+                dto.setProductId(id);
+                dto.isTopProduct(true);
+                recmdProductList.add(dto);
+            });
+        }
+
+        if(activityProductIdList != null && !activityProductIdList.isEmpty()) {
+            activityProductIdList.stream().forEach(id->{
+                RecmdProductIdDto dto = recmdProductList.stream().filter(c->c.getProductId().equals(id)).findFirst().orElse(null);
+                if(dto == null)
+                {
+                    dto = new RecmdProductIdDto();
+                    dto.setProductId(id);
+                    dto.isTopProduct(false);
+                    recmdProductList.add(dto);
+                }
+            });
+        }
+        return recmdProductList;
     }
 }
