@@ -2,6 +2,7 @@ package com.ymatou.productquery.test.facade;
 
 import com.ymatou.productquery.facade.ProductQueryFacade;
 import com.ymatou.productquery.model.req.GetCatalogListByCatalogIdListRequest;
+import com.ymatou.productquery.model.req.GetCatalogListByTradeIsolationRequest;
 import com.ymatou.productquery.model.res.BaseResponseNetAdapter;
 import com.ymatou.productquery.web.ProductQueryApplication;
 import org.junit.runner.RunWith;
@@ -62,5 +63,16 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByCatalogIdList(request);
         assertEquals(200, response.getCode());
+    }
+
+    @Test
+    void testWithoutActivityOrLiveTradeIsolation() {
+        List<String> catalogs = new ArrayList<>();
+        catalogs.add("dc03f90e-1fba-4525-948e-93afd1eced63");
+        catalogs.add("7d5aba06-e200-4023-b21c-d421f956e77c");
+        catalogs.add("c8b7ac3e-098b-4ecd-871e-a002daacff47");
+        GetCatalogListByTradeIsolationRequest request = new GetCatalogListByTradeIsolationRequest();
+        request.setCatalogIdList(catalogs);
+        BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
     }
 }

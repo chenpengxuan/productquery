@@ -1,8 +1,13 @@
 package com.ymatou.productquery.domain.service;
 
+import com.ymatou.productquery.domain.cache.ActivityCacheProcessor;
 import com.ymatou.productquery.domain.cache.CatalogCacheProcessor;
+import com.ymatou.productquery.domain.cache.LiveCacheProcessor;
 import com.ymatou.productquery.domain.cache.ProductCacheProcessor;
-import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.domain.model.ActivityProducts;
+import com.ymatou.productquery.domain.model.Catalogs;
+import com.ymatou.productquery.domain.model.LiveProducts;
+import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +29,14 @@ public class CommonQueryService {
     @Resource(name = "productCacheProcessor")
     private ProductCacheProcessor productCacheProcessor;
 
+    @Resource(name = "activityCacheProcessor")
+    private ActivityCacheProcessor activityCacheProcessor;
+
     @Resource(name = "catalogCacheProcessor")
     private CatalogCacheProcessor catalogCacheProcessor;
+
+    @Resource(name="liveCacheProcessor")
+    private LiveCacheProcessor liveCacheProcessor;
 
     @Autowired
     private ProductRepository productRepository;
@@ -36,7 +47,7 @@ public class CommonQueryService {
      * @param productIdList
      * @return
      */
-    List<Products> getProductListByProductIdList(List<String> productIdList) {
+    public List<Products> getProductListByProductIdList(List<String> productIdList) {
         if (bizProps.isUseCache()) {
             return productCacheProcessor.getProductInfoByProductIdList(productIdList);
         } else {
@@ -50,7 +61,7 @@ public class CommonQueryService {
      * @param productId
      * @return
      */
-    Products getProductByProductId(String productId) {
+    public Products getProductByProductId(String productId) {
         if (bizProps.isUseCache()) {
             return productCacheProcessor.getProductInfoByProductId(productId);
         } else {
@@ -64,7 +75,7 @@ public class CommonQueryService {
      * @param catalogIdList
      * @return
      */
-    List<Catalogs> getCatalogListByCatalogIdList(List<String> catalogIdList) {
+    public List<Catalogs> getCatalogListByCatalogIdList(List<String> catalogIdList) {
         if (bizProps.isUseCache()) {
             return catalogCacheProcessor.getCatalogListByCatalogIdList(catalogIdList);
         } else {
@@ -78,7 +89,7 @@ public class CommonQueryService {
      * @param productIdList
      * @return
      */
-    List<Catalogs> getCatalogListByProductIdList(List<String> productIdList) {
+    public List<Catalogs> getCatalogListByProductIdList(List<String> productIdList) {
         if (bizProps.isUseCache()) {
             return catalogCacheProcessor.getCatalogListByProductIdList(productIdList);
         } else {
@@ -92,8 +103,12 @@ public class CommonQueryService {
      * @param productIdList
      * @return
      */
-    List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
-        return null;
+    public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
+        if(bizProps.isUseCache()){
+            return activityCacheProcessor.getActivityProductListByProductIdList(productIdList);
+        }else{
+            return productRepository.getActivityProductListByProductIdList(productIdList);
+        }
     }
 
     /**
@@ -102,39 +117,11 @@ public class CommonQueryService {
      * @param productIdList
      * @return
      */
-    List<LiveProducts> getLiveProductListByProductId(List<String> productIdList) {
-        return null;
+    public List<LiveProducts> getLiveProductListByProductId(List<String> productIdList) {
+        if(bizProps.isUseCache()){
+            return liveCacheProcessor.getProductInfoByProductIdList(productIdList);
+        }else{
+            return productRepository.getLiveProductListByProductIdList(productIdList);
+        }
     }
-
-
-    /**
-     * 取直播中置顶商品编号列表
-     * @param liveId
-     * @return
-     */
-    List<String> getTopProductFromLive(int liveId)  { return null;}
-
-    /**
-     * 取新品的商品编号列表
-     * @param sellerId
-     * @param curPage
-     * @param pageSize
-     * @return
-     */
-    List<String> getNewestProductList(int sellerId, int curPage, int pageSize){return null;}
-
-    /**
-     * 取买手热推商品列表
-     * @param sellerId
-     * @return
-     */
-    List<String> getHotRecmdProductList(int sellerId){return null;}
-
-
-    /**
-     * 取商品图文描述扩展
-     * @param productId
-     * @return
-     */
-    ProductDescExtra getProductDescExtra(String productId) {return null;}
 }

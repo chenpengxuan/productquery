@@ -3,6 +3,7 @@ package com.ymatou.productquery.domain.repo.mongorepo;
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.domain.model.Catalogs;
+import com.ymatou.productquery.domain.model.LiveProducts;
 import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
@@ -78,6 +79,22 @@ public class ProductRepository extends MongoRepository {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Products.class).disableValidation()
                 .field("spid").in(productIdList).asList();
+    }
+
+    /**
+     * 根据ProductIds查询直播商品列表
+     * @param productIdList
+     * @return
+     */
+    public List<LiveProducts> getLiveProductListByProductIdList(List<String> productIdList) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        return datastore.find(LiveProducts.class).disableValidation()
+                .field("spid").in(productIdList)
+                .field("start").lessThanOrEq(now)
+                .field("end").greaterThanOrEq(now)
+                .field("status").equal(1)
+                .asList();
     }
 
     /**
