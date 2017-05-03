@@ -1,10 +1,7 @@
 package com.ymatou.productquery.domain.service;
 
-import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
-import com.ymatou.productquery.infrastructure.config.props.BizProps;
-import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +18,6 @@ public class ListQueryService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private HistoryProductRepository historyProductRepository;
 
     @Autowired
     private CommonQueryService commonQueryService;
@@ -166,7 +160,7 @@ public class ListQueryService {
     public List<ProductHistoryDto> getProductListByHistoryProductIdList(List<String> productIds) {
         List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
         List<String> notHisProductId = new ArrayList<>();
-        List<HistoryProductModel> productDetailModelList = historyProductRepository.getHistoryProductListByProductIdList(productIds);
+        List<HistoryProductModel> productDetailModelList = commonQueryService.getHistoryProductListByProductIdList(productIds);
         if (productDetailModelList == null || productDetailModelList.isEmpty()) {
             notHisProductId = productIds;
         } else {
