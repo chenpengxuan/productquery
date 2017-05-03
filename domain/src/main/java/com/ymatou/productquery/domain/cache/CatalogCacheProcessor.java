@@ -51,7 +51,7 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
         Map<String,Date> productTimeStampMap = new HashMap<>();
         productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(),x.getProductUpdateTime()));
 
-        List<Catalogs> result = processCacheInfo(productIdList,cacheProductInfoList,productTimeStampMap);
+        List<Catalogs> result = processCacheInfo(catalogIdList,cacheProductInfoList,productTimeStampMap);
 
         if(result != null && result.isEmpty()){
             List<String> tempCatalogIdList = catalogIdList;
@@ -109,14 +109,14 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
     }
 
     @Override
-    protected List<Catalogs> processPartialHitCache(List<String> productIdList, List<CacheProductInfo> cacheInfoList, Map<String, Date> productUpdateTimeMap) {
+    protected List<Catalogs> processPartialHitCache(List<String> catalogIdList, List<CacheProductInfo> cacheInfoList, Map<String, Date> productUpdateTimeMap) {
         List<Catalogs> result = new ArrayList<>();
         //过滤有效业务缓存数据
         List<Catalogs> validCatalogList = filterValidCache(cacheInfoList, productUpdateTimeMap);
         List<String> needReloadCacheIdList = new ArrayList<>();
-        needReloadCacheIdList.addAll(productIdList);
-        List<String> validProductIds = validCatalogList.stream().map(Catalogs::getProductId).distinct().collect(Collectors.toList());
-        needReloadCacheIdList.removeAll(validProductIds);
+        needReloadCacheIdList.addAll(catalogIdList);
+        List<String> validCatalogIdList = validCatalogList.stream().map(Catalogs::getCatalogId).distinct().collect(Collectors.toList());
+        needReloadCacheIdList.removeAll(validCatalogIdList);
 
         result.addAll(validCatalogList);
 
