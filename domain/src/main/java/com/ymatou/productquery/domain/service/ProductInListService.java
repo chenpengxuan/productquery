@@ -2,9 +2,7 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
-import com.ymatou.productquery.model.res.ProductInListDto;
-import com.ymatou.productquery.model.res.ProductStatusEnum;
-import com.ymatou.productquery.model.res.TopProductInLiveDto;
+import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +26,7 @@ public class ProductInListService {
      */
     public List<ProductInListDto> getProductList(List<String> productIdList, boolean tradeIsolation) {
         List<Products> productList = commonQueryService.getProductListByProductIdList(productIdList);
-        if(productList == null || productList.isEmpty()){
+        if (productList == null || productList.isEmpty()) {
             return null;
         }
 
@@ -38,7 +36,7 @@ public class ProductInListService {
         List<ActivityProducts> activityProductList = commonQueryService.getActivityProductListByProductIdList(productIdList);
         List<LiveProducts> liveProductList = commonQueryService.getLiveProductListByProductId(productIdList);
 
-        for (String productId:productIdList) {
+        for (String productId : productIdList) {
             Products product = productList.stream().filter(c -> c.getProductId().equals(productId)).findFirst().orElse(null);
             List<Catalogs> catalogs = catalogList.stream().filter(c -> c.getProductId().equals(productId)).collect(Collectors.toList());
             if (product == null || catalogs == null || catalogs.isEmpty()) {
@@ -80,8 +78,7 @@ public class ProductInListService {
             productDtoList.add(productDto);
         }
 
-
-        return null;
+        return productDtoList;
     }
 
     /**
@@ -178,6 +175,186 @@ public class ProductInListService {
      * @return
      */
     public List<TopProductInLiveDto> getTopProductListByLiveId(int liveId) {
-        return null;
+        List<String> topProductIdList = commonQueryService.getTopProductIdListByLiveId(liveId);
+        if (topProductIdList == null || topProductIdList.isEmpty()) {
+            return null;
+        }
+
+        List<ProductInListDto> productList = getProductList(topProductIdList, false);
+        if (productList == null || productList.isEmpty()) {
+            return null;
+        }
+
+        List<TopProductInLiveDto> topProductList = new ArrayList<>();
+        productList.stream().forEach(product -> {
+            TopProductInLiveDto topProduct = new TopProductInLiveDto();
+            topProduct.setLiveId(product.getLiveId());
+            topProduct.setProductId(product.getProductId());
+            topProduct.setPicUrl(product.getMainPic());
+            topProduct.setPrice(product.getMinPrice());
+            topProduct.isPspProduct(product.getIsPspProduct());
+            topProductList.add(topProduct);
+        });
+
+        return topProductList;
     }
+
+    /**
+     * 取买手新品列表
+     * @param sellerId
+     * @param curPage
+     * @param pageSize
+     * @return
+     */
+    public List<ProductInListDto> getNewestProductListBySellerId(int sellerId, int curPage, int pageSize) {
+        List<String> newestProductIdList = commonQueryService.getNewestProductIdList(sellerId, curPage, pageSize);
+        if(newestProductIdList == null || newestProductIdList.isEmpty()) {
+            return null;
+        }
+
+        return getProductList(newestProductIdList, false);
+    }
+
+    /**
+     * 取买手热推商品列表
+     * @param sellerId
+     * @return
+     */
+    public List<ProductInListDto> getHotRecmdProductListBySellerId(int sellerId) {
+        List<String> hotRecmdProductIdList = commonQueryService.getHotRecmdProductIdListBySellerId(sellerId);
+        if(hotRecmdProductIdList == null || hotRecmdProductIdList.isEmpty()) {
+            return null;
+        }
+
+        return getProductList(hotRecmdProductIdList, false);
+    }
+
+    /**
+     * 取买手置顶商品和活动商品编号列表
+     * @param sellerIdList
+     * @return
+     */
+
+    public List<RecmdProductIdDto> getSellerRecommendProductList(List<Integer> sellerIdList) {
+        List<String> topLiveProductIdList = commonQueryService.getTopLiveProductIdListBySellerIdList(sellerIdList);
+        List<String> activityProductIdList = commonQueryService.getActivityProductIdListBySellerIdList(sellerIdList);
+
+        List<RecmdProductIdDto> recmdProductList = new ArrayList<>();
+
+        if(topLiveProductIdList != null && !topLiveProductIdList.isEmpty()) {
+            topLiveProductIdList.stream().forEach(id -> {
+                RecmdProductIdDto dto = new RecmdProductIdDto();
+                dto.setProductId(id);
+                dto.isTopProduct(true);
+                recmdProductList.add(dto);
+            });
+        }
+
+        if(activityProductIdList != null && !activityProductIdList.isEmpty()) {
+            activityProductIdList.stream().forEach(id->{
+                RecmdProductIdDto dto = recmdProductList.stream().filter(c->c.getProductId().equals(id)).findFirst().orElse(null);
+                if(dto == null)
+                {
+                    dto = new RecmdProductIdDto();
+                    dto.setProductId(id);
+                    dto.isTopProduct(false);
+                    recmdProductList.add(dto);
+                }
+            });
+        }
+        return recmdProductList;
+    }
+
+    /**
+     * 取秒杀商品的活动库存量
+     * @param productId
+     * @param activityId
+     * @return
+     */
+    public List<SecKillProductActivityStockDto> getSecKillProductActivityStockList(String productId, int activityId) {
+        List<String> productIdList = new ArrayList<>();
+        productIdList.add(productId);
+
+        List<SecKillProductActivityStockDto> stockDtoList = new ArrayList<>();
+
+        Products product = commonQueryService.getProductByProductId(productId);
+        List<ActivityProducts> activityProductList = commonQueryService.getActivityProductListByProductIdList(productIdList);
+
+        if(product == null || activityProductList == null || activityProductList.isEmpty()) {
+            return null;
+        }
+
+        ActivityProducts activityProduct = activityProductList.stream()
+                .filter(a-> a.getActivityId() == activityId).findFirst().orElse(null);
+
+        if(activityProduct == null || activityProduct.getCatalogs() == null || activityProduct.getCatalogs().isEmpty()) {
+            return null;
+        }
+
+        activityProduct.getCatalogs().stream().forEach(c->{
+            SecKillProductActivityStockDto dto = new SecKillProductActivityStockDto();
+            dto.setProductId(activityProduct.getProductId());
+            dto.setActivityId(activityProduct.getActivityId());
+            dto.setProductActivityId(activityProduct.getProductInActivityId());
+            dto.setCatalogId(c.getCatalogId());
+            dto.setActivityStock(c.getActivityStock());
+
+            stockDtoList.add(dto);
+        });
+
+        return stockDtoList;
+    }
+
+    /**
+     * 取商品图文描述扩展信息
+     * @param productId
+     * @return
+     */
+    public ProductDescExtraDto getProductDescExtra(String productId)
+    {
+        ProductDescExtra descExtra = commonQueryService.getProductDescExtra(productId);
+        if(descExtra == null) {
+            return null;
+        }
+
+        ProductDescExtraDto dto = new ProductDescExtraDto();
+
+        dto.setProductId(descExtra.getProductId());
+        dto.setDescText(descExtra.getDescText());
+        dto.setDescPicList(descExtra.getDescPicList());
+        dto.setSizePicList(descExtra.getSizePicList());
+        dto.setNoticeText(descExtra.getNoticeText());
+        dto.setNoticePicList(descExtra.getNoticePicList());
+        dto.setSellerIntroText(descExtra.getSellerInfoText());
+        dto.setSellerIntroPicList(descExtra.getSellerIntroPicList());
+        dto.setDescPropertyDtoList(getDescPropertyDtoList(descExtra.getPropertyList()));
+
+        return dto;
+    }
+
+
+    /**
+     * 商品属性对象转换
+     * @param descPropertyInfoList
+     * @return
+     */
+    private List<DescPropertyDto> getDescPropertyDtoList(List<ProductDescPropertyInfo> descPropertyInfoList)
+    {
+        if(descPropertyInfoList == null || descPropertyInfoList.isEmpty()) {
+            return null;
+        }
+
+        List<DescPropertyDto> dtoList = new ArrayList<>();
+        descPropertyInfoList.stream().forEach(c->{
+            DescPropertyDto dto = new DescPropertyDto();
+            dto.setKey(c.getKey());
+            dto.setValue(c.getValue());
+
+            dtoList.add(dto);
+        });
+
+        return dtoList;
+    }
+
+
 }

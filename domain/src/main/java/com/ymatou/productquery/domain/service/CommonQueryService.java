@@ -176,7 +176,7 @@ public class CommonQueryService {
      * @return
      */
     List<String> getTopProductIdListByLiveId(int liveId) {
-        return null;
+        return productRepository.getTopLiveProductIdList(liveId);
     }
 
     /**
@@ -186,7 +186,7 @@ public class CommonQueryService {
      * @return
      */
     List<String> getHotRecmdProductIdListBySellerId(int sellerId) {
-        return null;
+        return productRepository.getHotRecmdProductList(sellerId);
     }
 
     /**
@@ -198,7 +198,7 @@ public class CommonQueryService {
      * @return
      */
     List<String> getNewestProductIdList(int sellerId, int curPage, int pageSize) {
-        return null;
+        return productRepository.getNewestProductList(sellerId, curPage, pageSize);
     }
 
     /**
@@ -208,7 +208,7 @@ public class CommonQueryService {
      * @return
      */
     ProductDescExtra getProductDescExtra(String productId) {
-        return null;
+        return productRepository.getProductDescExtra(productId);
     }
 
     /**
@@ -218,7 +218,7 @@ public class CommonQueryService {
      * @return
      */
     List<String> getTopLiveProductIdListBySellerIdList(List<Integer> sellerIdList) {
-        return null;
+        return productRepository.getTopLiveProductIdListBySellerIdList(sellerIdList);
     }
 
     /**
@@ -228,7 +228,7 @@ public class CommonQueryService {
      * @return
      */
     List<String> getActivityProductIdListBySellerIdList(List<Integer> sellerIdList) {
-        return null;
+        return productRepository.getActivityProductIdListBySellerIdList(sellerIdList);
     }
 
     /**
@@ -240,5 +240,4 @@ public class CommonQueryService {
     public List<HistoryProductModel> getHistoryProductListByProductIdList(List<String> productIdList) {
         return historyProductRepository.getHistoryProductListByProductIdList(productIdList);
     }
-
 }

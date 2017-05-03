@@ -63,7 +63,7 @@ public class Products{
     @Property("tariffy")
     private int tariffType;//	是否包税
     @Property("shipping")
-    private int Freight;//	是否包邮
+    private int isFreeShipping;//	是否包邮
     @Property("country")
     private int countryId;//	国家编号
     @Property("newdesc")
@@ -283,13 +283,6 @@ public class Products{
         this.tariffType = tariffType;
     }
 
-    public int getFreight() {
-        return Freight;
-    }
-
-    public void setFreight(int freight) {
-        this.Freight = freight;
-    }
 
     public int getCountryId() {
         return countryId;
@@ -321,6 +314,14 @@ public class Products{
 
     public void setNoReasonReturn(boolean noReasonReturn) {
         this.noReasonReturn = noReasonReturn;
+    }
+
+    public int getIsFreeShipping() {
+        return isFreeShipping;
+    }
+
+    public void setIsFreeShipping(int isFreeShipping) {
+        this.isFreeShipping = isFreeShipping;
     }
 
     public int getAction() {

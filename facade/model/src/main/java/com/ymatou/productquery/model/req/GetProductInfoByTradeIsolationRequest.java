@@ -1,16 +1,15 @@
 package com.ymatou.productquery.model.req;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.QueryParam;
 
 /**
- * 根据商品编号获取商品信息
- * Created by chenpengxuan on 2017/4/25.
+ * Created by zhangyong on 2017/5/2.
  */
-public class GetProductInfoByProductIdRequest extends BaseRequest {
+public class GetProductInfoByTradeIsolationRequest extends BaseRequest {
     /**
      * 商品编号列表
      */

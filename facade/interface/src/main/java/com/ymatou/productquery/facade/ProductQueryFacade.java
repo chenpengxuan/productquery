@@ -70,7 +70,56 @@ public interface ProductQueryFacade {
      * @param request
      * @return
      */
-    BaseResponseNetAdapter getProductDetailByProductId(GetProductInfoByProductIdRequest request);
+    BaseResponseNetAdapter getProductInfoByProductId(GetProductInfoByProductIdRequest request);
+
+    /**
+     * 根据商品编号取交易隔离的商品信息
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductInfoByTradeIsolation(GetProductInfoByTradeIsolationRequest request);
+
+    /**
+     * 取直播中置顶商品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getTopProductListByLiveId(GetTopProductListByLiveIdRequest request);
+
+    /**
+     * 取买手新品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getNewestProductList(GetNewestProductListBySellerIdRequest request);
+
+    /**
+     * 买手热推商品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getHotRecmdProductListBySellerId(GetHotRecmdProductListBySellerIdRequest request);
+
+    /**
+     * 买手推荐的商品列表
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getSellerRecommendProductList(GetSellerRecommendProductListRequest request);
+
+    /**
+     * 取秒杀商品的活动库存量
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request);
+
+    /**
+     * 取商品图文描述扩展信息
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getProductDescExtraByProductId (GetProductDescExtraByProductIdRequest request);
 
 
 }

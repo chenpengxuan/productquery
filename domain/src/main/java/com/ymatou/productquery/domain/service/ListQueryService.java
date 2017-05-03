@@ -1,10 +1,7 @@
 package com.ymatou.productquery.domain.service;
 
-import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
-import com.ymatou.productquery.infrastructure.config.props.BizProps;
-import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +20,10 @@ public class ListQueryService {
     private ProductRepository productRepository;
 
     @Autowired
-    private HistoryProductRepository historyProductRepository;
-
-    @Autowired
     private CommonQueryService commonQueryService;
 
     @Autowired
-    private BizProps bizProps;
+    private ItemQueryService itemQueryService;
 
     /**
      * 购物车中商品列表
@@ -107,24 +101,12 @@ public class ListQueryService {
      */
     public List<ProductDetailDto> getProductDetailList(List<String> productIds, int nextActivityExpire, boolean tradeIsolation) {
         List<ProductDetailDto> productDetailDtoList = new ArrayList<>();
-//        List<ProductTimeStamp> updateStampMap = productTimeStampRepository
-//                .getTimeStampByProductIds(productIds, "cut,sut,lut,aut");
+
         List<Products> productsList;
         List<Catalogs> catalogsList;
         List<LiveProducts> liveProductsList;
         List<ActivityProducts> activityProductsList;
-//        if (bizProps.isUseCache()) {
-//            productsList = cache.getProductsByProductIds(productIds, updateStampMap);
-//            catalogsList = cache.getCatalogsByProductIds(productIds, updateStampMap);
-//            liveProductsList = cache.getLiveProductsByProductIds(productIds, updateStampMap);
-//            activityProductsList = cache.getActivityProductList(productIds, updateStampMap, nextActivityExpire);
-//
-//        } else {
-//            productsList = productRepository.getProductsByProductIds(productIds);
-//            catalogsList = productRepository.getCatalogsByProductIds(productIds);
-//            liveProductsList = liveProductRepository.getLiveProductList(productIds);
-//            activityProductsList = activityProductRepository.getValidAndNextActivityProductByProductId(productIds, nextActivityExpire);
-//        }
+
         productsList = commonQueryService.getProductListByProductIdList(productIds);
         if (productsList == null || productsList.isEmpty()) {
             throw new BizException("商品不存在");
@@ -139,7 +121,6 @@ public class ListQueryService {
         activityProductsList = commonQueryService.getActivityProductListByProductIdList(productIds);
 
         for (String pid : productIds) {
-            ProductDetailDto productDetailDto;
             Products product = productsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
             if (product == null) {
                 continue;
@@ -149,36 +130,13 @@ public class ListQueryService {
             List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
             ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
 
-            //活动
-            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-                productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
-
-                productDetailDto.setProductActivity(DtoMapper.toProductActivityDto(activityProduct));
-                productDetailDto.setValidStart(activityProduct.getStartTime());
-                productDetailDto.setValidEnd(activityProduct.getEndTime());
-                Tuple<Double, Double> maxmin = DtoMapper.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
-                double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
-                double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
-                productDetailDto.getProductActivity().setMaxActivityPrice(max);
-                productDetailDto.getProductActivity().setMinActivityPrice(min);
-            } else {
-                productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
-            }
-
-            //下一场活动
-            ActivityProducts nextActivityProduct = ProductActivityService.getNextProductActivity(activityProducts, nextActivityExpire, activityProduct);
-            if (nextActivityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-                productDetailDto.setNextActivity(DtoMapper.toProductActivityDto(nextActivityProduct));
-                Tuple<Double, Double> maxmin = DtoMapper.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
-                double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
-                double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
-                productDetailDto.getNextActivity().setMaxActivityPrice(max);
-                productDetailDto.getNextActivity().setMinActivityPrice(min);
-            }
+            ProductDetailDto productDetailDto = itemQueryService.setCurrentAndNextActivityProduct(product, catalogs, activityProducts,
+                    activityProduct, nextActivityExpire, tradeIsolation);
 
             //直播
             LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
             productDetailDto.setLiveProduct(DtoMapper.toProductLiveDto(liveProduct));
+            // 设置商品的有效期, 直播有效取直播时间， 直播无效活动有效，取活动时间
             if (liveProduct != null) {
                 productDetailDto.setValidStart(liveProduct.getStartTime());
                 productDetailDto.setValidEnd(liveProduct.getEndTime());
@@ -202,7 +160,7 @@ public class ListQueryService {
     public List<ProductHistoryDto> getProductListByHistoryProductIdList(List<String> productIds) {
         List<ProductHistoryDto> productHistoryDtoList = new ArrayList<>();
         List<String> notHisProductId = new ArrayList<>();
-        List<HistoryProductModel> productDetailModelList = historyProductRepository.getHistoryProductListByProductIdList(productIds);
+        List<HistoryProductModel> productDetailModelList = commonQueryService.getHistoryProductListByProductIdList(productIds);
         if (productDetailModelList == null || productDetailModelList.isEmpty()) {
             notHisProductId = productIds;
         } else {
