@@ -46,9 +46,10 @@ public class ProductMapperExtension {
         result.setLocalReturn(product.getLocalReturn());
         result.setCatalogType(product.getCatalogType());
         result.setNoReasonReturn(product.isNoReasonReturn());
-        result.setStockNum(getCatalogStock(catalog, activityProduct));
+        Tuple<Integer, Double> stockPrice = getCatalogStockAndPrice(catalog, activityProduct);
+        result.setStockNum(stockPrice.first);
+        result.setPrice(stockPrice.second);
         result.setCatalogCount((int) catalogsList.stream().filter(t -> t.getProductId().equals(product.getProductId())).count());
-        result.setPrice(getCatalogPrice(catalog, activityProduct));
         result.setSku(catalog.getSku() == null ? "" : catalog.getSku());
         result.setPreSale(catalog.isPriceSale());
         result.setPspProduct(product.isPspProduct());
@@ -253,30 +254,25 @@ public class ProductMapperExtension {
         return String.valueOf(Double.valueOf(version) / 1000);
     }
 
-    private static int getCatalogStock(Catalogs catalog, ActivityProducts activityProduct) {
+    /**
+     * 返回规格的库存和价格（有活动则返回活动值）
+     *
+     * @param catalog
+     * @param activityProduct
+     * @return
+     */
+    private static Tuple<Integer, Double> getCatalogStockAndPrice(Catalogs catalog, ActivityProducts activityProduct) {
         if (catalog == null) {
-            return 0;
+            return new Tuple<>(0, 0d);
         }
         if (activityProduct != null) {
-
-            if (activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
-                return activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityStock();
+            ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId()
+                    .equals(catalog.getCatalogId())).findAny().orElse(null);
+            if (activityCatalogInfo != null) {
+                return new Tuple<>(activityCatalogInfo.getActivityStock(), activityCatalogInfo.getActivityPrice());
             }
         }
-        return catalog.getStock();
-    }
-
-    private static Double getCatalogPrice(Catalogs catalog, ActivityProducts activityProduct) {
-        if (catalog == null) {
-            return 0d;
-        }
-        if (activityProduct != null) {
-
-            if (activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
-                return activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityPrice();
-            }
-        }
-        return catalog.getPrice();
+        return new Tuple<>(catalog.getStock(), catalog.getPrice());
     }
 
     private static List<PropertyDto> getCatalogPropertyList(List<PropertyInfo> propertyInfoList) {

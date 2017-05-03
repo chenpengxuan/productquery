@@ -2,6 +2,7 @@ package com.ymatou.productquery.model.res;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -523,7 +524,7 @@ public class ProductDetailDto {
     }
 
     public List<String> getSizePicList() {
-        return sizePicList;
+        return sizePicList == null ? new ArrayList<>() : sizePicList;
     }
 
     public void setSizePicList(List<String> sizePicList) {
