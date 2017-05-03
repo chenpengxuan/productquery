@@ -26,7 +26,7 @@ public class ProductInListService {
      */
     public List<ProductInListDto> getProductList(List<String> productIdList, boolean tradeIsolation) {
         List<Products> productList = commonQueryService.getProductListByProductIdList(productIdList);
-        if(productList == null || productList.isEmpty()){
+        if (productList == null || productList.isEmpty()) {
             return null;
         }
 
@@ -36,7 +36,7 @@ public class ProductInListService {
         List<ActivityProducts> activityProductList = commonQueryService.getActivityProductListByProductIdList(productIdList);
         List<LiveProducts> liveProductList = commonQueryService.getLiveProductListByProductId(productIdList);
 
-        for (String productId:productIdList) {
+        for (String productId : productIdList) {
             Products product = productList.stream().filter(c -> c.getProductId().equals(productId)).findFirst().orElse(null);
             List<Catalogs> catalogs = catalogList.stream().filter(c -> c.getProductId().equals(productId)).collect(Collectors.toList());
             if (product == null || catalogs == null || catalogs.isEmpty()) {
@@ -78,8 +78,7 @@ public class ProductInListService {
             productDtoList.add(productDto);
         }
 
-
-        return null;
+        return productDtoList;
     }
 
     /**
