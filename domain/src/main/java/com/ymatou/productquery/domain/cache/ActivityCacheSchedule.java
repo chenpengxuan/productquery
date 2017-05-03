@@ -1,6 +1,5 @@
 package com.ymatou.productquery.domain.cache;
 
-import com.ymatou.productquery.domain.model.ActivityProducts;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.infrastructure.config.props.CacheProps;
 import com.ymatou.productquery.infrastructure.util.LogWrapper;
@@ -12,9 +11,6 @@ import org.springframework.scheduling.support.CronTrigger;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.stream.Collectors;
 
 /**
  * Created by zhangyong on 2017/4/6.
