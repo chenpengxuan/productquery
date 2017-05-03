@@ -2,15 +2,17 @@ package com.ymatou.productquery.model.req;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.ws.rs.QueryParam;
+
 /**
  * Created by zhujinfeng on 2017/5/2.
  */
 public class GetTopProductListByLiveIdRequest extends BaseRequest {
 
-    @JsonProperty("LiveId")
+    @QueryParam("LiveId")
     private int liveId;
 
-    @JsonProperty("TopCount")
+    @QueryParam("TopCount")
     private int topCount;
 
     public int getLiveId() {

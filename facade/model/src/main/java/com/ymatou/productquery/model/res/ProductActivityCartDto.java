@@ -70,7 +70,6 @@ public class ProductActivityCartDto
     /// <summary>
     /// 是否仅限码头新人
     /// </summary>
-    @JsonProperty("IsNewBuyer")
     private boolean newBuyer;
 
     public int getActivityId() {
@@ -145,6 +144,7 @@ public class ProductActivityCartDto
         this.activityCatalogList = activityCatalogList;
     }
 
+    @JsonProperty("IsNewBuyer")
     public boolean isNewBuyer() {
         return newBuyer;
     }

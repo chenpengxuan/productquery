@@ -13,51 +13,39 @@ public class CatalogDto {
     @JsonProperty("CatalogId")
     private String catalogId;
 
-
     // sku
     @JsonProperty("SKU")
     private String sku;
 
-
     // 该规格是否报名活动
-    @JsonProperty("IsInActivity")
     private boolean isInActivity;
 
-
     // 预订商品
-    @JsonProperty("IsPreSale")
     private boolean isPreSale;
-
 
     // 原价
     @JsonProperty("Price")
     private double price;
 
-
     // 买手新客价
     @JsonProperty("NewGuestPrice")
     private double newGuestPrice;
-
 
     // 买手VIP价
     @JsonProperty("VipPrice")
     private double vipPrice;
 
-
     // 商品规格库存量
     @JsonProperty("CatalogStock")
     private int catalogStock;
-
 
     // 活动库存
     @JsonProperty("ActivityStock")
     private int activityStock;
 
-
     // 活动价格
     @JsonProperty("ActivityPrice")
     private double activityPrice;
-
 
     // 规格属性
     @JsonProperty("PropertyList")
@@ -72,13 +60,14 @@ public class CatalogDto {
     }
 
     public String getSku() {
-        return sku;
+        return sku ==null?"":sku;
     }
 
     public void setSku(String sku) {
         this.sku = sku;
     }
 
+    @JsonProperty("IsInActivity")
     public boolean isInActivity() {
         return isInActivity;
     }
@@ -87,6 +76,7 @@ public class CatalogDto {
         isInActivity = inActivity;
     }
 
+    @JsonProperty("IsPreSale")
     public boolean isPreSale() {
         return isPreSale;
     }

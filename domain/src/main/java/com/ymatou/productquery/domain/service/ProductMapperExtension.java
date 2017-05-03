@@ -5,7 +5,6 @@ import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.res.*;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.functors.ExceptionClosure;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * 转换ProductInCartDto 对象
  */
-public class DtoMapper {
+public class ProductMapperExtension {
 
     public static ProductInCartDto toProductInCartDto(Products product, Catalogs catalog, ActivityProducts activityProduct, List<Catalogs> catalogsList) {
         ProductInCartDto result = new ProductInCartDto();
@@ -47,9 +46,10 @@ public class DtoMapper {
         result.setLocalReturn(product.getLocalReturn());
         result.setCatalogType(product.getCatalogType());
         result.setNoReasonReturn(product.isNoReasonReturn());
-        result.setStockNum(getCatalogStock(catalog, activityProduct));
+        Tuple<Integer, Double> stockPrice = getCatalogStockAndPrice(catalog, activityProduct);
+        result.setStockNum(stockPrice.first);
+        result.setPrice(stockPrice.second);
         result.setCatalogCount((int) catalogsList.stream().filter(t -> t.getProductId().equals(product.getProductId())).count());
-        result.setPrice(getCatalogPrice(catalog, activityProduct));
         result.setSku(catalog.getSku() == null ? "" : catalog.getSku());
         result.setPreSale(catalog.isPriceSale());
         result.setPspProduct(product.isPspProduct());
@@ -254,30 +254,25 @@ public class DtoMapper {
         return String.valueOf(Double.valueOf(version) / 1000);
     }
 
-    private static int getCatalogStock(Catalogs catalog, ActivityProducts activityProduct) {
+    /**
+     * 返回规格的库存和价格（有活动则返回活动值）
+     *
+     * @param catalog
+     * @param activityProduct
+     * @return
+     */
+    private static Tuple<Integer, Double> getCatalogStockAndPrice(Catalogs catalog, ActivityProducts activityProduct) {
         if (catalog == null) {
-            return 0;
+            return new Tuple<>(0, 0d);
         }
         if (activityProduct != null) {
-
-            if (activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
-                return activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityStock();
+            ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId()
+                    .equals(catalog.getCatalogId())).findAny().orElse(null);
+            if (activityCatalogInfo != null) {
+                return new Tuple<>(activityCatalogInfo.getActivityStock(), activityCatalogInfo.getActivityPrice());
             }
         }
-        return catalog.getStock();
-    }
-
-    private static Double getCatalogPrice(Catalogs catalog, ActivityProducts activityProduct) {
-        if (catalog == null) {
-            return 0d;
-        }
-        if (activityProduct != null) {
-
-            if (activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())) != null) {
-                return activityProduct.getCatalogs().stream().filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(new ActivityCatalogInfo()).getActivityPrice();
-            }
-        }
-        return catalog.getPrice();
+        return new Tuple<>(catalog.getStock(), catalog.getPrice());
     }
 
     private static List<PropertyDto> getCatalogPropertyList(List<PropertyInfo> propertyInfoList) {
@@ -312,5 +307,130 @@ public class DtoMapper {
         return !now.before(startTime) && !now.after(endTime);
     }
 
+    /**
+     * 组装商品简化信息列表对象
+     *
+     * @param product
+     * @param catalogs
+     * @return
+     */
+    public static ProductInListDto toProductInListDto(Products product, List<Catalogs> catalogs) {
+        ProductInListDto productDto = new ProductInListDto();
+        if (product == null || catalogs == null || catalogs.isEmpty()) {
+            //// FIXME: 2017/4/28 : 无该商品，
+            return null;
+        }
 
+        productDto.setProdId(product.getProdId());
+        productDto.setProductId(product.getProductId());
+        productDto.setVersion(product.getVersion());
+        productDto.setTitle(product.getTitle());
+        productDto.setMainPic(getProductFirstPicture(product.getPicList()));
+        productDto.setValidStart(product.getValidStart());
+        productDto.setValidEnd(product.getValidEnd());
+        productDto.setMinPrice(getPrice(product.getMinCatalogPrice()));
+        productDto.setMaxPrice(getPrice(product.getMaxCatalogPrice()));
+        productDto.setSellerId(product.getSellerId());
+        productDto.setSellerName(product.getSellerName());
+        productDto.setCountryId(product.getCountryId());
+        productDto.setStock(getStock(catalogs));
+        productDto.isFreeShipping(true);
+        productDto.setTariffType(product.getTariffType());
+        productDto.setDeliveryMethod(product.getDeliveryMethod());
+        productDto.isNewProduct(getNewestProduct(product.isNewProduct(), product.getNewStartTime(), product.getNewEndTime()));
+        productDto.setNewStartTime(product.getNewStartTime());
+        productDto.setNewEndTime(product.getNewEndTime());
+        productDto.setIsHotRecmd(product.isTopProduct());
+        productDto.isAnyPreSale(getIsAnyPreSale(catalogs));
+        productDto.isAllPreSale(getIsAnyPreSale(catalogs));
+        productDto.isPspProduct(product.isPspProduct());
+        //// FIXME: 2017/4/28 代做
+        //productDto.setOwnProduct(product);
+
+        return productDto;
+    }
+
+    /**
+     * 取商品主图列表中的首图
+     *
+     * @param productPictureList
+     * @return
+     */
+    private static String getProductFirstPicture(List<String> productPictureList) {
+        if (productPictureList == null || productPictureList.isEmpty()) {
+            //Fixme : exception 商品没有首图异常。
+        }
+        return productPictureList.get(0);
+    }
+
+    /**
+     * 取商品价格
+     *
+     * @param catalogPrice
+     * @return
+     */
+    private static double getPrice(String catalogPrice) {
+        if (catalogPrice == null || catalogPrice.isEmpty()) {
+            //// FIXME: 2017/4/28 log 取不到商品价格异常
+            return 0;
+        }
+        return Double.valueOf(catalogPrice.split(",")[0]);
+    }
+
+    /**
+     * 取商品的所有规格库存的汇总
+     *
+     * @param catalogs
+     * @return
+     */
+    private static int getStock(List<Catalogs> catalogs) {
+        if (catalogs == null || catalogs.isEmpty()) {
+            //// FIXME: 2017/4/28 log 取不到商品的库存
+            return 0;
+        }
+        return catalogs.stream().collect(Collectors.summingInt(Catalogs::getStock));
+    }
+
+    /**
+     * 判断商品是否新品
+     *
+     * @param isNewProduct
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    private static boolean getNewestProduct(boolean isNewProduct, Date startTime, Date endTime) {
+        if (!isNewProduct) return false;
+
+        Date now = new Date();
+        return (startTime.getTime() <= now.getTime() && endTime.getTime() >= now.getTime());
+    }
+
+    /**
+     * 判断商品中是否有预订的规格
+     *
+     * @param catalogs
+     * @return
+     */
+    private static boolean getIsAnyPreSale(List<Catalogs> catalogs) {
+        if (catalogs == null || catalogs.isEmpty()) {
+            //// FIXME: 2017/4/28 log 规格数据不完整
+            return false;
+        }
+        return catalogs.stream().anyMatch(c -> c.isPriceSale());
+    }
+
+    /**
+     * 判断商品中是否全部是预订规格
+     *
+     * @param catalogs
+     * @return
+     */
+    private static boolean getIsAllPreSale(List<Catalogs> catalogs) {
+        if (catalogs == null || catalogs.isEmpty()) {
+            //// FIXME: 2017/4/28 log 规格数据不完整
+            return false;
+        }
+        return catalogs.stream().allMatch(c -> c.isPriceSale());
+    }
 }

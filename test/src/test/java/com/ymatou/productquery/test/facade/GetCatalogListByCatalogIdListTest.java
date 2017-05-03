@@ -75,4 +75,30 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
     }
+
+    @Test
+    public void testWithActivityTradeIsolation() {
+        List<String> catalogs = new ArrayList<>();
+        catalogs.add("c2bade23-9557-4fd1-9c3e-603ea0739f7a");
+        catalogs.add("f1b461f9-b2be-465b-8ece-ee490a8751e6");
+        catalogs.add("4250cdbb-bc8e-4379-b0e2-8165fa4e5133");
+
+        GetCatalogListByTradeIsolationRequest request = new GetCatalogListByTradeIsolationRequest();
+        request.setCatalogIdList(catalogs);
+        BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
+        assertEquals(200, response.getCode());
+    }
+
+    @Test
+    public void testWithLiveTradeIsolation() {
+        List<String> catalogs = new ArrayList<>();
+        catalogs.add("dc03f90e-1fba-4525-948e-93afd1eced63");
+        catalogs.add("7d5aba06-e200-4023-b21c-d421f956e77c");
+        catalogs.add("c8b7ac3e-098b-4ecd-871e-a002daacff47");
+
+        GetCatalogListByTradeIsolationRequest request = new GetCatalogListByTradeIsolationRequest();
+        request.setCatalogIdList(catalogs);
+        BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
+        assertEquals(200, response.getCode());
+    }
 }

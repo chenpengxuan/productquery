@@ -100,7 +100,6 @@ public class ProductLiveDto {
 
 
     // 是否置顶商品
-    @JsonProperty("IsTop")
     private boolean isTop;
 
 
@@ -252,6 +251,7 @@ public class ProductLiveDto {
         this.sellStatus = sellStatus;
     }
 
+    @JsonProperty("IsTop")
     public boolean isTop() {
         return isTop;
     }

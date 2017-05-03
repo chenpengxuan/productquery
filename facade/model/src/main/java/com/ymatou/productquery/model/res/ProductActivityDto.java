@@ -81,17 +81,14 @@ public class ProductActivityDto {
 
 
     // 是否交易隔离（活动策略）
-    @JsonProperty("IsTradeIsolation")
     private boolean isTradeIsolation;
 
 
     // 是否支持部分规格报名（活动策略）
-    @JsonProperty("IsPartCatalogs")
     private boolean isPartCatalogs;
 
 
     // 是否仅限码头新人（活动策略）
-    @JsonProperty("IsNewBuyer")
     private boolean isNewBuyer;
 
 
@@ -216,6 +213,7 @@ public class ProductActivityDto {
         this.catalogList = catalogList;
     }
 
+    @JsonProperty("IsTradeIsolation")
     public boolean isTradeIsolation() {
         return isTradeIsolation;
     }
@@ -224,6 +222,7 @@ public class ProductActivityDto {
         isTradeIsolation = tradeIsolation;
     }
 
+    @JsonProperty("IsPartCatalogs")
     public boolean isPartCatalogs() {
         return isPartCatalogs;
     }
@@ -232,6 +231,7 @@ public class ProductActivityDto {
         isPartCatalogs = partCatalogs;
     }
 
+    @JsonProperty("IsNewBuyer")
     public boolean isNewBuyer() {
         return isNewBuyer;
     }

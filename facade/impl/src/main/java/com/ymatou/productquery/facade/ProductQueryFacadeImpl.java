@@ -3,10 +3,8 @@ package com.ymatou.productquery.facade;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.ymatou.productquery.domain.service.ItemQueryService;
 import com.ymatou.productquery.domain.service.ListQueryService;
-import com.ymatou.productquery.domain.service.ProductInListService;
 import com.ymatou.productquery.model.req.*;
 import com.ymatou.productquery.model.res.*;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +27,6 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
 
     @Autowired
     private ItemQueryService itemQueryService;
-
-    @Autowired
-    private ProductInListService productInListService;
 
     /**
      * 购物车中商品列表（普通购物车中用）
@@ -89,7 +84,6 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
         productList.put("ProductList", result);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
-
 
     /**
      * 商品明细列表（交易隔离）
@@ -174,7 +168,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getProductListByTradeIsolation(GetProductListByTradeIsolationRequest request) {
-        List<ProductInListDto> productDtoList = productInListService.getProductList(request.getProductIdList(), true);
+        List<ProductInListDto> productDtoList = listQueryService.getProductList(request.getProductIdList(), true);
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
@@ -192,7 +186,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getProductListByProductIdList(GetProductListByProductIdListRequest request) {
-        List<ProductInListDto> productDtoList = productInListService.getProductList(request.getProductIdList(), false);
+        List<ProductInListDto> productDtoList = listQueryService.getProductList(request.getProductIdList(), false);
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
@@ -208,8 +202,8 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetTopProductListByLiveId:(?i:GetTopProductListByLiveId)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getTopProductListByLiveId(GetTopProductListByLiveIdRequest request) {
-        List<TopProductInLiveDto> productDtoList = productInListService.getTopProductListByLiveId(request.getLiveId());
+    public BaseResponseNetAdapter getTopProductListByLiveId(@BeanParam GetTopProductListByLiveIdRequest request) {
+        List<TopProductInLiveDto> productDtoList = listQueryService.getTopProductListByLiveId(request.getLiveId());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
@@ -226,7 +220,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetNewestProductList:(?i:GetNewestProductList)}")
     @Produces({MediaType.APPLICATION_JSON})
     public BaseResponseNetAdapter getNewestProductList(GetNewestProductListBySellerIdRequest request) {
-        List<ProductInListDto> productDtoList = productInListService
+        List<ProductInListDto> productDtoList = listQueryService
                 .getNewestProductListBySellerId(request.getSellerId(), request.getCurPage(), request.getPageSize());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
@@ -244,12 +238,11 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetHotRecmdProductListBySellerId:(?i:GetHotRecmdProductListBySellerId)}")
     @Produces({MediaType.APPLICATION_JSON})
     public BaseResponseNetAdapter getHotRecmdProductListBySellerId(GetHotRecmdProductListBySellerIdRequest request) {
-        List<ProductInListDto> productDtoList = productInListService.getHotRecmdProductListBySellerId(request.getSellerId());
+        List<ProductInListDto> productDtoList = listQueryService.getHotRecmdProductListBySellerId(request.getSellerId());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
     }
-
 
     /**
      * 买手推荐的商品列表
@@ -263,7 +256,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     public BaseResponseNetAdapter getSellerRecommendProductList(GetSellerRecommendProductListRequest request) {
-        List<RecmdProductIdDto> productDtoList = productInListService.getSellerRecommendProductList(request.getSellerIdList());
+        List<RecmdProductIdDto> productDtoList = listQueryService.getSellerRecommendProductList(request.getSellerIdList());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(productList);
@@ -280,7 +273,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetSecKillProductActivityStock:(?i:GetSecKillProductActivityStock)}")
     @Produces({MediaType.APPLICATION_JSON})
     public BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request) {
-        List<SecKillProductActivityStockDto> stockDtoList = productInListService.getSecKillProductActivityStockList(request.getProductId(), request.getActivityId());
+        List<SecKillProductActivityStockDto> stockDtoList = itemQueryService.getSecKillProductActivityStockList(request.getProductId(), request.getActivityId());
         Map<String, Object> stockList = new HashMap<>();
         stockList.put("StockList", stockDtoList);
         return BaseResponseNetAdapter.newSuccessInstance(stockList);
@@ -297,7 +290,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDescExtraByProductId:(?i:GetProductDescExtraByProductId)}")
     @Produces({MediaType.APPLICATION_JSON})
     public BaseResponseNetAdapter getProductDescExtraByProductId(GetProductDescExtraByProductIdRequest request) {
-        ProductDescExtraDto descExtraDto = productInListService.getProductDescExtra(request.getProductId());
+        ProductDescExtraDto descExtraDto = itemQueryService.getProductDescExtra(request.getProductId());
         Map<String, Object> descExtra = new HashMap<>();
         descExtra.put("ProductDescExtra", descExtraDto);
         return BaseResponseNetAdapter.newSuccessInstance(descExtra);

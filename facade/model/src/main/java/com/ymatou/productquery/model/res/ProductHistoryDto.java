@@ -13,61 +13,49 @@ public class ProductHistoryDto {
     @JsonProperty("ProductId")
     private String productId;
 
-
     // 商品标题
     @JsonProperty("Title")
     private String title;
-
 
     // 商品主图
     @JsonProperty("MainPic")
     private String mainPic;
 
-
     // 买手编号
     @JsonProperty("SellerId")
     private int sellerId;
-
 
     // 买手账号
     @JsonProperty("SellerName")
     private String sellerName;
 
-
     // 包税类型
     @JsonProperty("TariffType")
     private int tariffType;
-
 
     // 是否包邮
     @JsonProperty("FreeShipping")
     private boolean freeShipping;
 
-
     // 发货类型
     @JsonProperty("DeliveryMethod")
     private int deliveryMethod;
-
 
     // 本土退货
     @JsonProperty("LocalReturn")
     private int localReturn;
 
-
     // 价格
     @JsonProperty("Price")
     private Double price;
-
 
     // 开始时间
     @JsonProperty("ValidStart")
     private Date validStart;
 
-
     // 结束时间
     @JsonProperty("ValidEnd")
     private Date validEnd;
-
 
     // 商品的售卖状态
     @JsonProperty("Status")
