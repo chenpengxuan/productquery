@@ -5,6 +5,7 @@ import com.ymatou.productquery.domain.cache.CatalogCacheProcessor;
 import com.ymatou.productquery.domain.cache.LiveCacheProcessor;
 import com.ymatou.productquery.domain.cache.ProductCacheProcessor;
 import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.domain.model.cache.CacheProductInfo;
 import com.ymatou.productquery.domain.repo.mongorepo.HistoryProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 列表查询与单品查询共用
@@ -33,7 +36,7 @@ public class CommonQueryService {
     @Resource(name = "catalogCacheProcessor")
     private CatalogCacheProcessor catalogCacheProcessor;
 
-    @Resource(name="liveCacheProcessor")
+    @Resource(name = "liveCacheProcessor")
     private LiveCacheProcessor liveCacheProcessor;
 
     @Autowired
@@ -85,6 +88,41 @@ public class CommonQueryService {
     }
 
     /**
+     * 根据规格id列表获取商品及规格信息列表 用于购物车场景
+     * @param catalogIdList
+     * @return
+     */
+    public List<CacheProductInfo> getProductListByCatalogIdList(List<String> catalogIdList) {
+        List<Catalogs> catalogsList;
+        List<Products> productsList = new ArrayList<>();
+        List<String> productIdList;
+        List<CacheProductInfo> result = new ArrayList<>();
+
+        if (bizProps.isUseCache()) {
+            catalogsList = catalogCacheProcessor.getCatalogListByCatalogIdList(catalogIdList);
+            productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+        } else {
+            catalogsList = productRepository.getCatalogListByCatalogIdList(catalogIdList);
+            productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+        }
+
+        if(productIdList != null && !productIdList.isEmpty()){
+            productsList = getProductListByProductIdList(productIdList);
+        }
+
+        if(catalogsList != null && !catalogsList.isEmpty()){
+            catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach(x -> {
+                Products tempProduct = productsList.stream().filter(z -> z.getProductId().equals(x.getProductId())).findAny().orElse(null);
+
+                if(tempProduct != null){
+                    CacheProductInfo cacheProductInfo = tempProduct.convertDtoToCacheData();
+                    c
+                }
+            });
+        }
+    }
+
+    /**
      * 根据商品id列表获取规格列表
      *
      * @param productIdList
@@ -105,9 +143,9 @@ public class CommonQueryService {
      * @return
      */
     public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
-        if(bizProps.isUseCache()){
+        if (bizProps.isUseCache()) {
             return activityCacheProcessor.getActivityProductListByProductIdList(productIdList);
-        }else{
+        } else {
             return productRepository.getActivityProductListByProductIdList(productIdList);
         }
     }
@@ -119,56 +157,74 @@ public class CommonQueryService {
      * @return
      */
     public List<LiveProducts> getLiveProductListByProductId(List<String> productIdList) {
-        if(bizProps.isUseCache()){
+        if (bizProps.isUseCache()) {
             return liveCacheProcessor.getProductInfoByProductIdList(productIdList);
-        }else{
+        } else {
             return productRepository.getLiveProductListByProductIdList(productIdList);
         }
     }
 
     /**
      * 取直播中置顶商品列表
+     *
      * @param liveId
      * @return
      */
-    List<String> getTopProductIdListByLiveId(int liveId){return null;}
+    List<String> getTopProductIdListByLiveId(int liveId) {
+        return null;
+    }
 
     /**
      * 买手热推商品列表
+     *
      * @param sellerId
      * @return
      */
-    List<String> getHotRecmdProductIdListBySellerId(int sellerId){return null;}
+    List<String> getHotRecmdProductIdListBySellerId(int sellerId) {
+        return null;
+    }
 
     /**
      * 取买手新品列表
+     *
      * @param sellerId
      * @param curPage
      * @param pageSize
      * @return
      */
-    List<String> getNewestProductIdList(int sellerId, int curPage, int pageSize){return null;}
+    List<String> getNewestProductIdList(int sellerId, int curPage, int pageSize) {
+        return null;
+    }
 
     /**
      * 取商品图文描述扩展
+     *
      * @param productId
      * @return
      */
-    ProductDescExtra getProductDescExtra(String productId){return null;}
+    ProductDescExtra getProductDescExtra(String productId) {
+        return null;
+    }
 
     /**
      * 取买手的置顶商品编号列表
+     *
      * @param sellerIdList
      * @return
      */
-    List<String> getTopLiveProductIdListBySellerIdList(List<Integer> sellerIdList){return null;}
+    List<String> getTopLiveProductIdListBySellerIdList(List<Integer> sellerIdList) {
+        return null;
+    }
 
     /**
      * 取买手的活动商品编号列表
+     *
      * @param sellerIdList
      * @return
      */
-    List<String> getActivityProductIdListBySellerIdList(List<Integer> sellerIdList){return null;}
+    List<String> getActivityProductIdListBySellerIdList(List<Integer> sellerIdList) {
+        return null;
+    }
 
     /**
      * 查询历史商品
@@ -177,7 +233,7 @@ public class CommonQueryService {
      * @return
      */
     public List<HistoryProductModel> getHistoryProductListByProductIdList(List<String> productIdList) {
-       return historyProductRepository.getHistoryProductListByProductIdList(productIdList);
+        return historyProductRepository.getHistoryProductListByProductIdList(productIdList);
     }
 
 }
