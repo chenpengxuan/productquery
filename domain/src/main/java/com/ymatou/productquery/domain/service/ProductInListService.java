@@ -1,6 +1,5 @@
 package com.ymatou.productquery.domain.service;
 
-import com.ymatou.productquery.domain.mapper.ProductInListMapper;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class ProductInListService {
             }
 
             // 组装列表商品对象
-            ProductInListDto productDto = ProductInListMapper.toProductInListDto(product, catalogs);
+            ProductInListDto productDto = ProductMapperExtension.toProductInListDto(product, catalogs);
 
             // 取活动商品
             List<ActivityProducts> activityProducts = activityProductList.stream().filter(c -> c.getProductId().equals(productId)).collect(Collectors.toList());

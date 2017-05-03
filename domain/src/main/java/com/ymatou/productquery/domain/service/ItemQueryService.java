@@ -49,7 +49,7 @@ public class ItemQueryService {
         if (product == null) {
             logWrapper.recordInfoLog("line 52,商品不存在，取历史商品，{}", productId);
             HistoryProductModel historyProductModel = historyProductRepository.getHistoryProductInfoByProductId(productId);
-            return DtoMapper.toProductDetailDto(historyProductModel);
+            return ProductMapperExtension.toProductDetailDto(historyProductModel);
         }
         List<String> productIds = new ArrayList<>();
         productIds.add(productId);
@@ -68,7 +68,7 @@ public class ItemQueryService {
 
         //直播
         LiveProducts liveProduct = liveProductsList.stream().findFirst().orElse(null);
-        productDetailDto.setLiveProduct(DtoMapper.toProductLiveDto(liveProduct));
+        productDetailDto.setLiveProduct(ProductMapperExtension.toProductLiveDto(liveProduct));
         // 设置商品的有效期, 直播有效取直播时间， 直播无效活动有效，取活动时间
         if (liveProduct != null) {
             productDetailDto.setValidStart(liveProduct.getStartTime());
@@ -97,25 +97,25 @@ public class ItemQueryService {
         ProductDetailDto productDetailDto;
         //活动
         if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-            productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
+            productDetailDto = ProductMapperExtension.toProductDetailDto(product, catalogs, activityProduct);
 
-            productDetailDto.setProductActivity(DtoMapper.toProductActivityDto(activityProduct));
+            productDetailDto.setProductActivity(ProductMapperExtension.toProductActivityDto(activityProduct));
             productDetailDto.setValidStart(activityProduct.getStartTime());
             productDetailDto.setValidEnd(activityProduct.getEndTime());
-            Tuple<Double, Double> maxmin = DtoMapper.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
+            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
             double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
             double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
             productDetailDto.getProductActivity().setMaxActivityPrice(max);
             productDetailDto.getProductActivity().setMinActivityPrice(min);
         } else {
-            productDetailDto = DtoMapper.toProductDetailDto(product, catalogs, activityProduct);
+            productDetailDto = ProductMapperExtension.toProductDetailDto(product, catalogs, activityProduct);
         }
 
         //下一场活动
         ActivityProducts nextActivityProduct = ProductActivityService.getNextProductActivity(activityProductsList, nextActivityExpire, activityProduct);
         if (nextActivityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-            productDetailDto.setNextActivity(DtoMapper.toProductActivityDto(nextActivityProduct));
-            Tuple<Double, Double> maxmin = DtoMapper.getMaxMinPrice(productDetailDto.getCatalogList(), nextActivityProduct);
+            productDetailDto.setNextActivity(ProductMapperExtension.toProductActivityDto(nextActivityProduct));
+            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(productDetailDto.getCatalogList(), nextActivityProduct);
             double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
             double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
             productDetailDto.getNextActivity().setMaxActivityPrice(max);

@@ -65,22 +65,22 @@ public class ListQueryService {
                         .filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
                 if (activityCatalogInfo != null) {
                     if (activityCatalogInfo.getActivityStock() > 0) {
-                        productInCartDto = DtoMapper.toProductInCartDto(product, catalog, activityProduct, catalogsList);
-                        productInCartDto.setProductActivity(DtoMapper.toProductActivityCartDto(activityProduct));
+                        productInCartDto = ProductMapperExtension.toProductInCartDto(product, catalog, activityProduct, catalogsList);
+                        productInCartDto.setProductActivity(ProductMapperExtension.toProductActivityCartDto(activityProduct));
                         productInCartDto.setValidStart(activityProduct.getStartTime());
                         productInCartDto.setValidEnd(activityProduct.getEndTime());
                     }
                 } else {
-                    productInCartDto = DtoMapper.toProductInCartDto(product, catalog, null, catalogsList);
+                    productInCartDto = ProductMapperExtension.toProductInCartDto(product, catalog, null, catalogsList);
                 }
             } else {
-                productInCartDto = DtoMapper.toProductInCartDto(product, catalog, null, catalogsList);
+                productInCartDto = ProductMapperExtension.toProductInCartDto(product, catalog, null, catalogsList);
             }
 
 
             LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(productId)).findFirst().orElse(null);
             if (liveProduct != null) {
-                productInCartDto.setLiveProduct(DtoMapper.toLiveProductCartDto(liveProduct));
+                productInCartDto.setLiveProduct(ProductMapperExtension.toLiveProductCartDto(liveProduct));
                 productInCartDto.setValidStart(liveProduct.getStartTime());
                 productInCartDto.setValidEnd(liveProduct.getEndTime());
             }
@@ -135,7 +135,7 @@ public class ListQueryService {
 
             //直播
             LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(pid)).findFirst().orElse(null);
-            productDetailDto.setLiveProduct(DtoMapper.toProductLiveDto(liveProduct));
+            productDetailDto.setLiveProduct(ProductMapperExtension.toProductLiveDto(liveProduct));
             // 设置商品的有效期, 直播有效取直播时间， 直播无效活动有效，取活动时间
             if (liveProduct != null) {
                 productDetailDto.setValidStart(liveProduct.getStartTime());
@@ -170,7 +170,7 @@ public class ListQueryService {
                     notHisProductId.add(pid);
                     continue;
                 }
-                ProductHistoryDto productHistoryDto = DtoMapper.toProductHistoryDto(productDetail);
+                ProductHistoryDto productHistoryDto = ProductMapperExtension.toProductHistoryDto(productDetail);
                 productHistoryDto.setStatus(ProductStatusEnum.Disable.getCode());
                 productHistoryDtoList.add(productHistoryDto);
             }
@@ -184,7 +184,7 @@ public class ListQueryService {
                     if (product == null) {
                         continue;
                     }
-                    ProductHistoryDto pr = DtoMapper.toProductHistoryDto(product);
+                    ProductHistoryDto pr = ProductMapperExtension.toProductHistoryDto(product);
                     pr.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart(), product.getValidEnd(), null, null));
                     productHistoryDtoList.add(pr);
                 }
