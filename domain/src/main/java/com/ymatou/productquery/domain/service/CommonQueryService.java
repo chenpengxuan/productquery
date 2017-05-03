@@ -111,15 +111,20 @@ public class CommonQueryService {
         }
 
         if(catalogsList != null && !catalogsList.isEmpty()){
-            catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach(x -> {
-                Products tempProduct = productsList.stream().filter(z -> z.getProductId().equals(x.getProductId())).findAny().orElse(null);
+            List<Products> tempProductList = productsList;
+
+            catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,group) -> {
+                Products tempProduct = tempProductList.stream().filter(z -> z.getProductId().equals(key)).findAny().orElse(null);
 
                 if(tempProduct != null){
                     CacheProductInfo cacheProductInfo = tempProduct.convertDtoToCacheData();
-                    c
+                    cacheProductInfo.setCatalogsList(group);
+                    result.add(cacheProductInfo);
                 }
             });
         }
+
+        return result;
     }
 
     /**

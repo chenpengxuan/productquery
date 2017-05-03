@@ -1,7 +1,6 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.mongodb.MongoClient;
-import com.ymatou.productquery.domain.model.LiveProducts;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.springframework.stereotype.Component;
@@ -37,7 +36,8 @@ public class LiveProductRepository extends MongoRepository {
      */
     public List<String> get(List<String> productIdList) {
         Datastore datastore = this.getDataStore(this.dbName);
-        return datastore.find(LiveProducts.class).disableValidation()
-                .field("spid").in(productIdList).asList();
+//        return datastore.find(LiveProducts.class).disableValidation()
+//                .field("spid").in(productIdList).asList();
+        return null;
     }
 }
