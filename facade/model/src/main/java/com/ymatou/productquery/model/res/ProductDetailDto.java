@@ -129,7 +129,6 @@ public class ProductDetailDto {
 
 
     // 是否包邮
-    @JsonProperty("IsFreeShipping")
     private boolean isFreeShipping;
 
 
@@ -174,7 +173,6 @@ public class ProductDetailDto {
 
 
     // 是否新品
-    @JsonProperty("IsNewProduct")
     private boolean isNewProduct;
 
 
@@ -189,12 +187,11 @@ public class ProductDetailDto {
 
 
     // 是否买手热推
-    @JsonProperty("IsHotRecmd")
     private boolean isHotRecmd;
 
 
     // 是否PSP商品
-    @JsonProperty("IsPspProduct")
+    //@JsonProperty("IsPspProduct")
     private boolean isPspProduct;
 
 
@@ -435,6 +432,7 @@ public class ProductDetailDto {
         this.tariffType = tariffType;
     }
 
+    @JsonProperty("IsFreeShipping")
     public boolean isFreeShipping() {
         return isFreeShipping;
     }
@@ -507,6 +505,7 @@ public class ProductDetailDto {
         this.noReasonReturn = noReasonReturn;
     }
 
+    @JsonProperty("IsNewProduct")
     public boolean isNewProduct() {
         return isNewProduct;
     }
@@ -531,6 +530,7 @@ public class ProductDetailDto {
         this.newEndTime = newEndTime;
     }
 
+    @JsonProperty("IsHotRecmd")
     public boolean isHotRecmd() {
         return isHotRecmd;
     }
@@ -539,6 +539,7 @@ public class ProductDetailDto {
         isHotRecmd = hotRecmd;
     }
 
+    @JsonProperty("IsPspProduct")
     public boolean isPspProduct() {
         return isPspProduct;
     }
