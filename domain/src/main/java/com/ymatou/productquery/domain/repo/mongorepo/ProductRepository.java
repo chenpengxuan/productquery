@@ -39,15 +39,6 @@ public class ProductRepository extends MongoRepository {
     }
 
     /**
-     * 插入
-     *
-     * @param product
-     */
-    public void insert(Products product) {
-        this.insertEntity(this.dbName, product);
-    }
-
-    /**
      * 根据商品Id获取商品信息
      *
      * @param productIds
@@ -84,6 +75,7 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 根据ProductIds查询直播商品列表
+     *
      * @param productIdList
      * @return
      */
@@ -111,19 +103,8 @@ public class ProductRepository extends MongoRepository {
     }
 
     /**
-     * 根据productId查询Catalogs
-     *
-     * @param productId
-     * @return
-     */
-    public List<Catalogs> getCatalogListByProductId(String productId) {
-        Datastore datastore = this.getDataStore(this.dbName);
-        return datastore.find(Catalogs.class).disableValidation()
-                .field("spid").equal(productId).asList();
-    }
-
-    /**
      * 根据规格id列表获取规格信息列表
+     *
      * @param catalogIdList
      * @return
      */
@@ -135,6 +116,7 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 根据商品id列表获取活动商品列表
+     *
      * @param productIdList
      * @return
      */
@@ -174,6 +156,7 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 取直播置顶商品编号列表
+     *
      * @param liveId
      * @return
      */
@@ -192,11 +175,11 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 取买手热推商品
+     *
      * @param sellerId
      * @return
      */
-    public List<String> getHotRecmdProductList(int sellerId)
-    {
+    public List<String> getHotRecmdProductList(int sellerId) {
         Datastore datastore = this.getDataStore(this.dbName);
 
         List<Products> productList = datastore.find(Products.class).disableValidation()
@@ -204,11 +187,12 @@ public class ProductRepository extends MongoRepository {
                 .field("istop").equal(true)
                 .project("spid", true).asList();
 
-        return productList.stream().map(pid->pid.getProductId()).collect(Collectors.toList());
+        return productList.stream().map(pid -> pid.getProductId()).collect(Collectors.toList());
     }
 
     /**
      * 取新品列表
+     *
      * @param sellerId
      * @param curPage
      * @param pageSize
@@ -233,6 +217,7 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 取商品图文描述扩展信息
+     *
      * @param productId
      * @return
      */
@@ -244,6 +229,7 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 取买手的置顶商品编号列表
+     *
      * @param sellerIdList
      * @return
      */
@@ -264,6 +250,7 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 取买手的活动商品编号列表
+     *
      * @param sellerIdList
      * @return
      */

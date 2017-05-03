@@ -1,18 +1,12 @@
 package com.ymatou.productquery.infrastructure.config.datasource;
 
-import com.mongodb.DB;
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.ymatou.productquery.infrastructure.config.props.MongoProps;
-import org.jongo.Jongo;
-import org.jongo.marshall.jackson.JacksonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-
-import javax.annotation.Resource;
 
 /**
  * mongo data source

@@ -46,11 +46,11 @@ public class CacheManager {
     @Autowired
     private CacheProps cacheProps;
 
-    private Cache productCacheFactory;
+    private Cache productCacheContainer;
 
-    private Cache liveProductCacheFactory;
+    private Cache liveProductCacheContainer;
 
-    private ConcurrentMap activityProductCacheFactory;
+    private ConcurrentMap activityProductCacheContainer;
 
     private static final int CACHE_SIZE_UNIT = 10000;
 
@@ -63,19 +63,19 @@ public class CacheManager {
     public void init() {
         switch (CacheTypeEnum.valueOf(cacheProps.getCacheType().toUpperCase())) {
             case GUAVACACHE:
-                productCacheFactory = CacheBuilder.newBuilder()
+                productCacheContainer = CacheBuilder.newBuilder()
                         .maximumSize(cacheProps.getCacheSize() * CACHE_SIZE_UNIT)
                         .expireAfterAccess(cacheProps.getExpireTime(), TimeUnit.HOURS)
                         .concurrencyLevel(cacheProps.getWriteConcurrencyNum())
                         .recordStats()
                         .build();
-                liveProductCacheFactory = CacheBuilder.newBuilder()
+                liveProductCacheContainer = CacheBuilder.newBuilder()
                         .maximumSize(cacheProps.getCacheSize() * CACHE_SIZE_UNIT)
                         .expireAfterAccess(cacheProps.getExpireTime(), TimeUnit.HOURS)
                         .concurrencyLevel(cacheProps.getWriteConcurrencyNum())
                         .recordStats()
                         .build();
-                activityProductCacheFactory = new ConcurrentHashMap(cacheProps.getActivityProductCacheSize());
+                activityProductCacheContainer = new ConcurrentHashMap(cacheProps.getActivityProductCacheSize());
                 break;
             case EHCACHE:
                 break;
@@ -92,9 +92,9 @@ public class CacheManager {
     public CacheStats getCacheStats(CacheInfoTypeEnum cacheInfoTypeEnum) {
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                return productCacheFactory.stats();
+                return productCacheContainer.stats();
             case LIVEPRODUCT:
-                return liveProductCacheFactory.stats();
+                return liveProductCacheContainer.stats();
             case ACTIVITYPRODUCT:
                 return null;
             default:
@@ -111,11 +111,11 @@ public class CacheManager {
     public <V> V get(String cacheKey, CacheInfoTypeEnum cacheInfoTypeEnum) {
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                return Optional.ofNullable((V) productCacheFactory.getIfPresent(cacheKey)).orElse(null);
+                return Optional.ofNullable((V) productCacheContainer.getIfPresent(cacheKey)).orElse(null);
             case LIVEPRODUCT:
-                return Optional.ofNullable((V) liveProductCacheFactory.getIfPresent(cacheKey)).orElse(null);
+                return Optional.ofNullable((V) liveProductCacheContainer.getIfPresent(cacheKey)).orElse(null);
             case ACTIVITYPRODUCT:
-                return Optional.ofNullable((V) activityProductCacheFactory.get(cacheKey)).orElse(null);
+                return Optional.ofNullable((V) activityProductCacheContainer.get(cacheKey)).orElse(null);
             default:
                 return null;
         }
@@ -131,11 +131,11 @@ public class CacheManager {
     public <V> Map<String,V> get(List<String> cacheKeyList, CacheInfoTypeEnum cacheInfoTypeEnum) {
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                return Optional.ofNullable((Map<String,V>) productCacheFactory.getAllPresent(cacheKeyList)).orElse(null);
+                return Optional.ofNullable((Map<String,V>) productCacheContainer.getAllPresent(cacheKeyList)).orElse(null);
             case LIVEPRODUCT:
-                return Optional.ofNullable((Map<String,V>) liveProductCacheFactory.getAllPresent(cacheKeyList)).orElse(null);
+                return Optional.ofNullable((Map<String,V>) liveProductCacheContainer.getAllPresent(cacheKeyList)).orElse(null);
             case ACTIVITYPRODUCT:
-                return Optional.ofNullable((Map<String,V>) activityProductCacheFactory.get(cacheKeyList)).orElse(null);
+                return Optional.ofNullable((Map<String,V>) activityProductCacheContainer.get(cacheKeyList)).orElse(null);
             default:
                 return null;
         }
@@ -148,11 +148,14 @@ public class CacheManager {
     public void delete(String cacheKey, CacheInfoTypeEnum cacheInfoTypeEnum){
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                productCacheFactory.invalidate(cacheKey);
+                productCacheContainer.invalidate(cacheKey);
+                break;
             case LIVEPRODUCT:
-                liveProductCacheFactory.invalidate(cacheKey);
+                liveProductCacheContainer.invalidate(cacheKey);
+                break;
             case ACTIVITYPRODUCT:
-                activityProductCacheFactory.remove(cacheKey);
+                activityProductCacheContainer.remove(cacheKey);
+                break;
             default:
                 break;
         }
@@ -166,11 +169,14 @@ public class CacheManager {
     public void delete(List<String> cacheKeyList, CacheInfoTypeEnum cacheInfoTypeEnum){
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                productCacheFactory.invalidateAll(cacheKeyList);
+                productCacheContainer.invalidateAll(cacheKeyList);
+                break;
             case LIVEPRODUCT:
-                liveProductCacheFactory.invalidateAll(cacheKeyList);
+                liveProductCacheContainer.invalidateAll(cacheKeyList);
+                break;
             case ACTIVITYPRODUCT:
-                cacheKeyList.forEach(x -> activityProductCacheFactory.remove(x));
+                cacheKeyList.forEach(x -> activityProductCacheContainer.remove(x));
+                break;
             default:
                 break;
         }
@@ -186,16 +192,19 @@ public class CacheManager {
     public <V> void put(String cacheKey,V cacheInfo, CacheInfoTypeEnum cacheInfoTypeEnum){
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                productCacheFactory.put(cacheKey,cacheInfo);
+                productCacheContainer.put(cacheKey,cacheInfo);
+                break;
             case LIVEPRODUCT:
-                liveProductCacheFactory.put(cacheKey,cacheInfo);
+                liveProductCacheContainer.put(cacheKey,cacheInfo);
+                break;
             case ACTIVITYPRODUCT:
                 synchronized (this) {
-                    expectActivityCacheSize = activityProductCacheFactory.size() + 1;
+                    expectActivityCacheSize = activityProductCacheContainer.size() + 1;
                 }
                 if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
-                    activityProductCacheFactory.putIfAbsent(cacheKey, cacheInfo);
+                    activityProductCacheContainer.putIfAbsent(cacheKey, cacheInfo);
                 }
+                break;
             default:
                 break;
         }
@@ -210,16 +219,19 @@ public class CacheManager {
     public <V> void put(Map<String,V> cacheMap, CacheInfoTypeEnum cacheInfoTypeEnum){
         switch (cacheInfoTypeEnum) {
             case PRODUCT:
-                productCacheFactory.putAll(cacheMap);
+                productCacheContainer.putAll(cacheMap);
+                break;
             case LIVEPRODUCT:
-                liveProductCacheFactory.putAll(cacheMap);
+                liveProductCacheContainer.putAll(cacheMap);
+                break;
             case ACTIVITYPRODUCT:
                 synchronized (this) {
-                    expectActivityCacheSize = activityProductCacheFactory.size() + cacheMap.size();
+                    expectActivityCacheSize = activityProductCacheContainer.size() + cacheMap.size();
                 }
                 if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
-                    activityProductCacheFactory.putAll(cacheMap);
+                    activityProductCacheContainer.putAll(cacheMap);
                 }
+                break;
             default:
                 break;
         }

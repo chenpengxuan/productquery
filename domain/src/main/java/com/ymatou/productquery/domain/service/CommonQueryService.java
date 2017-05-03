@@ -5,6 +5,7 @@ import com.ymatou.productquery.domain.cache.CatalogCacheProcessor;
 import com.ymatou.productquery.domain.cache.LiveCacheProcessor;
 import com.ymatou.productquery.domain.cache.ProductCacheProcessor;
 import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.domain.model.cache.CacheProductInfo;
 import com.ymatou.productquery.domain.repo.mongorepo.HistoryProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 列表查询与单品查询共用
@@ -82,6 +85,46 @@ public class CommonQueryService {
         } else {
             return productRepository.getCatalogListByCatalogIdList(catalogIdList);
         }
+    }
+
+    /**
+     * 根据规格id列表获取商品及规格信息列表 用于购物车场景
+     * @param catalogIdList
+     * @return
+     */
+    public List<CacheProductInfo> getProductListByCatalogIdList(List<String> catalogIdList) {
+        List<Catalogs> catalogsList;
+        List<Products> productsList = new ArrayList<>();
+        List<String> productIdList;
+        List<CacheProductInfo> result = new ArrayList<>();
+
+        if (bizProps.isUseCache()) {
+            catalogsList = catalogCacheProcessor.getCatalogListByCatalogIdList(catalogIdList);
+            productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+        } else {
+            catalogsList = productRepository.getCatalogListByCatalogIdList(catalogIdList);
+            productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+        }
+
+        if(productIdList != null && !productIdList.isEmpty()){
+            productsList = getProductListByProductIdList(productIdList);
+        }
+
+        if(catalogsList != null && !catalogsList.isEmpty()){
+            List<Products> tempProductList = productsList;
+
+            catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,group) -> {
+                Products tempProduct = tempProductList.stream().filter(z -> z.getProductId().equals(key)).findAny().orElse(null);
+
+                if(tempProduct != null){
+                    CacheProductInfo cacheProductInfo = tempProduct.convertDtoToCacheData();
+                    cacheProductInfo.setCatalogsList(group);
+                    result.add(cacheProductInfo);
+                }
+            });
+        }
+
+        return result;
     }
 
     /**
