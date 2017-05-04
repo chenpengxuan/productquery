@@ -25,7 +25,7 @@ public class Catalogs {
     private String sku;//	sku
 
     @Property("presale")
-    private boolean isPriceSale;//	是否预售规格
+    private boolean isPreSale;//	是否预售规格
 
     @Property("earnest")
     private Double earnest;//	定金
@@ -41,6 +41,9 @@ public class Catalogs {
 
     @Property("stock")
     private int stock;//	规格库存
+
+    @Property("mdeliv")
+    private int ExtraDelivery;//规格多物流类型
 
     private List<PropertyInfo> props;//	规格属性列表
 
@@ -76,12 +79,12 @@ public class Catalogs {
         this.sku = sku;
     }
 
-    public boolean isPriceSale() {
-        return isPriceSale;
+    public boolean isPreSale() {
+        return isPreSale;
     }
 
-    public void setPriceSale(boolean priceSale) {
-        this.isPriceSale = priceSale;
+    public void setPreSale(boolean preSale) {
+        this.isPreSale = preSale;
     }
 
     public Double getEarnest() {
@@ -138,5 +141,13 @@ public class Catalogs {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public int getExtraDelivery() {
+        return ExtraDelivery;
+    }
+
+    public void setExtraDelivery(int extraDelivery) {
+        ExtraDelivery = extraDelivery;
     }
 }

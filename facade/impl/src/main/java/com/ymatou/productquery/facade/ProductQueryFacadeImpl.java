@@ -67,6 +67,44 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     }
 
     /**
+     * 多物流购物车接口（普通购物车中用）
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @POST
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetCatalogListByDeliveryExtraIsolation:(?i:GetCatalogListByDeliveryExtraIsolation)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public BaseResponseNetAdapter getCatalogListByDeliveryExtraIsolation(GetCatalogListByDeliveryExtraIsolationRequest request) {
+        List<ProductInCartDto> result = listQueryService.getProductListFromShoppingCartDeliveryExtra(request.getCatalogIdList(), false);
+
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", result);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    /**
+     * 多物流购物车接口（交易隔离中用）
+     *
+     * @param request
+     * @return
+     */
+    @Override
+    @POST
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetCatalogListByDeliveryExtra:(?i:GetCatalogListByDeliveryExtra)}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes(MediaType.APPLICATION_JSON)
+    public BaseResponseNetAdapter getCatalogListByDeliveryExtra(GetCatalogListByDeliveryExtraRequest request) {
+        List<ProductInCartDto> result = listQueryService.getProductListFromShoppingCartDeliveryExtra(request.getCatalogIdList(), true);
+
+        Map<String, Object> productList = new HashMap<>();
+        productList.put("ProductList", result);
+        return BaseResponseNetAdapter.newSuccessInstance(productList);
+    }
+
+    /**
      * 商品明细列表
      *
      * @param request

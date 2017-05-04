@@ -167,6 +167,18 @@ public class ProductDetailDto {
     // 是否PSP商品
     private boolean isPspProduct;
 
+    // 是否支持多物流（0.不支持， 3. 贝海直邮 ）
+    @JsonProperty("ExtraDeliveryType")
+    private int extraDeliveryType;
+
+    // 运费差价
+    @JsonProperty("ExtraDeliveryFee")
+    private double extraDeliveryFee;
+
+    // 是否自营商品
+    @JsonProperty("OwnProduct")
+    private boolean ownProduct;
+
     // 商品等级
     @JsonProperty("Grade")
     private String grade;
@@ -561,5 +573,29 @@ public class ProductDetailDto {
 
     public void setLiveProduct(ProductLiveDto liveProduct) {
         this.liveProduct = liveProduct;
+    }
+
+    public int getExtraDeliveryType() {
+        return extraDeliveryType;
+    }
+
+    public void setExtraDeliveryType(int extraDeliveryType) {
+        this.extraDeliveryType = extraDeliveryType;
+    }
+
+    public double getExtraDeliveryFee() {
+        return extraDeliveryFee;
+    }
+
+    public void setExtraDeliveryFee(double extraDeliveryFee) {
+        this.extraDeliveryFee = extraDeliveryFee;
+    }
+
+    public boolean isOwnProduct() {
+        return ownProduct;
+    }
+
+    public void setOwnProduct(boolean ownProduct) {
+        this.ownProduct = ownProduct;
     }
 }

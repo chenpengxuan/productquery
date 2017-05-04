@@ -51,6 +51,9 @@ public class CatalogDto {
     @JsonProperty("PropertyList")
     private List<CatalogPropertyDto> propertyList;
 
+    // 是否支持多物流
+    private boolean isExtraDelivery;
+
     public String getCatalogId() {
         return catalogId;
     }
@@ -60,7 +63,7 @@ public class CatalogDto {
     }
 
     public String getSku() {
-        return sku ==null?"":sku;
+        return sku == null ? "" : sku;
     }
 
     public void setSku(String sku) {
@@ -139,5 +142,14 @@ public class CatalogDto {
 
     public void setPropertyList(List<CatalogPropertyDto> propertyList) {
         this.propertyList = propertyList;
+    }
+
+    @JsonProperty("IsExtraDelivery")
+    public boolean isExtraDelivery() {
+        return isExtraDelivery;
+    }
+
+    public void setExtraDelivery(boolean extraDelivery) {
+        isExtraDelivery = extraDelivery;
     }
 }

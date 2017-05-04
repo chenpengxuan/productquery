@@ -41,4 +41,18 @@ public class GetProductListByProductIdListTest {
         assertEquals(200, response.getCode());
         Asserts.notNull(response.getData(), "ProductList");
     }
+
+    @Test
+    public void  testOnSaleWithActivity()
+    {
+        List<String> productIdList = new ArrayList();
+        productIdList.add("d70e9919-af08-4dee-8512-ad92dec423f3");
+        productIdList.add("17d40bee-93f3-4fc3-a510-5cec8be3e207");
+
+        GetProductListByProductIdListRequest request = new GetProductListByProductIdListRequest();
+        request.setProductIdList(productIdList);
+        BaseResponseNetAdapter response = productQueryFacade.getProductListByProductIdList(request);
+        assertEquals(200, response.getCode());
+        Asserts.notNull(response.getData(), "ProductList");
+    }
 }

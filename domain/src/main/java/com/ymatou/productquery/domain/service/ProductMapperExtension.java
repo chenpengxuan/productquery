@@ -2,6 +2,7 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.infrastructure.util.Tuple;
+import com.ymatou.productquery.infrastructure.util.Utils;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.res.*;
 import org.apache.commons.beanutils.BeanUtils;
@@ -51,19 +52,18 @@ public class ProductMapperExtension {
         result.setPrice(stockPrice.second);
         result.setCatalogCount((int) catalogsList.stream().filter(t -> t.getProductId().equals(product.getProductId())).count());
         result.setSku(catalog.getSku() == null ? "" : catalog.getSku());
-        result.setPreSale(catalog.isPriceSale());
+        result.setPreSale(catalog.isPreSale());
         result.setPspProduct(product.isPspProduct());
         result.setProperties(getCatalogPropertyList(catalog.getProps()));
+        result.setOwnProduct(product.getOwnProduct() > 0);
+        result.setExtraDeliveryFee(product.getExtraDeliveryFee());
+        result.setExtraDeliveryType(product.getExtraDeliveryType());
         return result;
     }
 
     public static ProductDetailDto toProductDetailDto(Products products, List<Catalogs> catalogsList, ActivityProducts activityProducts) {
         ProductDetailDto productDetailDto = new ProductDetailDto();
-        try {
-            BeanUtils.copyProperties(productDetailDto, products);
-        } catch (Exception ex) {
-            throw new BizException("line 62:BeanUtils.copyProperties fail,liveid:" + products.getProductId(), ex);
-        }
+        Utils.copyProperties(productDetailDto, products);
         productDetailDto.setFreeShipping(products.getIsFreeShipping() <= 0);
         productDetailDto.setHasTextDescription(products.isNewDesc());
         productDetailDto.setNewProduct(isNewestProduct(products.getNewStartTime(), products.getNewEndTime()));
@@ -78,22 +78,17 @@ public class ProductMapperExtension {
             return null;
         }
         ProductLiveDto productLiveDto = new ProductLiveDto();
-        try {
-            BeanUtils.copyProperties(productLiveDto, liveProduct);
-        } catch (Exception ex) {
-            throw new BizException("line 62:BeanUtils.copyProperties fail,liveid:" + liveProduct.getLiveId(), ex);
-        }
+        Utils.copyProperties(productLiveDto, liveProduct);
         return productLiveDto;
     }
 
     /**
      * 返回活动商品的最高价，最低价
      *
-     * @param catalogDtoList
      * @param activityProduct
      * @return
      */
-    public static Tuple<Double, Double> getMaxMinPrice(List<CatalogDto> catalogDtoList, ActivityProducts activityProduct) {
+    public static Tuple<Double, Double> getMaxMinPrice(ActivityProducts activityProduct) {
         List<Double> activityPrices = activityProduct.getCatalogs().stream().map(t -> t.getActivityPrice()).collect(Collectors.toList());
         return new Tuple<>(Collections.max(activityPrices), Collections.min(activityPrices));
     }
@@ -107,11 +102,7 @@ public class ProductMapperExtension {
             return null;
         }
         ProductActivityDto productActivityDto = new ProductActivityDto();
-        try {
-            BeanUtils.copyProperties(productActivityDto, model);
-        } catch (Exception ex) {
-            throw new BizException("line 85:BeanUtils.copyProperties fail,liveid:" + model.getProductInActivityId(), ex);
-        }
+        Utils.copyProperties(productActivityDto, model);
         productActivityDto.setPromotionType(3);
         productActivityDto.setBeginTimeOfProductInActivity(model.getStartTime());
         productActivityDto.setEndTimeOfProductInActivity(model.getEndTime());
@@ -130,14 +121,10 @@ public class ProductMapperExtension {
             return null;
         }
         ProductHistoryDto productHistoryDto = new ProductHistoryDto();
-        try {
-            BeanUtils.copyProperties(productHistoryDto, model);
-            productHistoryDto.setMainPic(model.getPicList() != null ? model.getPicList().stream().findFirst().orElse("") : "");
-            productHistoryDto.setFreeShipping(model.getFreight() <= 0);
-            productHistoryDto.setPrice(model.getMinCatalogPrice());
-        } catch (Exception ex) {
-            throw new BizException("line 72:BeanUtils.copyProperties fail,productid:" + model.getProductId(), ex);
-        }
+        Utils.copyProperties(productHistoryDto, model);
+        productHistoryDto.setMainPic(model.getPicList() != null ? model.getPicList().stream().findFirst().orElse("") : "");
+        productHistoryDto.setFreeShipping(model.getFreight() <= 0);
+        productHistoryDto.setPrice(model.getMinCatalogPrice());
 
 //        productHistoryDto.setProductId(model.getProductId());
 //        productHistoryDto.setTitle(model.getTitle());
@@ -156,16 +143,12 @@ public class ProductMapperExtension {
         if (model == null) {
             return null;
         }
-        try {
-            ProductHistoryDto productHistoryDto = new ProductHistoryDto();
-            BeanUtils.copyProperties(productHistoryDto, model);
-            productHistoryDto.setMainPic(model.getPicList() != null ? model.getPicList().stream().findFirst().orElse("") : "");
-            productHistoryDto.setFreeShipping(model.getIsFreeShipping() <= 0);
-            productHistoryDto.setPrice(Double.parseDouble(model.getMinCatalogPrice().split(",")[0]));
-            return productHistoryDto;
-        } catch (Exception ex) {
-            throw new BizException("line 98:BeanUtils.copyProperties fail,productid:" + model.getProductId(), ex);
-        }
+        ProductHistoryDto productHistoryDto = new ProductHistoryDto();
+        Utils.copyProperties(productHistoryDto, model);
+        productHistoryDto.setMainPic(model.getPicList() != null ? model.getPicList().stream().findFirst().orElse("") : "");
+        productHistoryDto.setFreeShipping(model.getIsFreeShipping() <= 0);
+        productHistoryDto.setPrice(Double.parseDouble(model.getMinCatalogPrice().split(",")[0]));
+        return productHistoryDto;
     }
 
     public static LiveProductCartDto toLiveProductCartDto(LiveProducts model) {
@@ -173,25 +156,18 @@ public class ProductMapperExtension {
             return null;
         }
         LiveProductCartDto lp = new LiveProductCartDto();
-        try {
-            BeanUtils.copyProperties(lp, model);
-            return lp;
-        } catch (Exception e) {
-            throw new BizException("line 111:BeanUtils.copyProperties fail,liveid:" + model.getLiveId(), e);
-        }
+        Utils.copyProperties(lp, model);
+        return lp;
     }
 
     public static ProductDetailDto toProductDetailDto(HistoryProductModel historyProductModel) {
         if (historyProductModel == null)
             return null;
-        try {
-            ProductDetailDto productDetailDto = new ProductDetailDto();
-            BeanUtils.copyProperties(historyProductModel, productDetailDto);
-            productDetailDto.setStatus(ProductStatusEnum.Disable.getCode());
-            return productDetailDto;
-        } catch (Exception ex) {
-            throw new BizException("line 185:BeanUtils.copyProperties fail,productid:" + historyProductModel.getProductId(), ex);
-        }
+
+        ProductDetailDto productDetailDto = new ProductDetailDto();
+        Utils.copyProperties(historyProductModel, productDetailDto);
+        productDetailDto.setStatus(ProductStatusEnum.Disable.getCode());
+        return productDetailDto;
     }
 
     public static ProductActivityCartDto toProductActivityCartDto(ActivityProducts model) {
@@ -217,11 +193,8 @@ public class ProductMapperExtension {
         catalogsList.forEach(t ->
         {
             CatalogDto catalogDto = new CatalogDto();
-            try {
-                BeanUtils.copyProperties(catalogDto, t);
-            } catch (Exception ex) {
-                throw new BizException("line 142:BeanUtils.copyProperties fail,liveid:" + t.getCatalogId(), ex);
-            }
+            Utils.copyProperties(catalogDto, t);
+            catalogDto.setExtraDelivery(t.getExtraDelivery() > 0);
             if (activityProduct != null) {
                 ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream().
                         filter(x -> x.getCatalogId().equals(t.getCatalogId())).findFirst().orElse(null);
@@ -276,13 +249,11 @@ public class ProductMapperExtension {
     }
 
     private static List<PropertyDto> getCatalogPropertyList(List<PropertyInfo> propertyInfoList) {
-        List<PropertyDto> propertyDtoList = new ArrayList<>();
         if (propertyInfoList == null || propertyInfoList.isEmpty()) {
-            propertyDtoList.add(new PropertyDto() {
-            });
-            return propertyDtoList;
+            return null;
         }
 
+        List<PropertyDto> propertyDtoList = new ArrayList<>();
         propertyInfoList.forEach(t -> {
                     PropertyDto prodto = new PropertyDto();
                     prodto.setPropertyValue(t.getValue());
@@ -344,8 +315,7 @@ public class ProductMapperExtension {
         productDto.isAnyPreSale(getIsAnyPreSale(catalogs));
         productDto.isAllPreSale(getIsAnyPreSale(catalogs));
         productDto.isPspProduct(product.isPspProduct());
-        //// FIXME: 2017/4/28 代做
-        //productDto.setOwnProduct(product);
+        productDto.setOwnProduct(product.getOwnProduct() > 0);
 
         return productDto;
     }
@@ -417,7 +387,7 @@ public class ProductMapperExtension {
             //// FIXME: 2017/4/28 log 规格数据不完整
             return false;
         }
-        return catalogs.stream().anyMatch(c -> c.isPriceSale());
+        return catalogs.stream().anyMatch(c -> c.isPreSale());
     }
 
     /**
@@ -431,6 +401,6 @@ public class ProductMapperExtension {
             //// FIXME: 2017/4/28 log 规格数据不完整
             return false;
         }
-        return catalogs.stream().allMatch(c -> c.isPriceSale());
+        return catalogs.stream().allMatch(c -> c.isPreSale());
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by zhangyong on 2017/4/6.
  */
-public class Products{
+public class Products {
     @Property("spid")
     private String productId;
     @Property("updatetime")
@@ -98,6 +98,12 @@ public class Products{
     private String grade;//	商品等级
     @Property("sizepics")
     private List<String> sizePicList;//	尺码表
+    @Property("own")
+    private int ownProduct;//自营
+    @Property("mdeliv")
+    private int ExtraDeliveryType;//是否支持多物流
+    @Property("mflight")
+    private double ExtraDeliveryFee;
 
     public int getProdId() {
         return prodId;
@@ -444,13 +450,38 @@ public class Products{
         this.updateTime = updateTime;
     }
 
+    public int getExtraDeliveryType() {
+        return ExtraDeliveryType;
+    }
+
+    public void setExtraDeliveryType(int extraDeliveryType) {
+        ExtraDeliveryType = extraDeliveryType;
+    }
+
+    public double getExtraDeliveryFee() {
+        return ExtraDeliveryFee;
+    }
+
+    public void setExtraDeliveryFee(double extraDeliveryFee) {
+        ExtraDeliveryFee = extraDeliveryFee;
+    }
+
+    public int getOwnProduct() {
+        return ownProduct;
+    }
+
+    public void setOwnProduct(int ownProduct) {
+        this.ownProduct = ownProduct;
+    }
+
     /**
      * 数据转换器
+     *
      * @return
      */
-    public CacheProductInfo convertDtoToCacheData(){
+    public CacheProductInfo convertDtoToCacheData() {
         CacheProductInfo cacheProductInfo = new CacheProductInfo();
-        Utils.copyProperties(cacheProductInfo,this);
+        Utils.copyProperties(cacheProductInfo, this);
         return cacheProductInfo;
     }
 }

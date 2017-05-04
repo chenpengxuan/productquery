@@ -23,6 +23,21 @@ public interface ProductQueryFacade {
      */
     BaseResponseNetAdapter getCatalogListByTradeIsolation(GetCatalogListByTradeIsolationRequest request);
 
+    /**
+     * 多物流购物车接口（普通购物车中用）
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getCatalogListByDeliveryExtra(GetCatalogListByDeliveryExtraRequest request);
+
+    /**
+     * 多物流购物车接口（交易隔离中用）
+     *
+     * @param request
+     * @return
+     */
+    BaseResponseNetAdapter getCatalogListByDeliveryExtraIsolation(GetCatalogListByDeliveryExtraIsolationRequest request);
 
     /**
      * 商品明细列表
@@ -74,6 +89,7 @@ public interface ProductQueryFacade {
 
     /**
      * 根据商品编号取交易隔离的商品信息
+     *
      * @param request
      * @return
      */
@@ -81,6 +97,7 @@ public interface ProductQueryFacade {
 
     /**
      * 取直播中置顶商品列表
+     *
      * @param request
      * @return
      */
@@ -88,6 +105,7 @@ public interface ProductQueryFacade {
 
     /**
      * 取买手新品列表
+     *
      * @param request
      * @return
      */
@@ -95,6 +113,7 @@ public interface ProductQueryFacade {
 
     /**
      * 买手热推商品列表
+     *
      * @param request
      * @return
      */
@@ -102,6 +121,7 @@ public interface ProductQueryFacade {
 
     /**
      * 买手推荐的商品列表
+     *
      * @param request
      * @return
      */
@@ -109,6 +129,7 @@ public interface ProductQueryFacade {
 
     /**
      * 取秒杀商品的活动库存量
+     *
      * @param request
      * @return
      */
@@ -116,10 +137,11 @@ public interface ProductQueryFacade {
 
     /**
      * 取商品图文描述扩展信息
+     *
      * @param request
      * @return
      */
-    BaseResponseNetAdapter getProductDescExtraByProductId (GetProductDescExtraByProductIdRequest request);
+    BaseResponseNetAdapter getProductDescExtraByProductId(GetProductDescExtraByProductIdRequest request);
 
 
 }

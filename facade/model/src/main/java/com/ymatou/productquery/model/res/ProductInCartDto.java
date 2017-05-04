@@ -163,6 +163,16 @@ public class ProductInCartDto {
     @JsonProperty("ProductActivity")
     private ProductActivityCartDto productActivity;
 
+    // 是否自营商品
+    @JsonProperty("OwnProduct")
+    private boolean ownProduct;
+
+    @JsonProperty("ExtraDeliveryType")
+    private int extraDeliveryType;
+
+    @JsonProperty("ExtraDeliveryFee")
+    private double extraDeliveryFee;
+
     public String getProductId() {
         return productId;
     }
@@ -437,5 +447,29 @@ public class ProductInCartDto {
 
     public void setPreSale(boolean preSale) {
         isPreSale = preSale;
+    }
+
+    public int getExtraDeliveryType() {
+        return extraDeliveryType;
+    }
+
+    public void setExtraDeliveryType(int extraDeliveryType) {
+        this.extraDeliveryType = extraDeliveryType;
+    }
+
+    public double getExtraDeliveryFee() {
+        return extraDeliveryFee;
+    }
+
+    public void setExtraDeliveryFee(double extraDeliveryFee) {
+        this.extraDeliveryFee = extraDeliveryFee;
+    }
+
+    public boolean isOwnProduct() {
+        return ownProduct;
+    }
+
+    public void setOwnProduct(boolean ownProduct) {
+        this.ownProduct = ownProduct;
     }
 }

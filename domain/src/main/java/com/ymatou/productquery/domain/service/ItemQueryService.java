@@ -50,7 +50,7 @@ public class ItemQueryService {
     public ProductDetailDto getProductDetail(String productId, int nextActivityExpire, boolean tradeIsolation) {
         Products product = commonQueryService.getProductByProductId(productId);
         if (product == null) {
-            logWrapper.recordInfoLog("line 52,商品不存在，取历史商品，{}", productId);
+            logWrapper.recordInfoLog("商品不存在，取历史商品，productId:{}", productId);
             HistoryProductModel historyProductModel = historyProductRepository.getHistoryProductInfoByProductId(productId);
             return ProductMapperExtension.toProductDetailDto(historyProductModel);
         }
@@ -58,7 +58,7 @@ public class ItemQueryService {
         productIds.add(productId);
         List<Catalogs> catalogs = commonQueryService.getCatalogListByProductIdList(productIds);
         if (catalogs == null) {
-            logWrapper.recordInfoLog("line 61,商品不存在，{}", productId);
+            logWrapper.recordInfoLog("商品不存在，productId：{}", productId);
             throw new BizException("商品不存在");
         }
 
@@ -105,7 +105,7 @@ public class ItemQueryService {
             productDetailDto.setProductActivity(ProductMapperExtension.toProductActivityDto(activityProduct));
             productDetailDto.setValidStart(activityProduct.getStartTime());
             productDetailDto.setValidEnd(activityProduct.getEndTime());
-            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(productDetailDto.getCatalogList(), activityProduct);
+            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(activityProduct);
             double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
             double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
             productDetailDto.getProductActivity().setMaxActivityPrice(max);
@@ -118,7 +118,7 @@ public class ItemQueryService {
         ActivityProducts nextActivityProduct = ProductActivityService.getNextProductActivity(activityProductsList, nextActivityExpire, activityProduct);
         if (nextActivityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
             productDetailDto.setNextActivity(ProductMapperExtension.toProductActivityDto(nextActivityProduct));
-            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(productDetailDto.getCatalogList(), nextActivityProduct);
+            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(nextActivityProduct);
             double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
             double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
             productDetailDto.getNextActivity().setMaxActivityPrice(max);
@@ -130,6 +130,7 @@ public class ItemQueryService {
 
     /**
      * 取秒杀商品的活动库存量
+     *
      * @param productId
      * @param activityId
      * @return
@@ -143,18 +144,18 @@ public class ItemQueryService {
         Products product = commonQueryService.getProductByProductId(productId);
         List<ActivityProducts> activityProductList = commonQueryService.getActivityProductListByProductIdList(productIdList);
 
-        if(product == null || activityProductList == null || activityProductList.isEmpty()) {
+        if (product == null || activityProductList == null || activityProductList.isEmpty()) {
             return null;
         }
 
         ActivityProducts activityProduct = activityProductList.stream()
-                .filter(a-> a.getActivityId() == activityId).findFirst().orElse(null);
+                .filter(a -> a.getActivityId() == activityId).findFirst().orElse(null);
 
-        if(activityProduct == null || activityProduct.getCatalogs() == null || activityProduct.getCatalogs().isEmpty()) {
+        if (activityProduct == null || activityProduct.getCatalogs() == null || activityProduct.getCatalogs().isEmpty()) {
             return null;
         }
 
-        activityProduct.getCatalogs().stream().forEach(c->{
+        activityProduct.getCatalogs().stream().forEach(c -> {
             SecKillProductActivityStockDto dto = new SecKillProductActivityStockDto();
             dto.setProductId(activityProduct.getProductId());
             dto.setActivityId(activityProduct.getActivityId());
@@ -170,13 +171,13 @@ public class ItemQueryService {
 
     /**
      * 取商品图文描述扩展信息
+     *
      * @param productId
      * @return
      */
-    public ProductDescExtraDto getProductDescExtra(String productId)
-    {
+    public ProductDescExtraDto getProductDescExtra(String productId) {
         ProductDescExtra descExtra = commonQueryService.getProductDescExtra(productId);
-        if(descExtra == null) {
+        if (descExtra == null) {
             return null;
         }
 
@@ -198,17 +199,17 @@ public class ItemQueryService {
 
     /**
      * 商品属性对象转换
+     *
      * @param descPropertyInfoList
      * @return
      */
-    private List<DescPropertyDto> getDescPropertyDtoList(List<ProductDescPropertyInfo> descPropertyInfoList)
-    {
-        if(descPropertyInfoList == null || descPropertyInfoList.isEmpty()) {
+    private List<DescPropertyDto> getDescPropertyDtoList(List<ProductDescPropertyInfo> descPropertyInfoList) {
+        if (descPropertyInfoList == null || descPropertyInfoList.isEmpty()) {
             return null;
         }
 
         List<DescPropertyDto> dtoList = new ArrayList<>();
-        descPropertyInfoList.stream().forEach(c->{
+        descPropertyInfoList.stream().forEach(c -> {
             DescPropertyDto dto = new DescPropertyDto();
             dto.setKey(c.getKey());
             dto.setValue(c.getValue());

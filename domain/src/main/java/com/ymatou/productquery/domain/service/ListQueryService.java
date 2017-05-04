@@ -3,6 +3,7 @@ package com.ymatou.productquery.domain.service;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
 import com.ymatou.productquery.model.BizException;
+import com.ymatou.productquery.model.req.CatalogDeliveryDto;
 import com.ymatou.productquery.model.res.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ public class ListQueryService {
     private ItemQueryService itemQueryService;
 
     /**
-     * 购物车中商品列表
+     * 购物车中商品列表(老版)
      *
      * @param catalogIds
      * @param tradeIsolation
@@ -48,7 +49,6 @@ public class ListQueryService {
         if (catalogsList == null || catalogsList.isEmpty()) {
             throw new BizException("规格不存在");
         }
-
         List<LiveProducts> liveProductsList = commonQueryService.getLiveProductListByProductId(pids);
         List<ActivityProducts> activityProductsList = commonQueryService.getActivityProductListByProductIdList(pids);
 
@@ -84,6 +84,35 @@ public class ListQueryService {
             productInCartDto.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart()
                     , product.getValidEnd(), liveProduct, activityProduct));
             productInCartDtoList.add(productInCartDto);
+        }
+        return productInCartDtoList;
+    }
+
+    /**
+     * 多物流的购物车商品列表
+     *
+     * @param catalogDeliveryDtoList
+     * @param tradeIsolation
+     * @return
+     */
+    public List<ProductInCartDto> getProductListFromShoppingCartDeliveryExtra(List<CatalogDeliveryDto> catalogDeliveryDtoList, boolean tradeIsolation) {
+        List<String> catalogids = catalogDeliveryDtoList.stream().map(t -> t.getCatalogId()).distinct().collect(Collectors.toList());
+        List<ProductInCartDto> productInCartDtoList = getProductListFromShoppingCart(catalogids, tradeIsolation);
+        if (productInCartDtoList != null && !productInCartDtoList.isEmpty()) {
+            List<String> extraDeliveryCatalogIds = catalogDeliveryDtoList.stream().filter(t -> t.getDeliveryType() > 0)
+                    .map(x -> x.getCatalogId()).distinct().collect(Collectors.toList());
+            if (extraDeliveryCatalogIds.isEmpty()) {
+                return productInCartDtoList;
+            }
+            productInCartDtoList.stream().forEach(t ->
+            {
+                CatalogDeliveryDto catalogDeliveryDto = catalogDeliveryDtoList.stream().filter(x -> x.getCatalogId()
+                        .equals(t.getCatalogId())).findAny().orElse(null);
+                if (extraDeliveryCatalogIds.contains(t.getCatalogId()) && catalogDeliveryDto != null && catalogDeliveryDto.getDeliveryType() == t.getExtraDeliveryType()) {
+                    t.setDeliveryMethod(t.getExtraDeliveryType());
+                    t.setPrice(t.getPrice() + t.getExtraDeliveryFee());
+                }
+            });
         }
         return productInCartDtoList;
     }
@@ -235,6 +264,7 @@ public class ListQueryService {
                 productDto.setActivityId(activityProduct.getActivityId());
                 productDto.setValidStart(activityProduct.getStartTime());
                 productDto.setValidEnd(activityProduct.getEndTime());
+                productDto.setMarketPrice(activityProduct.getMarketPrice());
             }
 
             // 取直播商品
