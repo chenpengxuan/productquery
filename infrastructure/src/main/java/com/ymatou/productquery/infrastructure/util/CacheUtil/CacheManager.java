@@ -103,6 +103,14 @@ public class CacheManager {
     }
 
     /**
+     * 获取活动商品缓存
+     * @return
+     */
+    public ConcurrentMap getActivityProductCacheContainer(){
+        return activityProductCacheContainer;
+    }
+
+    /**
      * 获取单个key的缓存
      *
      * @param cacheKey

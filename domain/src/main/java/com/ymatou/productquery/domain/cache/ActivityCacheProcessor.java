@@ -8,10 +8,12 @@ import com.ymatou.productquery.domain.model.cache.CacheActivityProductInfo;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductTimeStampRepository;
 import com.ymatou.productquery.infrastructure.util.CacheUtil.CacheManager;
+import com.ymatou.productquery.infrastructure.util.LogWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +30,51 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
 
     @Autowired
     private CacheManager cacheManager;
+
+    @Autowired
+    private LogWrapper logWrapper;
+
+    /**
+     * 初始化活动商品缓存
+     */
+    public int initActivityProductCache() {
+        List<CacheActivityProductInfo> activityProductList = productRepository.getValidActivityProductList().stream()
+                .map(x -> x.convertDtoToCacheData()).collect(Collectors.toList());
+        Map<String,CacheActivityProductInfo> cacheActivityProductInfoMap = activityProductList
+                .stream()
+                .collect(Collectors.toMap(CacheActivityProductInfo::getProductId, y -> y, (key1, key2) -> key2));
+
+        cacheManager.put(cacheActivityProductInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+        return activityProductList.size();
+    }
+
+    /**
+     * 添加活动商品增量信息
+     */
+    public void addNewestActivityProductCache() {
+        ConcurrentMap activityProductCache = cacheManager.getActivityProductCacheContainer();
+
+        List<String> cacheProductIdList = (List<String>) activityProductCache.keySet()
+                .stream().map(x -> x.toString()).collect(Collectors.toList());
+        List<String> validProductIdList = productRepository.getValidActivityProductIdList();
+
+        List<String> needReloadProductIdList = new ArrayList<>();
+        needReloadProductIdList.addAll(validProductIdList);
+        needReloadProductIdList.removeAll(cacheProductIdList);
+
+        //获取新增的mongo活动商品信息
+        List<ActivityProducts> newestActivityProductList = productRepository
+                .getActivityProductList(needReloadProductIdList);
+
+        //批量添加至缓存
+        Map tempMap = newestActivityProductList
+                .stream()
+                .collect(Collectors.toMap(ActivityProducts::getProductId, y -> y, (key1, key2) -> key2));
+
+        cacheManager.put(tempMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+
+        logWrapper.recordInfoLog("增量添加活动商品缓存已执行,新增{}条", newestActivityProductList.size());
+    }
 
     /**
      * 根据商品id列表获取活动商品信息列表

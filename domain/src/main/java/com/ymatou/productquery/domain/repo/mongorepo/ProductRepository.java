@@ -3,6 +3,7 @@ package com.ymatou.productquery.domain.repo.mongorepo;
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
+import com.ymatou.productquery.infrastructure.util.Tuple;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.ArraySlice;
 import org.mongodb.morphia.query.FindOptions;
@@ -10,9 +11,7 @@ import org.mongodb.morphia.query.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -265,5 +264,117 @@ public class ProductRepository extends MongoRepository {
                 .project("spid", true).asList();
 
         return activityProductList.stream().map(pid -> pid.getProductId()).collect(Collectors.toList());
+    }
+
+    /**
+     * 根据多个 商品编号查询活动商品列表
+     *
+     * @param productIdList
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductList(List<String> productIdList) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").in(productIdList)
+                .field("end").greaterThanOrEq(now).asList();
+    }
+
+    public List<ActivityProducts> getValidActivityProductList(){
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .project("_id",false)
+                .field("end").greaterThanOrEq(now).asList();
+    }
+
+    /**
+     * 根据productId查询活动商品
+     *
+     * @param productId
+     * @return
+     */
+    public List<ActivityProducts> getActivityProductByProductId(String productId) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").equal(productId)
+                .field("end").greaterThanOrEq(now).asList();
+    }
+
+    /**
+     * 根据productid查询正在进行的以及即将开始的活动
+     *
+     * @param productId
+     * @return
+     */
+    public Tuple<ActivityProducts, ActivityProducts> getValidAndNextActivityProductByProductId(String productId, int nextActivityExpire) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        ActivityProducts valid = datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").equal(productId)
+                .field("end").greaterThanOrEq(now)
+                .field("start").lessThanOrEq(now)
+                .get(limitOne);
+
+        ActivityProducts next = datastore.find(ActivityProducts.class).disableValidation()
+                .field("spid").equal(productId)
+                .field("start").greaterThan(now)
+                .order(Sort.ascending("start"))
+                .get(limitOne);
+        return new Tuple<>(valid, next);
+    }
+
+    /**
+     * 根据productid查询正在进行的以及即将开始的活动
+     *
+     * @param productIdList
+     * @param nextActivityExpire
+     * @return
+     */
+    public Map<String, Tuple<ActivityProducts, ActivityProducts>> getValidAndNextActivityProductByProductId(List<String> productIdList, int nextActivityExpire) {
+        Map<String, Tuple<ActivityProducts, ActivityProducts>> stringTupleMap = new HashMap<>();
+        productIdList.forEach(t -> stringTupleMap.put(t, getValidAndNextActivityProductByProductId(t, nextActivityExpire)));
+        return stringTupleMap;
+    }
+
+    /**
+     * 获取全部有效活动商品列表
+     *
+     * @return
+     */
+    public List<ActivityProducts> getAllValidActivityProductList() {
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .field("end").greaterThanOrEq(now)
+                .asList();
+    }
+
+    /**
+     * 获取全部有效的活动商品id列表
+     * @return
+     */
+    public List<String> getValidActivityProductIdList() {
+        Datastore datastore = this.getDataStore(this.dbName);
+        Date now = new Date();
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .project("spid",true)
+                .field("end").greaterThanOrEq(now)
+                .asList()
+                .stream().map(x -> x.getProductId()).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取新增活动商品信息列表
+     *
+     * @param newestProductInActivityId 最新
+     * @return
+     */
+    public List<ActivityProducts> getNewestActivityProductIdList(int newestProductInActivityId) {
+        Datastore datastore = this.getDataStore(this.dbName);
+        return datastore.find(ActivityProducts.class).disableValidation()
+                .field("inaid").greaterThan(newestProductInActivityId)
+                .asList();
     }
 }
