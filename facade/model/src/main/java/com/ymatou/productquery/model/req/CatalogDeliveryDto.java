@@ -1,9 +1,11 @@
 package com.ymatou.productquery.model.req;
 
+import com.ymatou.productquery.model.PrintFriendliness;
+
 /**
  * Created by zhangyong on 2017/5/3.
  */
-public class CatalogDeliveryDto {
+public class CatalogDeliveryDto extends PrintFriendliness {
     /// <summary>
     /// 规格编号
     /// </summary>

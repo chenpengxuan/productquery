@@ -23,7 +23,7 @@ public class ProductRepository extends MongoRepository {
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "YmtProducts";
+    private final static String dbName = "YmtProducts";
 
     private final FindOptions limitOne = new FindOptions().limit(1);
 
@@ -110,7 +110,7 @@ public class ProductRepository extends MongoRepository {
     public List<Catalogs> getCatalogListByCatalogIdList(List<String> catalogIdList) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(Catalogs.class).disableValidation()
-                .field("cid").equal(catalogIdList).asList();
+                .field("cid").in(catalogIdList).asList();
     }
 
     /**
@@ -280,11 +280,11 @@ public class ProductRepository extends MongoRepository {
                 .field("end").greaterThanOrEq(now).asList();
     }
 
-    public List<ActivityProducts> getValidActivityProductList(){
+    public List<ActivityProducts> getValidActivityProductList() {
         Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
-                .project("_id",false)
+                .project("_id", false)
                 .field("end").greaterThanOrEq(now).asList();
     }
 
@@ -353,13 +353,14 @@ public class ProductRepository extends MongoRepository {
 
     /**
      * 获取全部有效的活动商品id列表
+     *
      * @return
      */
     public List<String> getValidActivityProductIdList() {
         Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
-                .project("spid",true)
+                .project("spid", true)
                 .field("end").greaterThanOrEq(now)
                 .asList()
                 .stream().map(x -> x.getProductId()).collect(Collectors.toList());

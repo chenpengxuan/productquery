@@ -1,6 +1,7 @@
 package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.domain.model.cache.CacheProductInfo;
 import com.ymatou.productquery.domain.repo.mongorepo.*;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.req.CatalogDeliveryDto;
@@ -35,54 +36,51 @@ public class ListQueryService {
      */
     public List<ProductInCartDto> getProductListFromShoppingCart(List<String> catalogIds, boolean tradeIsolation) {
         List<ProductInCartDto> productInCartDtoList = new ArrayList<>();
-        List<String> pids = productRepository.getProductIdsByCatalogIds(catalogIds);
-        if (pids == null || pids.isEmpty()) {
+
+        List<CacheProductInfo> cacheProductInfoList = commonQueryService.getProductListByCatalogIdList(catalogIds);
+        if (cacheProductInfoList == null || cacheProductInfoList.isEmpty()) {
             return null;
         }
-
-        List<Products> productsList = commonQueryService.getProductListByProductIdList(pids);
-        if (productsList == null || productsList.isEmpty()) {
-            throw new BizException("商品不存在");
-        }
-
-        List<Catalogs> catalogsList = commonQueryService.getCatalogListByProductIdList(pids);
-        if (catalogsList == null || catalogsList.isEmpty()) {
-            throw new BizException("规格不存在");
-        }
+        List<String> pids = cacheProductInfoList.stream().map(t -> t.getProductId()).collect(Collectors.toList());
         List<LiveProducts> liveProductsList = commonQueryService.getLiveProductListByProductId(pids);
         List<ActivityProducts> activityProductsList = commonQueryService.getActivityProductListByProductIdList(pids);
 
-        ProductInCartDto productInCartDto;
         for (String catalogId : catalogIds) {
-            Catalogs catalog = catalogsList.stream().filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
-            String productId = catalog.getProductId();
-            Products product = productsList.stream().filter(t -> t.getProductId().equals(productId)).findFirst().orElse(null);
+            CacheProductInfo cacheProductInfo = cacheProductInfoList.stream().filter(t -> t.getCatalogsList().stream().map(s -> s.getCatalogId())
+                    .anyMatch(x -> x.equals(catalogId))).findFirst().orElse(null);
+            if (cacheProductInfo == null)
+                continue;
+            ProductInCartDto productInCartDto;
 
-            List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId().equals(productId)).collect(Collectors.toList());
-            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(tempActivityProductList, catalog);
-            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getCatalogs() != null)) {
+            List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId()
+                    .equals(cacheProductInfo.getProductId())).collect(Collectors.toList());
+            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(tempActivityProductList);
+
+            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getCatalogs() != null)
+                    && activityProduct.getCatalogs().stream().map(p -> p.getCatalogId()).anyMatch(t -> t.equals(catalogId))) {
                 ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream()
                         .filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
+
                 if (activityCatalogInfo != null && activityCatalogInfo.getActivityStock() > 0) {
-                    productInCartDto = ProductMapperExtension.toProductInCartDto(product, catalog, activityProduct, catalogsList);
+                    productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, activityProduct, catalogId);
                     productInCartDto.setProductActivity(ProductMapperExtension.toProductActivityCartDto(activityProduct));
                     productInCartDto.setValidStart(activityProduct.getStartTime());
                     productInCartDto.setValidEnd(activityProduct.getEndTime());
                 } else {
-                    productInCartDto = ProductMapperExtension.toProductInCartDto(product, catalog, null, catalogsList);
+                    productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId);
                 }
             } else {
-                productInCartDto = ProductMapperExtension.toProductInCartDto(product, catalog, null, catalogsList);
+                productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId);
             }
 
-            LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(productId)).findFirst().orElse(null);
+            LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(cacheProductInfo.getProductId())).findFirst().orElse(null);
             if (liveProduct != null) {
                 productInCartDto.setLiveProduct(ProductMapperExtension.toLiveProductCartDto(liveProduct));
                 productInCartDto.setValidStart(liveProduct.getStartTime());
                 productInCartDto.setValidEnd(liveProduct.getEndTime());
             }
-            productInCartDto.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart()
-                    , product.getValidEnd(), liveProduct, activityProduct));
+            productInCartDto.setStatus(ProductStatusService.getProductStatus(cacheProductInfo.getAction(), cacheProductInfo.getValidStart()
+                    , cacheProductInfo.getValidEnd(), liveProduct, activityProduct));
             productInCartDtoList.add(productInCartDto);
         }
         return productInCartDtoList;
@@ -251,7 +249,7 @@ public class ListQueryService {
 
             // 取活动商品
             List<ActivityProducts> activityProducts = activityProductList.stream().filter(c -> c.getProductId().equals(productId)).collect(Collectors.toList());
-            ActivityProducts activityProduct = getValidActivityProduct(activityProducts);
+            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
 
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
                 double minActivityPrice = getActivityPrice(productDto.getMinPrice(), activityProduct, "min");
@@ -276,7 +274,7 @@ public class ListQueryService {
             }
 
             // 验证商品售卖状态
-            productDto.setStatus(getProductStatus(product, activityProduct, liveProduct));
+            productDto.setStatus(ProductStatusService.getProductStatus(product.getAction(), product.getValidStart(), product.getValidEnd(), liveProduct, activityProduct));
 
             productDtoList.add(productDto);
         }
@@ -384,29 +382,6 @@ public class ListQueryService {
 
 
     /**
-     * 取有效的活动商品
-     *
-     * @param activityProductList
-     * @return
-     */
-    private ActivityProducts getValidActivityProduct(List<ActivityProducts> activityProductList) {
-        if (activityProductList == null || activityProductList.isEmpty()) {
-            return null;
-        }
-        Date now = new Date();
-        ActivityProducts activityProduct = activityProductList.stream()
-                .filter(c -> c.getStartTime().getTime() <= now.getTime() && c.getEndTime().getTime() >= now.getTime()).findFirst().orElse(null);
-
-        if (activityProduct != null && activityProduct.getCatalogs() != null && !activityProduct.getCatalogs().isEmpty()) {
-            int activityStock = activityProduct.getCatalogs().stream().collect(Collectors.summingInt(ActivityCatalogInfo::getActivityStock));
-            if (activityStock == 0) {
-                return null;
-            }
-        }
-        return activityProduct;
-    }
-
-    /**
      * 取活动价
      *
      * @param quotePrice
@@ -444,30 +419,5 @@ public class ListQueryService {
                         && c.getEndTime().getTime() >= date.getTime() && c.getSellStatus() == 1).findFirst().orElse(null);
     }
 
-    /**
-     * 取商品的销售状态
-     *
-     * @param product
-     * @param activityProduct
-     * @param liveProduct
-     * @return
-     */
-    private ProductStatusEnum getProductStatus(Products product, ActivityProducts activityProduct, LiveProducts liveProduct) {
-        if (product.getAction() == -1) {
-            return ProductStatusEnum.Deleted;
-        }
-
-        if (activityProduct != null) {
-            return ProductStatusEnum.Available;
-        }
-
-        if (liveProduct != null) {
-            return ProductStatusEnum.Available;
-        }
-
-        Date date = new Date();
-        return (product.getValidStart().getTime() <= date.getTime() && product.getValidEnd().getTime() >= date.getTime())
-                ? ProductStatusEnum.Available : ProductStatusEnum.Disable;
-    }
 
 }

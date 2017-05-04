@@ -20,7 +20,7 @@ public class HistoryProductRepository extends MongoRepository {
     @Resource(name = "historyProductMongoClient")
     private MongoClient mongoClient;
 
-    private final String dbName = "ProductHis";
+    private final static String dbName = "ProductHis";
 
     private final FindOptions limitOne = new FindOptions().limit(1);
 

@@ -16,42 +16,36 @@ import java.util.stream.Collectors;
 public class ProductActivityService {
 
     /**
-     * 取有效的活动商品
+     * 从商品活动列表中获取一个有效的活动策略
      *
-     * @param activityProductsList
-     * @param catalog
+     * @param activityProductList
      * @return
      */
-    public static ActivityProducts getValidProductActivity(List<ActivityProducts> activityProductsList, Catalogs catalog) {
-        ActivityProducts activityProducts = getValidProductActivity(activityProductsList);
-        if (activityProducts == null || catalog == null) {
-            return null;
-        }
-        ActivityCatalogInfo activityCatalogInfo = activityProducts.getCatalogs().stream().
-                filter(t -> t.getCatalogId().equals(catalog.getCatalogId())).findFirst().orElse(null);
-        if (activityCatalogInfo != null && activityCatalogInfo.getActivityStock() > 0) {
-            return activityProducts;
-        } else return null;
-    }
-
-    /**
-     * 从商品活动列表中获取最近开始的一个有效的活动策略
-     *
-     * @param activityProductsList
-     * @return
-     */
-    //// FIXME: 2017/4/13 注意排序效果
-    public static ActivityProducts getValidProductActivity(List<ActivityProducts> activityProductsList) {
-        if (activityProductsList == null || activityProductsList.isEmpty()) {
+    public static ActivityProducts getValidProductActivity(List<ActivityProducts> activityProductList) {
+        if (activityProductList == null || activityProductList.isEmpty()) {
             return null;
         }
         Date now = new Date();
-        List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> !t.getStartTime().after(now)
-                && !t.getEndTime().before(now)).collect(Collectors.toList());
-        return Collections.min(activityProducts, (o1, o2) ->
-                o1.getStartTime().compareTo(o2.getStartTime()));
+        ActivityProducts activityProduct = activityProductList.stream()
+                .filter(c -> c.getStartTime().getTime() <= now.getTime() && c.getEndTime().getTime() >= now.getTime()).findFirst().orElse(null);
+
+        if (activityProduct != null && activityProduct.getCatalogs() != null && !activityProduct.getCatalogs().isEmpty()) {
+            int activityStock = activityProduct.getCatalogs().stream().collect(Collectors.summingInt(ActivityCatalogInfo::getActivityStock));
+            if (activityStock == 0) {
+                return null;
+            }
+        }
+        return activityProduct;
     }
 
+    /**
+     * 取下一个即将开始的活动
+     *
+     * @param activityProductsList
+     * @param nextActivityExpire
+     * @param activityProduct
+     * @return
+     */
     public static ActivityProducts getNextProductActivity(List<ActivityProducts> activityProductsList, int nextActivityExpire, ActivityProducts activityProduct) {
         if (activityProduct != null) {
             return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())

@@ -4,7 +4,9 @@ import com.ymatou.productquery.facade.ProductQueryFacade;
 import com.ymatou.productquery.model.req.GetCatalogListByCatalogIdListRequest;
 import com.ymatou.productquery.model.req.GetCatalogListByTradeIsolationRequest;
 import com.ymatou.productquery.model.res.BaseResponseNetAdapter;
+import com.ymatou.productquery.model.res.ProductInCartDto;
 import com.ymatou.productquery.web.ProductQueryApplication;
+import org.apache.http.util.Asserts;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,7 +32,7 @@ public class GetCatalogListByCatalogIdListTest {
     public void testWithoutActivityOrLive() {
         List<String> catalogs = new ArrayList<>();
         catalogs.add("41e135e7-536c-46b2-9f89-8ce199f82517");
-//        catalogs.add("58aa4923-c05f-45f4-b9ee-dfb409eb709c");
+        catalogs.add("58aa4923-c05f-45f4-b9ee-dfb409eb709c");
 //        catalogs.add("673db9d9-1e5e-447e-b7df-935bf7d4c47a");
 
 
@@ -37,6 +40,7 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByCatalogIdList(request);
         assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 2);
     }
 
     @Test
@@ -50,6 +54,7 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByCatalogIdList(request);
         assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 3);
     }
 
     @Test
@@ -63,6 +68,7 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByCatalogIdList(request);
         assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 3);
     }
 
     @Test
@@ -74,6 +80,8 @@ public class GetCatalogListByCatalogIdListTest {
         GetCatalogListByTradeIsolationRequest request = new GetCatalogListByTradeIsolationRequest();
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
+        assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 3);
     }
 
     @Test
@@ -87,6 +95,7 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
         assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 3);
     }
 
     @Test
@@ -100,5 +109,6 @@ public class GetCatalogListByCatalogIdListTest {
         request.setCatalogIdList(catalogs);
         BaseResponseNetAdapter response = productQueryFacade.getCatalogListByTradeIsolation(request);
         assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 3);
     }
 }

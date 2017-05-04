@@ -1,11 +1,10 @@
 package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.domain.model.cache.CacheProductInfo;
 import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.infrastructure.util.Utils;
-import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.res.*;
-import org.apache.commons.beanutils.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +20,8 @@ import java.util.stream.Collectors;
  */
 public class ProductMapperExtension {
 
-    public static ProductInCartDto toProductInCartDto(Products product, Catalogs catalog, ActivityProducts activityProduct, List<Catalogs> catalogsList) {
+    public static ProductInCartDto toProductInCartDto(CacheProductInfo product, ActivityProducts activityProduct, String catalogId) {
+        Catalogs catalog = product.getCatalogsList().stream().filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
         ProductInCartDto result = new ProductInCartDto();
         result.setProductId(product.getProductId());
         result.setCatalogId(catalog.getCatalogId());
@@ -50,7 +50,7 @@ public class ProductMapperExtension {
         Tuple<Integer, Double> stockPrice = getCatalogStockAndPrice(catalog, activityProduct);
         result.setStockNum(stockPrice.first);
         result.setPrice(stockPrice.second);
-        result.setCatalogCount((int) catalogsList.stream().filter(t -> t.getProductId().equals(product.getProductId())).count());
+        result.setCatalogCount(product.getCatalogsList().size());
         result.setSku(catalog.getSku() == null ? "" : catalog.getSku());
         result.setPreSale(catalog.isPreSale());
         result.setPspProduct(product.isPspProduct());
@@ -255,11 +255,11 @@ public class ProductMapperExtension {
 
         List<PropertyDto> propertyDtoList = new ArrayList<>();
         propertyInfoList.forEach(t -> {
-                    PropertyDto prodto = new PropertyDto();
-                    prodto.setPropertyValue(t.getValue());
-                    prodto.setPropertyName(t.getName());
-                    prodto.setPropertyPictureUrl(t.getPic());
-                    propertyDtoList.add(prodto);
+                    PropertyDto propertyDto = new PropertyDto();
+                    propertyDto.setPropertyValue(t.getValue());
+                    propertyDto.setPropertyName(t.getName());
+                    propertyDto.setPropertyPictureUrl(t.getPic());
+                    propertyDtoList.add(propertyDto);
                 }
         );
 
@@ -296,7 +296,7 @@ public class ProductMapperExtension {
         productDto.setProductId(product.getProductId());
         productDto.setVersion(product.getVersion());
         productDto.setTitle(product.getTitle());
-        productDto.setMainPic(getProductFirstPicture(product.getPicList()));
+        productDto.setMainPic(product.getPicList() != null ? product.getPicList().stream().findFirst().orElse("") : "");
         productDto.setValidStart(product.getValidStart());
         productDto.setValidEnd(product.getValidEnd());
         productDto.setMinPrice(getPrice(product.getMinCatalogPrice()));
@@ -318,19 +318,6 @@ public class ProductMapperExtension {
         productDto.setOwnProduct(product.getOwnProduct() > 0);
 
         return productDto;
-    }
-
-    /**
-     * 取商品主图列表中的首图
-     *
-     * @param productPictureList
-     * @return
-     */
-    private static String getProductFirstPicture(List<String> productPictureList) {
-        if (productPictureList == null || productPictureList.isEmpty()) {
-            //Fixme : exception 商品没有首图异常。
-        }
-        return productPictureList.get(0);
     }
 
     /**

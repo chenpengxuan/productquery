@@ -83,7 +83,7 @@ public class ProductInListDto {
 
     // 售卖状态
     @JsonProperty("Status")
-    private ProductStatusEnum status;
+    private int status;
 
     // 是否新品
     @JsonProperty("IsNewProduct")
@@ -122,87 +122,227 @@ public class ProductInListDto {
     private double marketPrice;
 
 
-    public int getProdId() { return prodId;}
-    public void setProdId(int prodId){this.prodId = prodId;}
+    public int getProdId() {
+        return prodId;
+    }
 
-    public String getProductId(){return productId;}
-    public void setProductId(String productId){this.productId = productId;}
+    public void setProdId(int prodId) {
+        this.prodId = prodId;
+    }
 
-    public String getVersion(){return version;}
-    public void setVersion(String version){ this.version = version;}
+    public String getProductId() {
+        return productId;
+    }
 
-    public String getTitle(){return title;}
-    public void setTitle(String title) {this.title = title;}
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-    public String getMainPic(){return mainPic;}
-    public void setMainPic(String mainPic){this.mainPic = mainPic;}
+    public String getVersion() {
+        return version;
+    }
 
-    public Date getValidStart(){return validStart;}
-    public void setValidStart(Date validStart){this.validStart = validStart;}
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-    public Date getValidEnd(){return validEnd;}
-    public void setValidEnd(Date validEnd){this.validEnd = validEnd;}
+    public String getTitle() {
+        return title;
+    }
 
-    public double getMinPrice(){return minPrice;}
-    public void setMinPrice(double minPrice){this.minPrice = minPrice;}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public double getMaxPrice(){return maxPrice;}
-    public void setMaxPrice(double maxPrice){this.maxPrice = maxPrice;}
+    public String getMainPic() {
+        return mainPic;
+    }
 
-    public int getLiveId(){return liveId;}
-    public void setLiveId(int liveId){this.liveId = liveId;}
+    public void setMainPic(String mainPic) {
+        this.mainPic = mainPic;
+    }
 
-    public int getActivityId(){return activityId;}
-    public void setActivityId(int activityId){this.activityId = activityId;}
+    public Date getValidStart() {
+        return validStart;
+    }
 
-    public int getSellerId() {return sellerId;}
-    public void setSellerId(int sellerId){this.sellerId = sellerId;}
+    public void setValidStart(Date validStart) {
+        this.validStart = validStart;
+    }
 
-    public String getSellerName(){return sellerName;}
-    public void setSellerName(String sellerName){this.sellerName = sellerName;}
+    public Date getValidEnd() {
+        return validEnd;
+    }
 
-    public int getCountryId(){return countryId;}
-    public void setCountryId(int countryId){this.countryId = countryId;}
+    public void setValidEnd(Date validEnd) {
+        this.validEnd = validEnd;
+    }
 
-    public int getStock(){return stock;}
-    public void setStock(int stock){this.stock = stock;}
+    public double getMinPrice() {
+        return minPrice;
+    }
 
-    public int getTariffType(){return tariffType;}
-    public void setTariffType(int tariffType){this.tariffType = tariffType;}
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
+    }
 
-    public boolean getIsFreeShipping(){return isFreeShipping;}
-    public void isFreeShipping(boolean isFreeShipping) {this.isFreeShipping = isFreeShipping;}
+    public double getMaxPrice() {
+        return maxPrice;
+    }
 
-    public int getDeliveryMethod(){return deliveryMethod;}
-    public void setDeliveryMethod(int deliveryMethod){this.deliveryMethod = deliveryMethod;}
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
 
-    public ProductStatusEnum getStatus(){return status;}
-    public void setStatus( ProductStatusEnum status){this.status = status;}
+    public int getLiveId() {
+        return liveId;
+    }
 
-    public boolean getIsNewProduct(){return isNewProduct;}
-    public void isNewProduct(boolean isNewProduct) {this.isNewProduct = isNewProduct;}
+    public void setLiveId(int liveId) {
+        this.liveId = liveId;
+    }
 
-    public Date getNewStartTime(){return newStartTime;}
-    public void setNewStartTime(Date newStartTime){this.newStartTime = newStartTime;}
+    public int getActivityId() {
+        return activityId;
+    }
 
-    public Date getNewEndTime(){return newEndTime;}
-    public void setNewEndTime(Date newEndTime){this.newEndTime = newEndTime;}
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
+    }
 
-    public boolean getIsHotRecmd(){return isHotRecmd;}
-    public void setIsHotRecmd(boolean isHotRecmd){this.isHotRecmd = isHotRecmd;}
+    public int getSellerId() {
+        return sellerId;
+    }
 
-    public boolean getIsAnyPreSale(){return isAnyPreSale;}
-    public void isAnyPreSale(boolean isAnyPreSale){ this.isAnyPreSale = isAnyPreSale;}
+    public void setSellerId(int sellerId) {
+        this.sellerId = sellerId;
+    }
 
-    public boolean getIsAllPreSale(){return isAllPreSale;}
-    public void isAllPreSale(boolean isAllPreSale){this.isAllPreSale = isAllPreSale;}
+    public String getSellerName() {
+        return sellerName;
+    }
 
-    public boolean getIsPspProduct(){return isPspProduct;}
-    public void isPspProduct(boolean isPspProduct){this.isPspProduct = isPspProduct;}
+    public void setSellerName(String sellerName) {
+        this.sellerName = sellerName;
+    }
 
-    public boolean getOwnProduct(){return ownProduct;}
-    public void setOwnProduct(boolean ownProduct){ this.ownProduct = ownProduct;}
+    public int getCountryId() {
+        return countryId;
+    }
 
-    public double getMarketPrice(){return marketPrice;}
-    public void setMarketPrice(double marketPrice){this.marketPrice = marketPrice;}
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public int getTariffType() {
+        return tariffType;
+    }
+
+    public void setTariffType(int tariffType) {
+        this.tariffType = tariffType;
+    }
+
+    public boolean getIsFreeShipping() {
+        return isFreeShipping;
+    }
+
+    public void isFreeShipping(boolean isFreeShipping) {
+        this.isFreeShipping = isFreeShipping;
+    }
+
+    public int getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(int deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public boolean getIsNewProduct() {
+        return isNewProduct;
+    }
+
+    public void isNewProduct(boolean isNewProduct) {
+        this.isNewProduct = isNewProduct;
+    }
+
+    public Date getNewStartTime() {
+        return newStartTime;
+    }
+
+    public void setNewStartTime(Date newStartTime) {
+        this.newStartTime = newStartTime;
+    }
+
+    public Date getNewEndTime() {
+        return newEndTime;
+    }
+
+    public void setNewEndTime(Date newEndTime) {
+        this.newEndTime = newEndTime;
+    }
+
+    public boolean getIsHotRecmd() {
+        return isHotRecmd;
+    }
+
+    public void setIsHotRecmd(boolean isHotRecmd) {
+        this.isHotRecmd = isHotRecmd;
+    }
+
+    public boolean getIsAnyPreSale() {
+        return isAnyPreSale;
+    }
+
+    public void isAnyPreSale(boolean isAnyPreSale) {
+        this.isAnyPreSale = isAnyPreSale;
+    }
+
+    public boolean getIsAllPreSale() {
+        return isAllPreSale;
+    }
+
+    public void isAllPreSale(boolean isAllPreSale) {
+        this.isAllPreSale = isAllPreSale;
+    }
+
+    public boolean getIsPspProduct() {
+        return isPspProduct;
+    }
+
+    public void isPspProduct(boolean isPspProduct) {
+        this.isPspProduct = isPspProduct;
+    }
+
+    public boolean getOwnProduct() {
+        return ownProduct;
+    }
+
+    public void setOwnProduct(boolean ownProduct) {
+        this.ownProduct = ownProduct;
+    }
+
+    public double getMarketPrice() {
+        return marketPrice;
+    }
+
+    public void setMarketPrice(double marketPrice) {
+        this.marketPrice = marketPrice;
+    }
 }

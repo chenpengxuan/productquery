@@ -101,9 +101,9 @@ public class Products {
     @Property("own")
     private int ownProduct;//自营
     @Property("mdeliv")
-    private int ExtraDeliveryType;//是否支持多物流
+    private int extraDeliveryType;//是否支持多物流
     @Property("mflight")
-    private double ExtraDeliveryFee;
+    private double extraDeliveryFee;
 
     public int getProdId() {
         return prodId;
@@ -451,19 +451,19 @@ public class Products {
     }
 
     public int getExtraDeliveryType() {
-        return ExtraDeliveryType;
+        return extraDeliveryType;
     }
 
     public void setExtraDeliveryType(int extraDeliveryType) {
-        ExtraDeliveryType = extraDeliveryType;
+        this.extraDeliveryType = extraDeliveryType;
     }
 
     public double getExtraDeliveryFee() {
-        return ExtraDeliveryFee;
+        return extraDeliveryFee;
     }
 
     public void setExtraDeliveryFee(double extraDeliveryFee) {
-        ExtraDeliveryFee = extraDeliveryFee;
+        this.extraDeliveryFee = extraDeliveryFee;
     }
 
     public int getOwnProduct() {

@@ -10,6 +10,16 @@ import java.util.Date;
  * Created by zhangyong on 2017/4/13.
  */
 public class ProductStatusService {
+    /**
+     * 取商品的销售状态
+     *
+     * @param action
+     * @param validStart
+     * @param validEnd
+     * @param liveProduct
+     * @param activityProduct
+     * @return
+     */
     public static int getProductStatus(int action, Date validStart, Date validEnd, LiveProducts liveProduct, ActivityProducts activityProduct) {
         if (action == -1) {
             return ProductStatusEnum.Deleted.getCode();

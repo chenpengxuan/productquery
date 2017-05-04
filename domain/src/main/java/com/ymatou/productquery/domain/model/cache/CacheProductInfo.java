@@ -3,6 +3,7 @@ package com.ymatou.productquery.domain.model.cache;
 import com.ymatou.productquery.domain.model.Catalogs;
 import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.util.Utils;
+import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
 import java.util.List;
@@ -125,12 +126,12 @@ public class CacheProductInfo extends BaseCacheInfo{
     /**
      * 是否包税
      */
-    private int isTariffy;	
+    private int tariffType;
 
     /**
      * 是否包邮
      */
-    private int isShipping;	
+    private int isFreeShipping;
 
     /**
      * 国家编号
@@ -217,6 +218,11 @@ public class CacheProductInfo extends BaseCacheInfo{
      */
     private List<String> sizePicList;
 
+    private int ownProduct;//自营
+
+    private int extraDeliveryType;//是否支持多物流
+
+    private double extraDeliveryFee;
     /**
      * 规格列表
      */
@@ -398,20 +404,20 @@ public class CacheProductInfo extends BaseCacheInfo{
         this.bondedArea = bondedArea;
     }
 
-    public int getIsTariffy() {
-        return isTariffy;
+    public int getTariffType() {
+        return tariffType;
     }
 
-    public void setIsTariffy(int isTariffy) {
-        this.isTariffy = isTariffy;
+    public void setTariffType(int tariffType) {
+        this.tariffType = tariffType;
     }
 
-    public int getIsShipping() {
-        return isShipping;
+    public int getIsFreeShipping() {
+        return isFreeShipping;
     }
 
-    public void setIsShipping(int isShipping) {
-        this.isShipping = isShipping;
+    public void setIsFreeShipping(int isFreeShipping) {
+        this.isFreeShipping = isFreeShipping;
     }
 
     public int getCountryId() {
@@ -556,6 +562,30 @@ public class CacheProductInfo extends BaseCacheInfo{
 
     public void setCatalogsList(List<Catalogs> catalogsList) {
         this.catalogsList = catalogsList;
+    }
+
+    public int getOwnProduct() {
+        return ownProduct;
+    }
+
+    public void setOwnProduct(int ownProduct) {
+        this.ownProduct = ownProduct;
+    }
+
+    public int getExtraDeliveryType() {
+        return extraDeliveryType;
+    }
+
+    public void setExtraDeliveryType(int extraDeliveryType) {
+        this.extraDeliveryType = extraDeliveryType;
+    }
+
+    public double getExtraDeliveryFee() {
+        return extraDeliveryFee;
+    }
+
+    public void setExtraDeliveryFee(double extraDeliveryFee) {
+        this.extraDeliveryFee = extraDeliveryFee;
     }
 
     /**
