@@ -43,7 +43,7 @@ public class Catalogs {
     private int stock;//	规格库存
 
     @Property("mdeliv")
-    private int ExtraDelivery;//规格多物流类型
+    private int extraDeliveryType;//规格多物流类型
 
     private List<PropertyInfo> props;//	规格属性列表
 
@@ -143,11 +143,11 @@ public class Catalogs {
         this.updateTime = updateTime;
     }
 
-    public int getExtraDelivery() {
-        return ExtraDelivery;
+    public int getExtraDeliveryType() {
+        return extraDeliveryType;
     }
 
-    public void setExtraDelivery(int extraDelivery) {
-        ExtraDelivery = extraDelivery;
+    public void setExtraDeliveryType(int extraDeliveryType) {
+        this.extraDeliveryType = extraDeliveryType;
     }
 }

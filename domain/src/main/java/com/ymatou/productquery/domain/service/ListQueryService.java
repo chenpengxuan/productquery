@@ -106,9 +106,14 @@ public class ListQueryService {
             {
                 CatalogDeliveryDto catalogDeliveryDto = catalogDeliveryDtoList.stream().filter(x -> x.getCatalogId()
                         .equals(t.getCatalogId())).findAny().orElse(null);
-                if (extraDeliveryCatalogIds.contains(t.getCatalogId()) && catalogDeliveryDto != null && catalogDeliveryDto.getDeliveryType() == t.getExtraDeliveryType()) {
-                    t.setDeliveryMethod(t.getExtraDeliveryType());
-                    t.setPrice(t.getPrice() + t.getExtraDeliveryFee());
+                //符合多物流
+                if (extraDeliveryCatalogIds.contains(t.getCatalogId()) && catalogDeliveryDto != null) {
+                    if (catalogDeliveryDto.getDeliveryType() == t.getExtraDeliveryType()) {
+                        t.setDeliveryMethod(t.getExtraDeliveryType());
+                        t.setPrice(t.getPrice() + t.getExtraDeliveryFee());
+                    } else if (catalogDeliveryDto.getDeliveryType() != t.getDeliveryMethod()) {
+                        t.setStatus(ProductStatusEnum.Disable.getCode());
+                    }
                 }
             });
         }

@@ -28,6 +28,14 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Autowired
     private ItemQueryService itemQueryService;
 
+    @GET
+    @Path("/warmup")
+    @Produces(MediaType.TEXT_HTML)
+    @Override
+    public String warmup() {
+        return "ok";
+    }
+
     /**
      * 购物车中商品列表（普通购物车中用）
      *
@@ -318,7 +326,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     }
 
     /**
-     * 取秒杀商品的活动库存量
+     * 取商品新图文描述
      *
      * @param request
      * @return

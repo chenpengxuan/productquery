@@ -49,6 +49,21 @@ public class GetCatalogListByDeliveryExtraTest {
 
     @Test
     public void testMultiLogistics() {
+        List<CatalogDeliveryDto> catalogs = new ArrayList<>();
+        CatalogDeliveryDto catalogDeliveryDto1 = new CatalogDeliveryDto();
+        catalogDeliveryDto1.setCatalogId("41e135e7-536c-46b2-9f89-8ce199f82517");
+        catalogDeliveryDto1.setDeliveryType(3);
+        catalogs.add(catalogDeliveryDto1);
+        CatalogDeliveryDto catalogDeliveryDto2 = new CatalogDeliveryDto();
+        catalogDeliveryDto2.setCatalogId("58aa4923-c05f-45f4-b9ee-dfb409eb709c");
+        catalogDeliveryDto2.setDeliveryType(3);
+        catalogs.add(catalogDeliveryDto2);
+
+        GetCatalogListByDeliveryExtraRequest request = new GetCatalogListByDeliveryExtraRequest();
+        request.setCatalogIdList(catalogs);
+        BaseResponseNetAdapter response = productQueryFacade.getCatalogListByDeliveryExtra(request);
+        assertEquals(200, response.getCode());
+        assertEquals(((List<ProductInCartDto>) ((Map) response.getData()).get("ProductList")).size(), 2);
     }
 
 }

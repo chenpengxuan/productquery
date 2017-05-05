@@ -57,7 +57,7 @@ public class ProductMapperExtension {
         result.setProperties(getCatalogPropertyList(catalog.getProps()));
         result.setOwnProduct(product.getOwnProduct() > 0);
         result.setExtraDeliveryFee(product.getExtraDeliveryFee());
-        result.setExtraDeliveryType(product.getExtraDeliveryType());
+        result.setExtraDeliveryType(getExtraDeliveryType(product.getExtraDeliveryType(), product.getCatalogsList(), catalogId));
         return result;
     }
 
@@ -194,7 +194,7 @@ public class ProductMapperExtension {
         {
             CatalogDto catalogDto = new CatalogDto();
             Utils.copyProperties(catalogDto, t);
-            catalogDto.setExtraDelivery(t.getExtraDelivery() > 0);
+            catalogDto.setExtraDelivery(t.getExtraDeliveryType() > 0);
             if (activityProduct != null) {
                 ActivityCatalogInfo activityCatalogInfo = activityProduct.getCatalogs().stream().
                         filter(x -> x.getCatalogId().equals(t.getCatalogId())).findFirst().orElse(null);
@@ -389,5 +389,20 @@ public class ProductMapperExtension {
             return false;
         }
         return catalogs.stream().allMatch(c -> c.isPreSale());
+    }
+
+    /**
+     * 验证规格是否支持多物流
+     *
+     * @param extraDeliveryType
+     * @param catalogs
+     * @param catalogId
+     * @return
+     */
+    private static int getExtraDeliveryType(int extraDeliveryType, List<Catalogs> catalogs, String catalogId) {
+        if (extraDeliveryType == 0 || catalogs == null || catalogs.isEmpty())
+            return 0;
+        Catalogs catalog = catalogs.stream().filter(t -> t.getCatalogId().equals(catalogId)).findAny().orElse(null);
+        return catalog != null && catalog.getExtraDeliveryType() > 0 ? extraDeliveryType : 0;
     }
 }
