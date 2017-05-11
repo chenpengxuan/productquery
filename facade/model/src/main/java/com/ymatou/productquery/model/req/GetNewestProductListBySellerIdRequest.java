@@ -1,19 +1,19 @@
 package com.ymatou.productquery.model.req;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.ws.rs.QueryParam;
 
 /**
  * Created by zhujinfeng on 2017/5/2.
  */
 public class GetNewestProductListBySellerIdRequest extends BaseRequest {
 
-    @JsonProperty("SellerId")
+    @QueryParam("SellerId")
     private int sellerId;
 
-    @JsonProperty("CurPage")
+    @QueryParam("CurPage")
     private int curPage;
 
-    @JsonProperty("PageSize")
+    @QueryParam("PageSize")
     private int pageSize;
 
     public int getSellerId() {

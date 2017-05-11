@@ -1,8 +1,8 @@
 package com.ymatou.productquery.model.req;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class GetSellerRecommendProductListRequest extends BaseRequest {
 
-    @JsonProperty("SellerIdList")
+    @QueryParam("SellerIdList")
     @NotEmpty(message="买手ID不能为空")
     private List<Integer> sellerIdList;
 

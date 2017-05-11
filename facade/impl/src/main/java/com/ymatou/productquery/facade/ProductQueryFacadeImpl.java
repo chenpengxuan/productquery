@@ -265,7 +265,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetNewestProductListBySellerId:(?i:GetNewestProductListBySellerId)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getNewestProductList(GetNewestProductListBySellerIdRequest request) {
+    public BaseResponseNetAdapter getNewestProductList(@BeanParam GetNewestProductListBySellerIdRequest request) {
         List<ProductInListDto> productDtoList = listQueryService
                 .getNewestProductListBySellerId(request.getSellerId(), request.getCurPage(), request.getPageSize());
         Map<String, Object> productList = new HashMap<>();
@@ -283,7 +283,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetHotRecmdProductListBySellerId:(?i:GetHotRecmdProductListBySellerId)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getHotRecmdProductListBySellerId(GetHotRecmdProductListBySellerIdRequest request) {
+    public BaseResponseNetAdapter getHotRecmdProductListBySellerId(@BeanParam GetHotRecmdProductListBySellerIdRequest request) {
         List<ProductInListDto> productDtoList = listQueryService.getHotRecmdProductListBySellerId(request.getSellerId());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
@@ -301,7 +301,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetSellerRecommendProductList:(?i:GetSellerRecommendProductList)}")
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
-    public BaseResponseNetAdapter getSellerRecommendProductList(GetSellerRecommendProductListRequest request) {
+    public BaseResponseNetAdapter getSellerRecommendProductList(@BeanParam GetSellerRecommendProductListRequest request) {
         List<RecmdProductIdDto> productDtoList = listQueryService.getSellerRecommendProductList(request.getSellerIdList());
         Map<String, Object> productList = new HashMap<>();
         productList.put("ProductList", productDtoList);
@@ -318,7 +318,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetSecKillProductActivityStock:(?i:GetSecKillProductActivityStock)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getSecKillProductActivityStock(GetSecKillProductActivityStockRequest request) {
+    public BaseResponseNetAdapter getSecKillProductActivityStock(@BeanParam GetSecKillProductActivityStockRequest request) {
         List<SecKillProductActivityStockDto> stockDtoList = itemQueryService.getSecKillProductActivityStockList(request.getProductId(), request.getActivityId());
         Map<String, Object> stockList = new HashMap<>();
         stockList.put("StockList", stockDtoList);
@@ -335,7 +335,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
     @GET
     @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetProductDescExtraByProductId:(?i:GetProductDescExtraByProductId)}")
     @Produces({MediaType.APPLICATION_JSON})
-    public BaseResponseNetAdapter getProductDescExtraByProductId(GetProductDescExtraByProductIdRequest request) {
+    public BaseResponseNetAdapter getProductDescExtraByProductId(@BeanParam GetProductDescExtraByProductIdRequest request) {
         ProductDescExtraDto descExtraDto = itemQueryService.getProductDescExtra(request.getProductId());
         Map<String, Object> descExtra = new HashMap<>();
         descExtra.put("ProductDescExtra", descExtraDto);

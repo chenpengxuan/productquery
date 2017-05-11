@@ -1,16 +1,16 @@
 package com.ymatou.productquery.model.req;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.ws.rs.QueryParam;
 
 /**
  * Created by zhujinfeng on 2017/5/2.
  */
 public class GetSecKillProductActivityStockRequest extends BaseRequest {
 
-    @JsonProperty("ProductId")
+    @QueryParam("ProductId")
     private String productId;
 
-    @JsonProperty("ActivityId")
+    @QueryParam("ActivityId")
     private int activityId;
 
     public String getProductId() {

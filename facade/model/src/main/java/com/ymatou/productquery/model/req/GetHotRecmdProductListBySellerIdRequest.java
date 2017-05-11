@@ -1,13 +1,13 @@
 package com.ymatou.productquery.model.req;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.ws.rs.QueryParam;
 
 /**
  * Created by zhujinfeng on 2017/5/2.
  */
 public class GetHotRecmdProductListBySellerIdRequest extends BaseRequest {
 
-    @JsonProperty("SellerId")
+    @QueryParam("SellerId")
     private int sellerId;
 
     public int getSellerId(){return sellerId;}
