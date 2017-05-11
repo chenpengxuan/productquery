@@ -294,7 +294,7 @@ public class ProductMapperExtension {
 
         productDto.setProdId(product.getProdId());
         productDto.setProductId(product.getProductId());
-        productDto.setVersion(product.getVersion());
+        productDto.setVersion(getSnapshotVersion(product.getVersion()));
         productDto.setTitle(product.getTitle());
         productDto.setMainPic(product.getPicList() != null ? product.getPicList().stream().findFirst().orElse("") : "");
         productDto.setValidStart(product.getValidStart());
