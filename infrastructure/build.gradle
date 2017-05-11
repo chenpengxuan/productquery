@@ -25,8 +25,8 @@ dependencies {
 
     compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
-    compile "org.jboss.resteasy:resteasy-jaxrs:${resteasyJaxrsVersion}"
-    compile "org.jboss.resteasy:resteasy-client:${resteasyJaxrsVersion}"
+//    compile "org.jboss.resteasy:resteasy-jaxrs:${resteasyJaxrsVersion}"
+//    compile "org.jboss.resteasy:resteasy-client:${resteasyJaxrsVersion}"
 
     compile "org.apache.httpcomponents:httpclient:${httpclientVersion}"
     compile "org.apache.httpcomponents:httpcore:${httpcoreVersion}"
