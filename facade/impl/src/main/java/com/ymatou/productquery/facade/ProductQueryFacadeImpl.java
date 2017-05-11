@@ -263,7 +263,7 @@ public class ProductQueryFacadeImpl implements ProductQueryFacade {
      */
     @Override
     @GET
-    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetNewestProductList:(?i:GetNewestProductList)}")
+    @Path("/{api:(?i:api)}/{Product:(?i:Product)}/{GetNewestProductListBySellerId:(?i:GetNewestProductListBySellerId)}")
     @Produces({MediaType.APPLICATION_JSON})
     public BaseResponseNetAdapter getNewestProductList(GetNewestProductListBySellerIdRequest request) {
         List<ProductInListDto> productDtoList = listQueryService
