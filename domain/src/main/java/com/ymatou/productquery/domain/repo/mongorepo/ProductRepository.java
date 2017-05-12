@@ -209,7 +209,7 @@ public class ProductRepository extends MongoRepository {
                 .field("newstart").lessThanOrEq(now)
                 .field("newend").greaterThanOrEq(now)
                 .order(Sort.descending("newstart"))
-                .project("spid", true).asList();
+                .project("spid", true).asList(options);
 
         return productList.stream().map(pid -> pid.getProductId()).collect(Collectors.toList());
     }
