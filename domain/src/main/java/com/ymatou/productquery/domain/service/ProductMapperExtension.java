@@ -6,10 +6,7 @@ import com.ymatou.productquery.infrastructure.util.Tuple;
 import com.ymatou.productquery.infrastructure.util.Utils;
 import com.ymatou.productquery.model.res.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 /**
  * Created by zhangyong on 2017/4/11.
@@ -20,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class ProductMapperExtension {
 
-    public static ProductInCartDto toProductInCartDto(CacheProductInfo product, ActivityProducts activityProduct, String catalogId) {
+    public static ProductInCartDto toProductInCartDto(CacheProductInfo product, ActivityProducts activityProduct, String catalogId, Map<String, Integer> catalogListCountMap) {
         Catalogs catalog = product.getCatalogsList().stream().filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
         ProductInCartDto result = new ProductInCartDto();
         result.setProductId(product.getProductId());
@@ -50,7 +47,7 @@ public class ProductMapperExtension {
         Tuple<Integer, Double> stockPrice = getCatalogStockAndPrice(catalog, activityProduct);
         result.setStockNum(stockPrice.first);
         result.setPrice(stockPrice.second);
-        result.setCatalogCount(product.getCatalogsList().size());
+        result.setCatalogCount(catalogListCountMap != null && catalogListCountMap.get(result.getProductId()) != null ? catalogListCountMap.get(result.getProductId()) : 0);
         result.setSku(catalog.getSku() == null ? "" : catalog.getSku());
         result.setPreSale(catalog.isPreSale());
         result.setPspProduct(product.isPspProduct());

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * Created by chenpengxuan on 2017/4/28.
  */
 @Component("catalogCacheProcessor")
-public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProductInfo>{
+public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs, CacheProductInfo> {
     @Autowired
     private CacheManager cacheManager;
 
@@ -31,11 +31,12 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
 
     /**
      * 根据规格id列表获取规格信息
+     *
      * @param catalogIdList
      * @return
      */
-    public List<Catalogs> getCatalogListByCatalogIdList(List<String> catalogIdList){
-        if(catalogIdList != null && !catalogIdList.isEmpty()){
+    public List<Catalogs> getCatalogListByCatalogIdList(List<String> catalogIdList) {
+        if (catalogIdList != null && !catalogIdList.isEmpty()) {
             catalogIdList.removeAll(Collections.singleton(null));
             catalogIdList = catalogIdList.stream().distinct().collect(Collectors.toList());
         }
@@ -43,17 +44,17 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
 
         List<CacheProductInfo> cacheProductInfoList = Lists.newArrayList
                 (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.PRODUCT).values())
-                .stream().map(x -> ((CacheProductInfo)x)).collect(Collectors.toList());
+                .stream().map(x -> ((CacheProductInfo) x)).collect(Collectors.toList());
 
         List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
-                .getTimeStampByProductIds(productIdList,Arrays.asList("cut"));
+                .getTimeStampByProductIds(productIdList, Arrays.asList("cut"));
 
-        Map<String,Date> productTimeStampMap = new HashMap<>();
-        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(),x.getProductUpdateTime()));
+        Map<String, Date> productTimeStampMap = new HashMap<>();
+        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getProductUpdateTime()));
 
-        List<Catalogs> result = processCacheInfo(catalogIdList,cacheProductInfoList,productTimeStampMap);
+        List<Catalogs> result = processCacheInfo(catalogIdList, cacheProductInfoList, productTimeStampMap);
 
-        if(result != null && result.isEmpty()){
+        if (result != null && result.isEmpty()) {
             List<String> tempCatalogIdList = catalogIdList;
             return result.stream().filter(x -> tempCatalogIdList.contains(x.getCatalogId())).collect(Collectors.toList());
         }
@@ -61,22 +62,65 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
     }
 
     /**
+     * 根据规格id列表获取对应的每个商品的规格数量
+     * @param catalogIdList
+     * @return
+     */
+    public Map<String,Integer> getCatalogNumByCatalogIdList(List<String> catalogIdList){
+        Map<String,Integer> result = new HashMap<>();
+
+        if (catalogIdList != null && !catalogIdList.isEmpty()) {
+            catalogIdList.removeAll(Collections.singleton(null));
+            catalogIdList = catalogIdList.stream().distinct().collect(Collectors.toList());
+        }
+        List<String> productIdList = productRepository.getProductIdsByCatalogIds(catalogIdList);
+        List<CacheProductInfo> cacheProductInfoList = Lists.newArrayList
+                (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.PRODUCT).values())
+                .stream().map(x -> ((CacheProductInfo) x)).collect(Collectors.toList());
+        List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
+                .getTimeStampByProductIds(productIdList, Arrays.asList("cut"));
+
+        List<String> needReloadProductIdList = new ArrayList<>();
+        if(cacheProductInfoList == null || cacheProductInfoList.isEmpty()){
+            needReloadProductIdList.addAll(productIdList);
+        }
+        else{
+            Map<String, Date> productTimeStampMap = new HashMap<>();
+            productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getProductUpdateTime()));
+
+            List<Catalogs> validCatalogList = filterValidCache(cacheProductInfoList,productTimeStampMap);
+
+            List<String> validProductIdList = validCatalogList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+
+            needReloadProductIdList.addAll(productIdList);
+            needReloadProductIdList.removeAll(validProductIdList);
+
+            validCatalogList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,val) -> result.put(key,val.size()));
+        }
+
+        result.putAll(productRepository.getCatalogCountList(needReloadProductIdList));
+
+        return result;
+    }
+
+    /**
      * 根据商品id列表获取规格列表
+     *
      * @param productIdList
      * @return
      */
-    public List<Catalogs> getCatalogListByProductIdList(List<String> productIdList){
+    public List<Catalogs> getCatalogListByProductIdList(List<String> productIdList) {
         List<CacheProductInfo> cacheProductInfoList = Lists.newArrayList
                 (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.PRODUCT).values())
-                .stream().map(x -> ((CacheProductInfo)x)).collect(Collectors.toList());
+                .stream().map(x -> ((CacheProductInfo) x)).collect(Collectors.toList());
 
         List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
-                .getTimeStampByProductIds(productIdList,Arrays.asList("cut"));
+                .getTimeStampByProductIds(productIdList, Arrays.asList("cut"));
 
-        Map<String,Date> productTimeStampMap = new HashMap<>();
-        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(),x.getProductUpdateTime()));
+        Map<String, Date> productTimeStampMap = new HashMap<>();
+        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getProductUpdateTime()));
 
-        return processCacheInfo(productIdList,cacheProductInfoList,productTimeStampMap);
+        return processCacheInfo(productIdList, cacheProductInfoList, productTimeStampMap);
     }
 
     @Override
@@ -86,23 +130,23 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
 
     @Override
     protected List<Catalogs> processNoneCache(List<String> productIdList) {
-        if(productIdList != null && !productIdList.isEmpty()){
+        if (productIdList != null && !productIdList.isEmpty()) {
             productIdList.removeAll(Collections.singleton(null));
             productIdList = productIdList.stream().distinct().collect(Collectors.toList());
         }
 
         List<Catalogs> cacheCatalogInfoList = productRepository.getCatalogListByProductIdList(productIdList);
-        if(cacheCatalogInfoList != null && !cacheCatalogInfoList.isEmpty()){
-            Map<String,CacheProductInfo> cacheProductInfoMap = new HashMap<>();
-            cacheCatalogInfoList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,list)->{
+        if (cacheCatalogInfoList != null && !cacheCatalogInfoList.isEmpty()) {
+            Map<String, CacheProductInfo> cacheProductInfoMap = new HashMap<>();
+            cacheCatalogInfoList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key, list) -> {
                 CacheProductInfo cacheProductInfo = new CacheProductInfo();
                 cacheProductInfo.setCatalogsList(list);
 
-                cacheProductInfoMap.put(key,cacheProductInfo);
+                cacheProductInfoMap.put(key, cacheProductInfo);
             });
 
-            cacheManager.put(cacheProductInfoMap, CacheManager.CacheInfoTypeEnum.PRODUCT);
-
+            //针对规格的缓存只用不写
+            //cacheManager.put(cacheProductInfoMap, CacheManager.CacheInfoTypeEnum.PRODUCT);
             return cacheCatalogInfoList;
         }
         return null;
@@ -126,17 +170,16 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs,CacheProd
             if (reloadCatalogList != null && !reloadCatalogList.isEmpty()) {
                 Map<String, CacheProductInfo> cacheInfoMap = new HashMap<>();
 
-                reloadCatalogList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,rcList) -> {
+                reloadCatalogList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key, rcList) -> {
                     CacheProductInfo tempCacheProductInfo = cacheInfoList.stream().filter(x -> x.getProductId().equals(key))
                             .findAny().orElse(null);
 
-                    if(tempCacheProductInfo == null){
+                    if (tempCacheProductInfo == null) {
                         tempCacheProductInfo = new CacheProductInfo();
                     }
                     tempCacheProductInfo.setCatalogsList(rcList);
-                    cacheInfoMap.put(key,tempCacheProductInfo);
+                    cacheInfoMap.put(key, tempCacheProductInfo);
                 });
-                cacheManager.put(cacheInfoMap, CacheManager.CacheInfoTypeEnum.PRODUCT);
 
                 result.addAll(reloadCatalogList);
             }

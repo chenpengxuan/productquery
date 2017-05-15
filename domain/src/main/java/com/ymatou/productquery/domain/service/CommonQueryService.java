@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -56,6 +57,20 @@ public class CommonQueryService {
             return productCacheProcessor.getProductInfoByProductIdList(productIdList);
         } else {
             return productRepository.getProductListByProductIdList(productIdList);
+        }
+    }
+
+    /**
+     * 根据规格id列表获取对应的每个商品的规格数量
+     * @param catalogIdList
+     * @return
+     */
+    public Map<String,Integer> getCatalogNumByCatalogIdList(List<String> catalogIdList) {
+        if(bizProps.isUseCache()){
+            return catalogCacheProcessor.getCatalogNumByCatalogIdList(catalogIdList);
+        }else{
+            List<String> productIdList = productRepository.getProductIdsByCatalogIds(catalogIdList);
+            return productRepository.getCatalogCountList(productIdList);
         }
     }
 

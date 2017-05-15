@@ -3,7 +3,6 @@ package com.ymatou.productquery.domain.model.cache;
 import com.ymatou.productquery.domain.model.Catalogs;
 import com.ymatou.productquery.domain.model.Products;
 import com.ymatou.productquery.infrastructure.util.Utils;
-import org.mongodb.morphia.annotations.Property;
 
 import java.util.Date;
 import java.util.List;
@@ -223,10 +222,13 @@ public class CacheProductInfo extends BaseCacheInfo{
     private int extraDeliveryType;//是否支持多物流
 
     private double extraDeliveryFee;
+
     /**
      * 规格列表
      */
     private List<Catalogs> catalogsList;
+
+
 
     public int getProdId() {
         return prodId;

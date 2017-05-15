@@ -41,6 +41,7 @@ public class ListQueryService {
         if (cacheProductInfoList == null || cacheProductInfoList.isEmpty()) {
             return null;
         }
+
         List<String> pids = cacheProductInfoList.stream().map(t -> t.getProductId()).collect(Collectors.toList());
         List<LiveProducts> liveProductsList = commonQueryService.getLiveProductListByProductId(pids);
         List<ActivityProducts> activityProductsList = commonQueryService.getActivityProductListByProductIdList(pids);
@@ -48,9 +49,12 @@ public class ListQueryService {
         for (String catalogId : catalogIds) {
             CacheProductInfo cacheProductInfo = cacheProductInfoList.stream().filter(t -> t.getCatalogsList().stream().map(s -> s.getCatalogId())
                     .anyMatch(x -> x.equals(catalogId))).findFirst().orElse(null);
+
             if (cacheProductInfo == null)
                 continue;
+
             ProductInCartDto productInCartDto;
+            Map<String,Integer> productCatalogNumMap = commonQueryService.getCatalogNumByCatalogIdList(catalogIds);
 
             List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId()
                     .equals(cacheProductInfo.getProductId())).collect(Collectors.toList());
@@ -62,15 +66,15 @@ public class ListQueryService {
                         .filter(t -> t.getCatalogId().equals(catalogId)).findFirst().orElse(null);
 
                 if (activityCatalogInfo != null && activityCatalogInfo.getActivityStock() > 0) {
-                    productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, activityProduct, catalogId);
+                    productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, activityProduct, catalogId,productCatalogNumMap);
                     productInCartDto.setProductActivity(ProductMapperExtension.toProductActivityCartDto(activityProduct));
                     productInCartDto.setValidStart(activityProduct.getStartTime());
                     productInCartDto.setValidEnd(activityProduct.getEndTime());
                 } else {
-                    productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId);
+                    productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId,productCatalogNumMap);
                 }
             } else {
-                productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId);
+                productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId,productCatalogNumMap);
             }
 
             LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(cacheProductInfo.getProductId())).findFirst().orElse(null);

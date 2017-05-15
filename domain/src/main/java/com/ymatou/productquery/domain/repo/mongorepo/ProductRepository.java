@@ -61,6 +61,30 @@ public class ProductRepository extends MongoRepository {
     }
 
     /**
+     * 根据商品id列表获取每个商品规格数
+     *
+     * @param productIds
+     * @return
+     */
+    public Map<String, Integer> getCatalogCountList(List<String> productIds) {
+        if (productIds == null || productIds.size() == 0) {
+            return new HashMap<>();
+        }
+
+        Datastore datastore = this.getDataStore(this.dbName);
+        List<Catalogs> catalogsList = datastore.find(Catalogs.class).disableValidation()
+                .field("spid").in(productIds)
+                .project("spid", true)
+                .project("_id", false)
+                .asList();
+
+        Map<String, Integer> result = new HashMap<>();
+        catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key, valList) -> result.put(key, valList.size()));
+
+        return result;
+    }
+
+    /**
      * 根据ProductIds查询Proudcts
      *
      * @param productIdList
