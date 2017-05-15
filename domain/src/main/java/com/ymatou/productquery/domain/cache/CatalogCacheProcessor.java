@@ -131,6 +131,8 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs, CachePro
 
         List<Catalogs> cacheCatalogInfoList = productRepository.getCatalogListByCatalogIdList(catalogIdList);
         if (cacheCatalogInfoList != null && !cacheCatalogInfoList.isEmpty()) {
+            productTimeStampRepository.setCatalogListUpdateTime(cacheCatalogInfoList);
+
             Map<String, CacheProductInfo> cacheProductInfoMap = new HashMap<>();
             cacheCatalogInfoList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key, list) -> {
                 CacheProductInfo cacheProductInfo = new CacheProductInfo();
@@ -162,6 +164,7 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs, CachePro
             List<Catalogs> reloadCatalogList = productRepository.getCatalogListByCatalogIdList(needReloadCacheIdList);
 
             if (reloadCatalogList != null && !reloadCatalogList.isEmpty()) {
+                productTimeStampRepository.setCatalogListUpdateTime(reloadCatalogList);
                 result.addAll(reloadCatalogList);
             }
         }

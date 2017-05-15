@@ -5,13 +5,15 @@ import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import com.ymatou.productquery.infrastructure.util.Tuple;
 import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.query.ArraySlice;
 import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -35,29 +37,6 @@ public class ProductRepository extends MongoRepository {
     @Override
     protected MongoClient getMongoClient() {
         return mongoClient;
-    }
-
-    /**
-     * 根据商品Id获取商品信息
-     *
-     * @param productIds
-     * @return
-     */
-    public List<Products> getProducts(List<String> productIds) {
-
-        if (productIds == null || productIds.size() == 0) {
-            return new ArrayList<>();
-        }
-
-        Datastore datastore = this.getDataStore(this.dbName);
-        return datastore.find(Products.class).disableValidation()
-                .field("spid").in(productIds)
-                .project("spid", true)
-                .project("ispsp", true)
-                .project("pics", new ArraySlice(1))
-                .project("minp", true)
-                .project("_id", false)
-                .asList();
     }
 
     /**

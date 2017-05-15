@@ -8,6 +8,7 @@ import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.domain.model.cache.CacheProductInfo;
 import com.ymatou.productquery.domain.repo.mongorepo.HistoryProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
+import com.ymatou.productquery.domain.repo.mongorepo.ProductTimeStampRepository;
 import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,9 @@ public class CommonQueryService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductTimeStampRepository productTimeStampRepository;
 
     @Autowired
     private HistoryProductRepository historyProductRepository;
@@ -116,6 +120,7 @@ public class CommonQueryService {
         if (bizProps.isUseCache()) {
             catalogsList = catalogCacheProcessor.getCatalogListByCatalogIdList(catalogIdList);
             productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+
         } else {
             catalogsList = productRepository.getCatalogListByCatalogIdList(catalogIdList);
             productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());

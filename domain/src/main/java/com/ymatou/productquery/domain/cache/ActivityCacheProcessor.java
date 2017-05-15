@@ -110,6 +110,8 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
 
         List<ActivityProducts> activityProductsList = productRepository.getActivityProductListByProductIdList(productIdList);
         if (activityProductsList != null && !activityProductsList.isEmpty()) {
+            productTimeStampRepository.setActivityProductListUpdateTime(activityProductsList);
+
             Map<String, CacheActivityProductInfo> cacheActivityProductInfoMap = new HashMap<>();
             activityProductsList.forEach(x -> cacheActivityProductInfoMap.put(x.getProductId(), x.convertDtoToCacheData()));
             cacheManager.put(cacheActivityProductInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
@@ -134,6 +136,8 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
             List<ActivityProducts> reloadProducts = productRepository.getActivityProductListByProductIdList(needReloadCacheIdList);
 
             if (reloadProducts != null && !reloadProducts.isEmpty()) {
+                productTimeStampRepository.setActivityProductListUpdateTime(reloadProducts);
+
                 Map<String, CacheActivityProductInfo> cacheInfoMap = new HashMap<>();
                 reloadProducts.forEach(rp -> {
 

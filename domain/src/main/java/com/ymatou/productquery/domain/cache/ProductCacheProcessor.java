@@ -75,6 +75,10 @@ public class ProductCacheProcessor extends BaseCacheProcessor<Products,CacheProd
 
         List<Products> cacheProductInfoList = productRepository.getProductListByProductIdList(productIdList);
         List<Catalogs> cacheCatalogsInfoList = productRepository.getCatalogListByProductIdList(productIdList);
+
+        productTimeStampRepository.setProductListUpdateTime(cacheProductInfoList);
+        productTimeStampRepository.setCatalogListUpdateTime(cacheCatalogsInfoList);
+
         if(cacheProductInfoList != null && !cacheProductInfoList.isEmpty()){
             Map<String,CacheProductInfo> cacheProductInfoMap = new HashMap<>();
 
@@ -113,6 +117,8 @@ public class ProductCacheProcessor extends BaseCacheProcessor<Products,CacheProd
             List<Products> reloadProducts = productRepository.getProductListByProductIdList(needReloadCacheIdList);
 
             if (reloadProducts != null && !reloadProducts.isEmpty()) {
+                productTimeStampRepository.setProductListUpdateTime(reloadProducts);
+
                 Map<String, CacheProductInfo> cacheInfoMap = new HashMap<>();
 
                 reloadProducts.forEach(rp -> {
@@ -148,6 +154,8 @@ public class ProductCacheProcessor extends BaseCacheProcessor<Products,CacheProd
             Map<String, CacheProductInfo> cacheInfoMap = new HashMap<>();
 
             if(reloadCatalogs != null && !reloadCatalogs.isEmpty()){
+                productTimeStampRepository.setCatalogListUpdateTime(reloadCatalogs);
+
                 reloadCatalogs.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,valList)->{
                     CacheProductInfo tempCacheProductInfo = cacheManager.get(key, CacheManager.CacheInfoTypeEnum.PRODUCT);
 

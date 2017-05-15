@@ -1,7 +1,7 @@
 package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.mongodb.MongoClient;
-import com.ymatou.productquery.domain.model.ProductTimeStamp;
+import com.ymatou.productquery.domain.model.*;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
@@ -9,7 +9,9 @@ import org.mongodb.morphia.query.Query;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by zhangyong on 2017/4/21.
@@ -33,6 +35,82 @@ public class ProductTimeStampRepository extends MongoRepository {
     }
 
     private final FindOptions limitOne = new FindOptions().limit(1);
+
+    /**
+     * 设置products更新时间
+     * @param productsList
+     */
+    public void setProductListUpdateTime(List<Products> productsList){
+        if(productsList != null){
+            List<String> productIdList = productsList.stream().map(Products::getProductId).collect(Collectors.toList());
+            List<ProductTimeStamp> productTimeStampList = getTimeStampByProductIds(productIdList, Arrays.asList("sut"));
+            if(productTimeStampList != null){
+                productsList.forEach(x -> {
+                    ProductTimeStamp tempStamp = productTimeStampList.stream().filter(z -> z.getProductId().equals(x.getProductId())).findAny().orElse(null);
+                    if(tempStamp != null){
+                        x.setUpdateTime(tempStamp.getProductUpdateTime());
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 设置ActivityProduct更新时间
+     * @param productsList
+     */
+    public void setActivityProductListUpdateTime(List<ActivityProducts> productsList){
+        if(productsList != null){
+            List<String> productIdList = productsList.stream().map(ActivityProducts::getProductId).collect(Collectors.toList());
+            List<ProductTimeStamp> productTimeStampList = getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
+            if(productTimeStampList != null){
+                productsList.forEach(x -> {
+                    ProductTimeStamp tempStamp = productTimeStampList.stream().filter(z -> z.getProductId().equals(x.getProductId())).findAny().orElse(null);
+                    if(tempStamp != null){
+                        x.setUpdateTime(tempStamp.getActivityUpdateTime());
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 设置ActivityProduct更新时间
+     * @param productsList
+     */
+    public void setLiveProductListUpdateTime(List<LiveProducts> productsList){
+        if(productsList != null){
+            List<String> productIdList = productsList.stream().map(LiveProducts::getProductId).collect(Collectors.toList());
+            List<ProductTimeStamp> productTimeStampList = getTimeStampByProductIds(productIdList, Arrays.asList("lut"));
+            if(productTimeStampList != null){
+                productsList.forEach(x -> {
+                    ProductTimeStamp tempStamp = productTimeStampList.stream().filter(z -> z.getProductId().equals(x.getProductId())).findAny().orElse(null);
+                    if(tempStamp != null){
+                        x.setUpdateTime(tempStamp.getLiveUpdateTime());
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * 设置catalogs更新时间
+     * @param catalogsList
+     */
+    public void setCatalogListUpdateTime(List<Catalogs> catalogsList){
+        if(catalogsList != null){
+            List<String> productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
+            List<ProductTimeStamp> productTimeStampList = getTimeStampByProductIds(productIdList, Arrays.asList("cut"));
+            if(productTimeStampList != null){
+                catalogsList.forEach(x -> {
+                    ProductTimeStamp tempStamp = productTimeStampList.stream().filter(z -> z.getProductId().equals(x.getProductId())).findAny().orElse(null);
+                    if(tempStamp != null){
+                        x.setUpdateTime(tempStamp.getCatalogUpdateTime());
+                    }
+                });
+            }
+        }
+    }
 
     /**
      * 根据ProductId查询ProudctTimeStamp

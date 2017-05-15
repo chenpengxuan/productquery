@@ -59,6 +59,8 @@ public class LiveCacheProcessor  extends BaseCacheProcessor<LiveProducts,CacheLi
         List<LiveProducts> cacheProductInfoList = productRepository.getLiveProductListByProductIdList(productIdList);
 
         if(cacheProductInfoList != null && !cacheProductInfoList.isEmpty()){
+            productTimeStampRepository.setLiveProductListUpdateTime(cacheProductInfoList);
+
             Map<String,CacheLiveProductInfo> cacheProductInfoMap = new HashMap<>();
             cacheProductInfoList.forEach(x -> cacheProductInfoMap.put(x.getProductId(),x.convertDtoToCacheData()));
             cacheManager.put(cacheProductInfoMap, CacheManager.CacheInfoTypeEnum.LIVEPRODUCT);
@@ -83,6 +85,8 @@ public class LiveCacheProcessor  extends BaseCacheProcessor<LiveProducts,CacheLi
             List<LiveProducts> reloadProducts = productRepository.getLiveProductListByProductIdList(needReloadCacheIdList);
 
             if (reloadProducts != null && !reloadProducts.isEmpty()) {
+                productTimeStampRepository.setLiveProductListUpdateTime(reloadProducts);
+
                 Map<String, CacheLiveProductInfo> cacheInfoMap = new HashMap<>();
 
                 reloadProducts.forEach(rp -> {
