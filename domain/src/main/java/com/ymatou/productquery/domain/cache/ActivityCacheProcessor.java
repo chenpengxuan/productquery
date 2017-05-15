@@ -83,16 +83,17 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
      * @return
      */
     public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
-        List<CacheActivityProductInfo> cacheActivityProductInfoList = Lists.newArrayList
-                (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT).values())
-                .stream().map(x -> ((CacheActivityProductInfo) x)).collect(Collectors.toList());
+        Map cacheActivityProductInfoMap = cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+        if(cacheActivityProductInfoMap != null && !cacheActivityProductInfoMap.isEmpty()){
+            List<CacheActivityProductInfo> cacheActivityProductInfoList = (List<CacheActivityProductInfo>) Lists.newArrayList(cacheActivityProductInfoMap.values())
+                .stream().map(x -> x).collect(Collectors.toList());
 
-        List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
-                .getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
+            List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
+                    .getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
 
-        Map<String, Date> productTimeStampMap = new HashMap<>();
-        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getProductUpdateTime()));
-        return processCacheInfo(productIdList, cacheActivityProductInfoList, productTimeStampMap);
+            return processCacheInfo(productIdList, cacheActivityProductInfoList, productTimeStampList);
+        }
+        return null;
     }
 
     @Override
@@ -118,10 +119,10 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
     }
 
     @Override
-    protected List<ActivityProducts> processPartialHitCache(List<String> productIdList, List<CacheActivityProductInfo> cacheInfoList, Map<String, Date> productUpdateTimeMap) {
+    protected List<ActivityProducts> processPartialHitCache(List<String> productIdList, List<CacheActivityProductInfo> cacheInfoList, List<ProductTimeStamp> productUpdateTimeList) {
         //过滤有效业务缓存数据
         List<ActivityProducts> result = new ArrayList<>();
-        List<ActivityProducts> validProductList = filterValidCache(cacheInfoList, productUpdateTimeMap);
+        List<ActivityProducts> validProductList = filterValidCache(cacheInfoList, productUpdateTimeList);
         List<String> needReloadCacheIdList = new ArrayList<>();
         needReloadCacheIdList.addAll(productIdList);
         List<String> validProductIds = validProductList.stream().map(t -> t.getProductId()).distinct().collect(Collectors.toList());
@@ -138,7 +139,7 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
 
                     cacheInfoMap.put(rp.getProductId(), rp.convertDtoToCacheData());
                 });
-                cacheManager.put(cacheInfoMap, CacheManager.CacheInfoTypeEnum.PRODUCT);
+                cacheManager.put(cacheInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
                 result.addAll(reloadProducts);
             }
         }
@@ -146,12 +147,13 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
     }
 
     @Override
-    protected List<ActivityProducts> filterValidCache(List<CacheActivityProductInfo> cacheInfoList, Map<String, Date> productUpdateTimeMap) {
+    protected List<ActivityProducts> filterValidCache(List<CacheActivityProductInfo> cacheInfoList, List<ProductTimeStamp> productUpdateTimeList) {
         return cacheInfoList.stream().filter(t -> {
             Long cacheProductUpdateTimeStamp = t.getUpdateTime() != null ? t.getUpdateTime().getTime() : -1L;
+            ProductTimeStamp tempStamp = productUpdateTimeList.stream().filter(pt -> pt.getProductId().equals(t.getProductId())).findAny().orElse(null);
 
-            Long productUpdateTimeStamp = productUpdateTimeMap != null && productUpdateTimeMap.get(t.getProductId()) != null
-                    ? productUpdateTimeMap.get(t.getProductId()).getTime() : 0L;
+            Long productUpdateTimeStamp = tempStamp != null && tempStamp.getActivityUpdateTime() != null
+                    ? tempStamp.getActivityUpdateTime().getTime() : 0L;
 
             return Long.compare(cacheProductUpdateTimeStamp, productUpdateTimeStamp) == 0;
         }).map(x -> x.convertCacheDataToDto()).collect(Collectors.toList());

@@ -105,6 +105,11 @@ public class Products {
     @Property("mflight")
     private double extraDeliveryFee;
 
+    /**
+     * 规格列表
+     */
+    private List<Catalogs> catalogsList;
+
     public int getProdId() {
         return prodId;
     }
@@ -472,6 +477,14 @@ public class Products {
 
     public void setOwnProduct(int ownProduct) {
         this.ownProduct = ownProduct;
+    }
+
+    public List<Catalogs> getCatalogsList() {
+        return catalogsList;
+    }
+
+    public void setCatalogsList(List<Catalogs> catalogsList) {
+        this.catalogsList = catalogsList;
     }
 
     /**

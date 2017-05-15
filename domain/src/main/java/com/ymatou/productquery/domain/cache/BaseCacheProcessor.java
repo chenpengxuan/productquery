@@ -1,11 +1,10 @@
 package com.ymatou.productquery.domain.cache;
 
 import com.google.common.cache.CacheStats;
+import com.ymatou.productquery.domain.model.ProductTimeStamp;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by chenpengxuan on 2017/4/26.
@@ -24,17 +23,17 @@ public abstract class BaseCacheProcessor<T,C> {
      *
      * @param productIdList
      * @param cacheInfoList
-     * @param productUpdateTimeMap
+     * @param productUpdateTimeList
      * @return
      */
     protected List<T> processCacheInfo(List<String> productIdList,
                                        List<C> cacheInfoList,
-                                       Map<String, Date> productUpdateTimeMap) {
+                                       List<ProductTimeStamp> productUpdateTimeList) {
         if (cacheInfoList == null || cacheInfoList.isEmpty()) {
             return processNoneCache(productIdList);
         } else {
             cacheInfoList.removeAll(Collections.singleton(null));
-            return processPartialHitCache(productIdList, cacheInfoList, productUpdateTimeMap);
+            return processPartialHitCache(productIdList, cacheInfoList, productUpdateTimeList);
         }
     }
 
@@ -50,19 +49,19 @@ public abstract class BaseCacheProcessor<T,C> {
      *
      * @param productIdList
      * @param cacheInfoList
-     * @param productUpdateTimeMap
+     * @param productUpdateTimeList
      * @return
      */
     protected abstract List<T> processPartialHitCache(List<String> productIdList,
                                                       List<C> cacheInfoList,
-                                                      Map<String, Date> productUpdateTimeMap);
+                                                      List<ProductTimeStamp> productUpdateTimeList);
 
     /**
      * 过滤有效缓存数据
      *
      * @param cacheInfoList
-     * @param productUpdateTimeMap
+     * @param productUpdateTimeList
      * @return
      */
-    protected abstract List<T> filterValidCache(List<C> cacheInfoList, Map<String, Date> productUpdateTimeMap);
+    protected abstract List<T> filterValidCache(List<C> cacheInfoList, List<ProductTimeStamp> productUpdateTimeList);
 }

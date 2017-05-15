@@ -173,7 +173,9 @@ public class ProductRepository extends MongoRepository {
         Datastore datastore = this.getDataStore(this.dbName);
         List<Catalogs> query = datastore.find(Catalogs.class).disableValidation()
                 .field("cid").in(catalogIdList)
-                .project("spid", true).asList();
+                .project("spid", true)
+                .project("_id", false)
+                .asList();
         return query.stream().map(t -> t.getProductId()).distinct().collect(Collectors.toList());
     }
 

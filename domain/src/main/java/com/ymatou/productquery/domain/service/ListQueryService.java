@@ -55,10 +55,14 @@ public class ListQueryService {
 
             ProductInCartDto productInCartDto;
             Map<String,Integer> productCatalogNumMap = commonQueryService.getCatalogNumByCatalogIdList(catalogIds);
-
-            List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId()
-                    .equals(cacheProductInfo.getProductId())).collect(Collectors.toList());
-            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(tempActivityProductList);
+            ActivityProducts activityProduct;
+            if(activityProductsList != null && !activityProductsList.isEmpty()){
+                List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId()
+                        .equals(cacheProductInfo.getProductId())).collect(Collectors.toList());
+                activityProduct = ProductActivityService.getValidProductActivity(tempActivityProductList);
+            }else{
+                activityProduct = null;
+            }
 
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation) && (activityProduct.getCatalogs() != null)
                     && activityProduct.getCatalogs().stream().map(p -> p.getCatalogId()).anyMatch(t -> t.equals(catalogId))) {

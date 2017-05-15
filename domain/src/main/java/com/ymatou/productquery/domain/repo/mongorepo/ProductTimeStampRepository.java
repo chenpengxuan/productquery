@@ -45,6 +45,7 @@ public class ProductTimeStampRepository extends MongoRepository {
         Datastore datastore = this.getDataStore(this.dbName);
         Query<ProductTimeStamp> query = datastore.find(ProductTimeStamp.class).disableValidation()
                 .field("spid").equal(productId);
+        query.project("spid",true);
         stampKeyList.forEach(x -> query.project(x,true));
         return query.get(limitOne);
     }
@@ -60,6 +61,7 @@ public class ProductTimeStampRepository extends MongoRepository {
         Datastore datastore = this.getDataStore(this.dbName);
         Query<ProductTimeStamp> query = datastore.find(ProductTimeStamp.class).disableValidation()
                 .field("spid").in(productIdList);
+        query.project("spid",true);
         stampKeyList.forEach(x -> query.project(x,true));
         return query.asList();
     }

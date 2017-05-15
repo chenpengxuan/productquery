@@ -228,8 +228,6 @@ public class CacheProductInfo extends BaseCacheInfo{
      */
     private List<Catalogs> catalogsList;
 
-
-
     public int getProdId() {
         return prodId;
     }
