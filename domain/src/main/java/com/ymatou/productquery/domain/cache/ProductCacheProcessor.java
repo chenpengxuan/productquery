@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 商品缓存相关
+ * 商品缓存相关1
  * Created by chenpengxuan on 2017/4/26.
  */
 @Component("productCacheProcessor")
