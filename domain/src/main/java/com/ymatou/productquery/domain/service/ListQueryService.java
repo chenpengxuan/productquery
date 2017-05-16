@@ -81,7 +81,11 @@ public class ListQueryService {
                 productInCartDto = ProductMapperExtension.toProductInCartDto(cacheProductInfo, null, catalogId,productCatalogNumMap);
             }
 
-            LiveProducts liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(cacheProductInfo.getProductId())).findFirst().orElse(null);
+            LiveProducts liveProduct = null;
+            if(liveProductsList != null && !liveProductsList.isEmpty()){
+                liveProduct = liveProductsList.stream().filter(t -> t.getProductId().equals(cacheProductInfo.getProductId())).findFirst().orElse(null);
+            }
+
             if (liveProduct != null) {
                 productInCartDto.setLiveProduct(ProductMapperExtension.toLiveProductCartDto(liveProduct));
                 productInCartDto.setValidStart(liveProduct.getStartTime());
