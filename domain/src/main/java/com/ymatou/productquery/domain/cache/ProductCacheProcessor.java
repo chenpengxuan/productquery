@@ -32,7 +32,7 @@ public class ProductCacheProcessor extends BaseCacheProcessor<Products,CacheProd
     private ProductTimeStampRepository productTimeStampRepository;
 
     /**
-     * 根据商品id列表获取商品信息1
+     * 根据商品id列表获取商品信息
      * @param productIdList
      * @return
      */
