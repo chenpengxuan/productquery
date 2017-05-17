@@ -66,22 +66,21 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
     public void addNewestActivityProductCache() {
         ConcurrentMap activityProductCache = cacheManager.getActivityProductCacheContainer();
 
-        List<String> cacheProductIdList = (List<String>) activityProductCache.keySet()
-                .stream().map(x -> x.toString()).collect(Collectors.toList());
-        List<String> validProductIdList = productRepository.getValidActivityProductIdList();
+        List<Integer> cacheInActivityIdList = (List<Integer>) activityProductCache.values().stream().map(x -> ((CacheActivityProductInfo)x).getProductInActivityId()).collect(Collectors.toList());
+        List<Integer> validInActivityIdList = productRepository.getValidProductInActivityIdList();
 
-        List<String> needReloadProductIdList = new ArrayList<>();
-        needReloadProductIdList.addAll(validProductIdList);
-        needReloadProductIdList.removeAll(cacheProductIdList);
+        List<Integer> needReloadInActivityIdList = new ArrayList<>();
+        needReloadInActivityIdList.addAll(validInActivityIdList);
+        needReloadInActivityIdList.removeAll(cacheInActivityIdList);
 
         //获取新增的mongo活动商品信息
         List<ActivityProducts> newestActivityProductList = productRepository
-                .getActivityProductList(needReloadProductIdList);
+                .getActivityProductListByInActivityIdList(needReloadInActivityIdList);
 
         //批量添加至缓存
         Map tempMap = newestActivityProductList
                 .stream()
-                .collect(Collectors.toMap(ActivityProducts::getProductId, y -> y, (key1, key2) -> key2));
+                .collect(Collectors.toMap(ActivityProducts::getProductId, y -> y.convertDtoToCacheData(), (key1, key2) -> key2));
 
         cacheManager.put(tempMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
 

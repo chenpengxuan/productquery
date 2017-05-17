@@ -394,26 +394,26 @@ public class ProductRepository extends MongoRepository {
      *
      * @return
      */
-    public List<String> getValidActivityProductIdList() {
+    public List<Integer> getValidProductInActivityIdList() {
         Datastore datastore = this.getDataStore(this.dbName);
         Date now = new Date();
         return datastore.find(ActivityProducts.class).disableValidation()
-                .project("spid", true)
+                .project("inaid", true)
                 .field("end").greaterThanOrEq(now)
                 .asList()
-                .stream().map(x -> x.getProductId()).collect(Collectors.toList());
+                .stream().map(x -> x.getProductInActivityId()).collect(Collectors.toList());
     }
 
     /**
      * 获取新增活动商品信息列表
      *
-     * @param newestProductInActivityId 最新
+     * @param productInActivityIdList 最新
      * @return
      */
-    public List<ActivityProducts> getNewestActivityProductIdList(int newestProductInActivityId) {
+    public List<ActivityProducts> getActivityProductListByInActivityIdList(List<Integer> productInActivityIdList) {
         Datastore datastore = this.getDataStore(this.dbName);
         return datastore.find(ActivityProducts.class).disableValidation()
-                .field("inaid").greaterThan(newestProductInActivityId)
+                .field("inaid").in(productInActivityIdList)
                 .asList();
     }
 }
