@@ -39,14 +39,5 @@ public abstract class MongoRepository {
         return morphia.createDatastore(getMongoClient(), dbName);
     }
 
-    /**
-     * 插入文档
-     *
-     * @param dbName
-     * @param entity
-     */
-    protected void insertEntity(String dbName, Object entity) {
-        Datastore datastore = getDataStore(dbName);
-        datastore.save(entity);
-    }
+
 }

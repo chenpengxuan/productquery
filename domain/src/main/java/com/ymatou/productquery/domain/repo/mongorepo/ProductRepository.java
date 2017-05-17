@@ -2,11 +2,16 @@ package com.ymatou.productquery.domain.repo.mongorepo;
 
 import com.mongodb.MongoClient;
 import com.ymatou.productquery.domain.model.*;
+import com.ymatou.productquery.infrastructure.constants.Constants;
+import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoOperationTypeEnum;
+import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoProcessor;
+import com.ymatou.productquery.infrastructure.dataprocess.mongo.MongoQueryData;
 import com.ymatou.productquery.infrastructure.mongodb.MongoRepository;
 import com.ymatou.productquery.infrastructure.util.Tuple;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.query.FindOptions;
 import org.mongodb.morphia.query.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +29,9 @@ public class ProductRepository extends MongoRepository {
 
     @Resource(name = "productMongoClient")
     private MongoClient mongoClient;
+
+    @Autowired
+    private MongoProcessor mongoProcessor;
 
     private final static String dbName = "YmtProducts";
 
@@ -50,15 +58,28 @@ public class ProductRepository extends MongoRepository {
             return new HashMap<>();
         }
 
-        Datastore datastore = this.getDataStore(this.dbName);
-        List<Catalogs> catalogsList = datastore.find(Catalogs.class).disableValidation()
-                .field("spid").in(productIds)
-                .project("spid", true)
-                .project("_id", false)
-                .asList();
+        MongoQueryData queryData = new MongoQueryData();
+
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> tempMap = new HashMap<>();
+        tempMap.put("$in", productIds);
+        matchConditionMap.put("spid", tempMap);
+        queryData.setMatchCondition(matchConditionMap);
+
+        Map<String, Boolean> projectionMap = new HashMap<>();
+        projectionMap.put("spid", true);
+        projectionMap.put("cid",true);
+        projectionMap.put("_id", false);
+        queryData.setProjection(projectionMap);
+
+        queryData.setTableName(Constants.CatalogDb);
+
+        queryData.setOperationType(MongoOperationTypeEnum.SELECTMANY);
+
+        List<Map<String,Object>> mapList = mongoProcessor.queryMongo(queryData);
 
         Map<String, Integer> result = new HashMap<>();
-        catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key, valList) -> result.put(key, valList.size()));
+        mapList.stream().collect(Collectors.groupingBy(x -> x.get("spid").toString())).forEach((key,valList) ->  result.put(key,valList.size()));
 
         return result;
     }
@@ -149,13 +170,25 @@ public class ProductRepository extends MongoRepository {
      * @return
      */
     public List<String> getProductIdsByCatalogIds(List<String> catalogIdList) {
-        Datastore datastore = this.getDataStore(this.dbName);
-        List<Catalogs> query = datastore.find(Catalogs.class).disableValidation()
-                .field("cid").in(catalogIdList)
-                .project("spid", true)
-                .project("_id", false)
-                .asList();
-        return query.stream().map(t -> t.getProductId()).distinct().collect(Collectors.toList());
+        MongoQueryData queryData = new MongoQueryData();
+
+        Map<String, Object> matchConditionMap = new HashMap<>();
+        Map<String, Object> tempMap = new HashMap<>();
+        tempMap.put("$in", catalogIdList);
+        matchConditionMap.put("cid", tempMap);
+        queryData.setMatchCondition(matchConditionMap);
+
+        Map<String, Boolean> projectionMap = new HashMap<>();
+        projectionMap.put("spid", true);
+        projectionMap.put("_id", false);
+        queryData.setProjection(projectionMap);
+
+        queryData.setTableName(Constants.CatalogDb);
+
+        queryData.setOperationType(MongoOperationTypeEnum.SELECTMANY);
+
+        return mongoProcessor.queryMongo(queryData)
+                .stream().map(x -> x.get("spid").toString()).collect(Collectors.toList());
     }
 
     /**

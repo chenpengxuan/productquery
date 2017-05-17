@@ -1,8 +1,11 @@
 package com.ymatou.productquery.infrastructure.config.datasource;
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoDatabase;
 import com.ymatou.productquery.infrastructure.config.props.MongoProps;
+import org.jongo.Jongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +20,14 @@ import org.springframework.context.annotation.DependsOn;
 public class MongoDataSource {
     @Autowired
     private MongoProps mongoProps;
+
+    @Bean
+    public Jongo jongoClient(){
+        MongoClientURI uri = new MongoClientURI(mongoProps.getMongoProductUrl());
+        //Todo getDB deprecated,please use getDatabase
+        DB db =new MongoClient(uri).getDB(uri.getDatabase());
+        return new Jongo(db);
+    }
 
     @Bean("productMongoClient")
     public MongoClient getMongoClient() {
