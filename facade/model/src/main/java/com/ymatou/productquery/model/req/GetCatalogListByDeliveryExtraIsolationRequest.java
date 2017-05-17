@@ -9,7 +9,7 @@ import java.util.List;
  * Created by zhangyong on 2017/5/3.
  */
 public class GetCatalogListByDeliveryExtraIsolationRequest extends BaseRequest {
-    @JsonProperty("CatalogIdList")
+    @JsonProperty("CatalogList")
     @NotEmpty(message = "规格id不能为空")
     private List<CatalogDeliveryDto> catalogIdList;
 

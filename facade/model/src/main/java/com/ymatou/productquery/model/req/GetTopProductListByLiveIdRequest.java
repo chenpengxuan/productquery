@@ -1,7 +1,5 @@
 package com.ymatou.productquery.model.req;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.ws.rs.QueryParam;
 
 /**

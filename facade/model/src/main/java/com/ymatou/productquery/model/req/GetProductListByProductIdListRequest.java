@@ -9,9 +9,9 @@ import java.util.List;
  * Created by zhangyong on 2017/4/27.
  */
 public class GetProductListByProductIdListRequest extends BaseRequest {
-    // <summary>
-    // 商品编号列表
-    // </summary>
+    /**
+     * 商品编号列表
+     */
     @JsonProperty("ProductIdList")
     @NotEmpty(message = "商品id不能为空")
     private List<String> productIdList;

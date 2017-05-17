@@ -7,6 +7,9 @@ import javax.ws.rs.QueryParam;
  */
 public class GetProductDescExtraByProductIdRequest extends BaseRequest {
 
+    /**
+     * 商品编号
+     */
     @QueryParam("ProductId")
     private String productId;
 

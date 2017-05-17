@@ -6,14 +6,14 @@ import com.ymatou.productquery.model.PrintFriendliness;
  * Created by zhangyong on 2017/5/3.
  */
 public class CatalogDeliveryDto extends PrintFriendliness {
-    /// <summary>
-    /// 规格编号
-    /// </summary>
+    /**
+     *  规格编号
+     */
     private String CatalogId;
 
-    /// <summary>
-    /// 多物流类型
-    /// </summary>
+    /**
+     * 多物流类型
+     */
     private int DeliveryType;
 
     public String getCatalogId() {

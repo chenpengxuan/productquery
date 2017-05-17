@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class GetCatalogListByDeliveryExtraRequest extends BaseRequest {
 
-    @JsonProperty("CatalogIdList")
+    @JsonProperty("CatalogList")
     @NotEmpty(message = "规格id不能为空")
     private List<CatalogDeliveryDto> catalogIdList;
 

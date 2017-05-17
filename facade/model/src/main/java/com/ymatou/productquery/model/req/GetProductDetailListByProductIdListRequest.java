@@ -10,17 +10,17 @@ import java.util.List;
  * Created by zhangyong on 2017/4/20.
  */
 public class GetProductDetailListByProductIdListRequest  extends BaseRequest {
-    // <summary>
-    // 商品编号列表
-    // </summary>
+    /**
+     *  商品编号列表
+     */
     @JsonProperty("ProductIdList")
     @NotEmpty(message = "商品id不能为空")
     @NotNull(message = "商品id不能为空")
     private List<String> productIdList;
 
-    // <summary>
-    // 下一场活动延长取值有效期，默认是1天内。
-    // </summary>
+    /**
+     * 下一场活动延长取值有效期，默认是1天内。
+     */
     @JsonProperty("NextActivityExpire")
     private int nextActivityExpire;
 
