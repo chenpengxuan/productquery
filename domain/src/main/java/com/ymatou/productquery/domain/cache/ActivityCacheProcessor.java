@@ -7,6 +7,7 @@ import com.ymatou.productquery.domain.model.ProductTimeStamp;
 import com.ymatou.productquery.domain.model.cache.CacheActivityProductInfo;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductRepository;
 import com.ymatou.productquery.domain.repo.mongorepo.ProductTimeStampRepository;
+import com.ymatou.productquery.infrastructure.config.props.CacheProps;
 import com.ymatou.productquery.infrastructure.util.CacheUtil.CacheManager;
 import com.ymatou.productquery.infrastructure.util.LogWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
     @Autowired
     private LogWrapper logWrapper;
 
+    @Autowired
+    private CacheProps cacheProps;
+
     /**
      * 初始化活动商品缓存
      */
@@ -46,6 +50,14 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
 
         cacheManager.put(cacheActivityProductInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
         return activityProductList.size();
+    }
+
+    /**
+     * 检查活动容器size是否已满
+     * @return
+     */
+    private boolean checkActivityCacheIsFull(){
+        return cacheProps.getActivityProductCacheSize() <= cacheManager.getActivityProductCacheContainer().size();
     }
 
     /**
@@ -85,13 +97,19 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
     public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
         Map cacheActivityProductInfoMap = cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
         if(cacheActivityProductInfoMap != null && !cacheActivityProductInfoMap.isEmpty()){
-            List<CacheActivityProductInfo> cacheActivityProductInfoList = (List<CacheActivityProductInfo>) Lists.newArrayList(cacheActivityProductInfoMap.values())
-                .stream().map(x -> x).collect(Collectors.toList());
+            if(!checkActivityCacheIsFull()){
+                List<CacheActivityProductInfo> cacheActivityProductInfoList = (List<CacheActivityProductInfo>) Lists.newArrayList(cacheActivityProductInfoMap.values())
+                        .stream().map(x -> x).collect(Collectors.toList());
 
-            List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
-                    .getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
+                List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
+                        .getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
 
-            return processCacheInfo(productIdList, cacheActivityProductInfoList, productTimeStampList);
+                return processCacheInfo(productIdList, cacheActivityProductInfoList, productTimeStampList);
+            }
+            else{
+                logWrapper.recordErrorLog("活动缓存容量已满，需要进行配置扩容并重启服务，当前数据改成从mongo读取，不影响业务");
+                return productRepository.getActivityProductListByProductIdList(productIdList);
+            }
         }
         return null;
     }

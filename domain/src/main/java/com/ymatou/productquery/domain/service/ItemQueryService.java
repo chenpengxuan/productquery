@@ -56,8 +56,8 @@ public class ItemQueryService {
         }
         List<String> productIds = new ArrayList<>();
         productIds.add(productId);
-        List<Catalogs> catalogs = commonQueryService.getCatalogListByProductIdList(productIds);
-        if (catalogs == null) {
+        List<Catalogs> catalogs = product.getCatalogsList();
+        if (catalogs == null || catalogs.isEmpty()) {
             logWrapper.recordInfoLog("商品不存在，productId：{}", productId);
             throw new BizException("商品不存在");
         }

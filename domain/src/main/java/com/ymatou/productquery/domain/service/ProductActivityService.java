@@ -2,10 +2,8 @@ package com.ymatou.productquery.domain.service;
 
 import com.ymatou.productquery.domain.model.ActivityCatalogInfo;
 import com.ymatou.productquery.domain.model.ActivityProducts;
-import com.ymatou.productquery.domain.model.Catalogs;
 import org.joda.time.DateTime;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,15 +45,18 @@ public class ProductActivityService {
      * @return
      */
     public static ActivityProducts getNextProductActivity(List<ActivityProducts> activityProductsList, int nextActivityExpire, ActivityProducts activityProduct) {
-        if (activityProduct != null) {
-            return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())
-                    && !t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate())
-                    && t.getProductInActivityId() != activityProduct.getProductInActivityId())
-                    .min((t1, t2) -> t1.getEndTime().compareTo(t2.getEndTime())).orElse(null);
+        if(activityProductsList != null && !activityProductsList.isEmpty()){
+            if (activityProduct != null) {
+                return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())
+                        && !t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate())
+                        && t.getProductInActivityId() != activityProduct.getProductInActivityId())
+                        .min((t1, t2) -> t1.getEndTime().compareTo(t2.getEndTime())).orElse(null);
 
+            }
+            return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())
+                    && !t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate()))
+                    .min((t1, t2) -> t1.getEndTime().compareTo(t2.getEndTime())).orElse(null);
         }
-        return activityProductsList.stream().filter(t -> !t.getEndTime().before(DateTime.now().toDate())
-                && !t.getStartTime().after(DateTime.now().plusDays(nextActivityExpire).toDate()))
-                .min((t1, t2) -> t1.getEndTime().compareTo(t2.getEndTime())).orElse(null);
+        return null;
     }
 }

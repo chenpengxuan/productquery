@@ -57,7 +57,7 @@ public class ProductCacheProcessor extends BaseCacheProcessor<Products,CacheProd
 
         ProductTimeStamp productTimeStamp = productTimeStampRepository.getTimeStampByProductId(productId,Arrays.asList("sut","cut"));
 
-        return processCacheInfo(Arrays.asList(productId),Arrays.asList(cacheProductInfo),Arrays.asList(productTimeStamp)).stream().findAny().orElse(null);
+        return processCacheInfo(Arrays.asList(productId),cacheProductInfo != null ? Arrays.asList(cacheProductInfo):null,productTimeStamp != null ? Arrays.asList(productTimeStamp):null).stream().findAny().orElse(null);
     }
 
 
@@ -84,9 +84,7 @@ public class ProductCacheProcessor extends BaseCacheProcessor<Products,CacheProd
 
             cacheProductInfoList.forEach(x -> {
                 List<Catalogs> tempCatalogList = cacheCatalogsInfoList.stream().filter(z -> z.getProductId().equals(x.getProductId())).collect(Collectors.toList());
-
-                CacheProductInfo cacheProductInfo = x.convertDtoToCacheData();
-                cacheProductInfo.setCatalogsList(tempCatalogList);
+                x.setCatalogsList(tempCatalogList);
                 cacheProductInfoMap.put(x.getProductId(),x.convertDtoToCacheData());
             });
             cacheManager.put(cacheProductInfoMap, CacheManager.CacheInfoTypeEnum.PRODUCT);
