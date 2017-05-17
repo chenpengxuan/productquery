@@ -41,22 +41,23 @@ public class CatalogCacheProcessor extends BaseCacheProcessor<Catalogs, CachePro
             catalogIdList = catalogIdList.stream().distinct().collect(Collectors.toList());
         }
         List<String> productIdList = productRepository.getProductIdsByCatalogIds(catalogIdList);
+        if(productIdList != null && !productIdList.isEmpty()){
+            List<CacheProductInfo> cacheProductInfoList = Lists.newArrayList
+                    (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.PRODUCT).values())
+                    .stream().map(x -> ((CacheProductInfo) x)).collect(Collectors.toList());
 
-        List<CacheProductInfo> cacheProductInfoList = Lists.newArrayList
-                (cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.PRODUCT).values())
-                .stream().map(x -> ((CacheProductInfo) x)).collect(Collectors.toList());
+            List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
+                    .getTimeStampByProductIds(productIdList, Arrays.asList("cut"));
 
-        List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
-                .getTimeStampByProductIds(productIdList, Arrays.asList("cut"));
+            Map<String, Date> productTimeStampMap = new HashMap<>();
+            productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getCatalogUpdateTime()));
 
-        Map<String, Date> productTimeStampMap = new HashMap<>();
-        productTimeStampList.forEach(x -> productTimeStampMap.put(x.getProductId(), x.getCatalogUpdateTime()));
+            List<Catalogs> result = processCacheInfo(catalogIdList, cacheProductInfoList, productTimeStampList);
 
-        List<Catalogs> result = processCacheInfo(catalogIdList, cacheProductInfoList, productTimeStampList);
-
-        if (result != null && !result.isEmpty()) {
-            List<String> tempCatalogIdList = catalogIdList;
-            return result.stream().filter(x -> tempCatalogIdList.contains(x.getCatalogId())).collect(Collectors.toList());
+            if (result != null && !result.isEmpty()) {
+                List<String> tempCatalogIdList = catalogIdList;
+                return result.stream().filter(x -> tempCatalogIdList.contains(x.getCatalogId())).collect(Collectors.toList());
+            }
         }
         return null;
     }
