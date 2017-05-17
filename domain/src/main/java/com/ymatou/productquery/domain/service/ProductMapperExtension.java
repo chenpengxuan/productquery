@@ -250,6 +250,7 @@ public class ProductMapperExtension {
 
         if (propertyInfoList == null || propertyInfoList.isEmpty()) {
             propertyDtoList.add(new PropertyDto());
+            return propertyDtoList;
         }
 
         propertyInfoList.forEach(t -> {
@@ -260,7 +261,6 @@ public class ProductMapperExtension {
                     propertyDtoList.add(propertyDto);
                 }
         );
-
         return propertyDtoList;
     }
 
