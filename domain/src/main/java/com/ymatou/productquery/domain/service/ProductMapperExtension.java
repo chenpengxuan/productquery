@@ -246,11 +246,12 @@ public class ProductMapperExtension {
     }
 
     private static List<PropertyDto> getCatalogPropertyList(List<PropertyInfo> propertyInfoList) {
+        List<PropertyDto> propertyDtoList = new ArrayList<>();
+
         if (propertyInfoList == null || propertyInfoList.isEmpty()) {
-            return null;
+            propertyDtoList.add(new PropertyDto());
         }
 
-        List<PropertyDto> propertyDtoList = new ArrayList<>();
         propertyInfoList.forEach(t -> {
                     PropertyDto propertyDto = new PropertyDto();
                     propertyDto.setPropertyValue(t.getValue());

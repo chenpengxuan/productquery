@@ -101,33 +101,34 @@ public class ItemQueryService {
      */
     public ProductDetailDto setCurrentAndNextActivityProduct(Products product, List<Catalogs> catalogs
             , List<ActivityProducts> activityProductsList, ActivityProducts activityProduct, int nextActivityExpire, boolean tradeIsolation) {
-        ProductDetailDto productDetailDto;
-        //活动
-        if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-            productDetailDto = ProductMapperExtension.toProductDetailDto(product, catalogs, activityProduct);
+        ProductDetailDto productDetailDto = ProductMapperExtension.toProductDetailDto(product, catalogs, activityProduct);;
+        if(activityProductsList != null && !activityProductsList.isEmpty()){
+            //活动
+            if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
+                productDetailDto.setProductActivity(ProductMapperExtension.toProductActivityDto(activityProduct));
+                productDetailDto.setValidStart(activityProduct.getStartTime());
+                productDetailDto.setValidEnd(activityProduct.getEndTime());
+                Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(activityProduct);
+                double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
+                double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
+                productDetailDto.getProductActivity().setMaxActivityPrice(max);
+                productDetailDto.getProductActivity().setMinActivityPrice(min);
+            } else {
+                productDetailDto = ProductMapperExtension.toProductDetailDto(product, catalogs, activityProduct);
+            }
 
-            productDetailDto.setProductActivity(ProductMapperExtension.toProductActivityDto(activityProduct));
-            productDetailDto.setValidStart(activityProduct.getStartTime());
-            productDetailDto.setValidEnd(activityProduct.getEndTime());
-            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(activityProduct);
-            double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
-            double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
-            productDetailDto.getProductActivity().setMaxActivityPrice(max);
-            productDetailDto.getProductActivity().setMinActivityPrice(min);
-        } else {
-            productDetailDto = ProductMapperExtension.toProductDetailDto(product, catalogs, activityProduct);
+            //下一场活动
+            ActivityProducts nextActivityProduct = ProductActivityService.getNextProductActivity(activityProductsList, nextActivityExpire, activityProduct);
+            if (nextActivityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
+                productDetailDto.setNextActivity(ProductMapperExtension.toProductActivityDto(nextActivityProduct));
+                Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(nextActivityProduct);
+                double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
+                double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
+                productDetailDto.getNextActivity().setMaxActivityPrice(max);
+                productDetailDto.getNextActivity().setMinActivityPrice(min);
+            }
         }
 
-        //下一场活动
-        ActivityProducts nextActivityProduct = ProductActivityService.getNextProductActivity(activityProductsList, nextActivityExpire, activityProduct);
-        if (nextActivityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
-            productDetailDto.setNextActivity(ProductMapperExtension.toProductActivityDto(nextActivityProduct));
-            Tuple<Double, Double> maxmin = ProductMapperExtension.getMaxMinPrice(nextActivityProduct);
-            double max = Math.max(maxmin.first, Double.valueOf(product.getMaxCatalogPrice().split(",")[0]));
-            double min = Math.min(maxmin.second, Double.valueOf(product.getMinCatalogPrice().split(",")[0]));
-            productDetailDto.getNextActivity().setMaxActivityPrice(max);
-            productDetailDto.getNextActivity().setMinActivityPrice(min);
-        }
         return productDetailDto;
     }
 

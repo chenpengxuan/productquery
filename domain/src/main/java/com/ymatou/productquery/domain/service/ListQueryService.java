@@ -45,6 +45,7 @@ public class ListQueryService {
         List<String> pids = cacheProductInfoList.stream().map(t -> t.getProductId()).collect(Collectors.toList());
         List<LiveProducts> liveProductsList = commonQueryService.getLiveProductListByProductId(pids);
         List<ActivityProducts> activityProductsList = commonQueryService.getActivityProductListByProductIdList(pids);
+        Map<String,Integer> productCatalogNumMap = commonQueryService.getCatalogNumByCatalogIdList(catalogIds);
 
         for (String catalogId : catalogIds) {
             CacheProductInfo cacheProductInfo = cacheProductInfoList.stream().filter(t -> t.getCatalogsList().stream().map(s -> s.getCatalogId())
@@ -54,7 +55,7 @@ public class ListQueryService {
                 continue;
 
             ProductInCartDto productInCartDto;
-            Map<String,Integer> productCatalogNumMap = commonQueryService.getCatalogNumByCatalogIdList(catalogIds);
+
             ActivityProducts activityProduct;
             if(activityProductsList != null && !activityProductsList.isEmpty()){
                 List<ActivityProducts> tempActivityProductList = activityProductsList.stream().filter(t -> t.getProductId()
@@ -168,8 +169,13 @@ public class ListQueryService {
             }
 
             List<Catalogs> catalogs = catalogsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
-            List<ActivityProducts> activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
-            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
+
+            ActivityProducts activityProduct = null;
+            List<ActivityProducts> activityProducts = null;
+            if(activityProductsList != null && !activityProductsList.isEmpty()){
+                activityProducts = activityProductsList.stream().filter(t -> t.getProductId().equals(pid)).collect(Collectors.toList());
+                activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
+            }
 
             ProductDetailDto productDetailDto = itemQueryService.setCurrentAndNextActivityProduct(product, catalogs, activityProducts,
                     activityProduct, nextActivityExpire, tradeIsolation);
