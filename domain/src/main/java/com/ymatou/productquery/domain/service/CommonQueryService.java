@@ -119,12 +119,11 @@ public class CommonQueryService {
 
         if (bizProps.isUseCache()) {
             catalogsList = catalogCacheProcessor.getCatalogListByCatalogIdList(catalogIdList);
-            productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
-
         } else {
             catalogsList = productRepository.getCatalogListByCatalogIdList(catalogIdList);
-            productIdList = catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList());
         }
+
+        productIdList = catalogsList != null && !catalogIdList.isEmpty() ?catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList()):null;
 
         if(productIdList != null && !productIdList.isEmpty()){
             productsList = getProductListByProductIdList(productIdList);
