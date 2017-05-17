@@ -70,8 +70,12 @@ public class ItemQueryService {
                 , activityProduct, nextActivityExpire, tradeIsolation);
 
         //直播
-        LiveProducts liveProduct = liveProductsList.stream().findFirst().orElse(null);
-        productDetailDto.setLiveProduct(ProductMapperExtension.toProductLiveDto(liveProduct));
+        LiveProducts liveProduct = null;
+        if(liveProductsList != null && !liveProductsList.isEmpty()){
+            liveProduct = liveProductsList.stream().findFirst().orElse(null);
+            productDetailDto.setLiveProduct(ProductMapperExtension.toProductLiveDto(liveProduct));
+        }
+
         // 设置商品的有效期, 直播有效取直播时间， 直播无效活动有效，取活动时间
         if (liveProduct != null) {
             productDetailDto.setValidStart(liveProduct.getStartTime());

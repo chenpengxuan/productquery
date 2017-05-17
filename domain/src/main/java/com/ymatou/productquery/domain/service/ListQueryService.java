@@ -265,8 +265,11 @@ public class ListQueryService {
             ProductInListDto productDto = ProductMapperExtension.toProductInListDto(product, catalogs);
 
             // 取活动商品
-            List<ActivityProducts> activityProducts = activityProductList.stream().filter(c -> c.getProductId().equals(productId)).collect(Collectors.toList());
-            ActivityProducts activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
+            ActivityProducts activityProduct = null;
+            if(activityProductList != null && !activityProductList.isEmpty()){
+                List<ActivityProducts> activityProducts = activityProductList.stream().filter(c -> c.getProductId().equals(productId)).collect(Collectors.toList());
+                activityProduct = ProductActivityService.getValidProductActivity(activityProducts);
+            }
 
             if (activityProduct != null && (!activityProduct.isTradeIsolation() || tradeIsolation)) {
                 double minActivityPrice = getActivityPrice(productDto.getMinPrice(), activityProduct, "min");
