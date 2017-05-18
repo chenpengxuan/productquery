@@ -3,14 +3,13 @@ package com.ymatou.productquery.infrastructure.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.common.base.Optional;
-import org.apache.commons.beanutils.BeanUtils;
 import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.cglib.beans.BeanCopier;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -53,12 +52,11 @@ public class Utils {
      * @param destObj
      * @param oriObj
      */
-    public static void copyProperties(Object destObj,Object oriObj){
+    public static <T1,T2> void copyProperties(T1 destObj,T2 oriObj){
         try {
-            BeanUtils.copyProperties(destObj,oriObj);
-        } catch (IllegalAccessException e) {
-            logWrapper.recordErrorLog("数据转换发生异常destObj:{},oriObj:{}",destObj,oriObj,e);
-        } catch (InvocationTargetException e) {
+            BeanCopier bc = BeanCopier.create(oriObj.getClass(), destObj.getClass(), false);
+            bc.copy(oriObj,destObj,null);
+        } catch (Throwable e) {
             logWrapper.recordErrorLog("数据转换发生异常destObj:{},oriObj:{}",destObj,oriObj,e);
         }
     }
