@@ -112,35 +112,17 @@ public class CommonQueryService {
      * @return
      */
     public List<CacheProductInfo> getProductListByCatalogIdList(List<String> catalogIdList) {
-        List<Catalogs> catalogsList;
         List<Products> productsList = new ArrayList<>();
-        List<String> productIdList;
         List<CacheProductInfo> result = new ArrayList<>();
 
-        if (bizProps.isUseCache()) {
-            catalogsList = catalogCacheProcessor.getCatalogListByCatalogIdList(catalogIdList);
-        } else {
-            catalogsList = productRepository.getCatalogListByCatalogIdList(catalogIdList);
-        }
-
-        productIdList = catalogsList != null && !catalogIdList.isEmpty() ?catalogsList.stream().map(Catalogs::getProductId).collect(Collectors.toList()):null;
+        List<String> productIdList = productRepository.getProductIdsByCatalogIds(catalogIdList);
 
         if(productIdList != null && !productIdList.isEmpty()){
             productsList = getProductListByProductIdList(productIdList);
         }
 
-        if(catalogsList != null && !catalogsList.isEmpty()){
-            List<Products> tempProductList = productsList;
-
-            catalogsList.stream().collect(Collectors.groupingBy(Catalogs::getProductId)).forEach((key,group) -> {
-                Products tempProduct = tempProductList.stream().filter(z -> z.getProductId().equals(key)).findAny().orElse(null);
-
-                if(tempProduct != null){
-                    CacheProductInfo cacheProductInfo = tempProduct.convertDtoToCacheData();
-                    cacheProductInfo.setCatalogsList(group);
-                    result.add(cacheProductInfo);
-                }
-            });
+        if(productsList != null && !productsList.isEmpty()){
+            result = productsList.stream().map(x -> x.convertDtoToCacheData()).collect(Collectors.toList());
         }
 
         return result;

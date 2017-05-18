@@ -45,11 +45,11 @@ public class ListQueryService {
         List<String> pids = cacheProductInfoList.stream().map(t -> t.getProductId()).collect(Collectors.toList());
         List<LiveProducts> liveProductsList = commonQueryService.getLiveProductListByProductId(pids);
         List<ActivityProducts> activityProductsList = commonQueryService.getActivityProductListByProductIdList(pids);
-        Map<String,Integer> productCatalogNumMap = commonQueryService.getCatalogNumByCatalogIdList(catalogIds);
 
+        Map<String,Integer> productCatalogNumMap = cacheProductInfoList.stream().collect(Collectors.toMap(x -> x.getProductId(),y -> y.getCatalogsList().size(),(key1,key2)->key2));
         for (String catalogId : catalogIds) {
             CacheProductInfo cacheProductInfo = cacheProductInfoList.stream().filter(t -> t.getCatalogsList().stream().map(s -> s.getCatalogId())
-                    .anyMatch(x -> x.equals(catalogId))).findFirst().orElse(null);
+                    .anyMatch(x -> x.equals(catalogId))).findAny().orElse(null);
 
             if (cacheProductInfo == null)
                 continue;
