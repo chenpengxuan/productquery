@@ -42,21 +42,20 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
      * 初始化活动商品缓存
      */
     public int initActivityProductCache() {
-        List<CacheActivityProductInfo> activityProductList = productRepository.getValidActivityProductList().stream()
-                .map(x -> x.convertDtoToCacheData()).collect(Collectors.toList());
-        Map<String,CacheActivityProductInfo> cacheActivityProductInfoMap = activityProductList
-                .stream()
-                .collect(Collectors.toMap(CacheActivityProductInfo::getProductId, y -> y, (key1, key2) -> key2));
+        Map activityProductListMap = new HashMap();
+        productRepository.getValidActivityProductList().stream().collect(Collectors.groupingBy(ActivityProducts::getProductId)).forEach((key, valList) ->
+                activityProductListMap.put(key, valList.stream().map(z -> z.convertDtoToCacheData()).collect(Collectors.toList())));
 
-        cacheManager.put(cacheActivityProductInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
-        return activityProductList.size();
+        cacheManager.put(activityProductListMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+        return activityProductListMap.size();
     }
 
     /**
      * 检查活动容器size是否已满
+     *
      * @return
      */
-    private boolean checkActivityCacheIsFull(){
+    private boolean checkActivityCacheIsFull() {
         return cacheProps.getActivityProductCacheSize() <= cacheManager.getActivityProductCacheContainer().size();
     }
 
@@ -66,7 +65,11 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
     public void addNewestActivityProductCache() {
         ConcurrentMap activityProductCache = cacheManager.getActivityProductCacheContainer();
 
-        List<Integer> cacheInActivityIdList = (List<Integer>) activityProductCache.values().stream().map(x -> ((CacheActivityProductInfo)x).getProductInActivityId()).collect(Collectors.toList());
+        List<Integer> cacheInActivityIdList = new ArrayList<>();
+
+        activityProductCache.values().forEach(z ->
+                ((List<CacheActivityProductInfo>) z).forEach(x -> cacheInActivityIdList.add(x.getProductInActivityId())));
+
         List<Integer> validInActivityIdList = productRepository.getValidProductInActivityIdList();
 
         List<Integer> needReloadInActivityIdList = new ArrayList<>();
@@ -77,14 +80,25 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
         List<ActivityProducts> newestActivityProductList = productRepository
                 .getActivityProductListByInActivityIdList(needReloadInActivityIdList);
 
-        //批量添加至缓存
-        Map tempMap = newestActivityProductList
-                .stream()
-                .collect(Collectors.toMap(ActivityProducts::getProductId, y -> y.convertDtoToCacheData(), (key1, key2) -> key2));
+        if (newestActivityProductList != null && !newestActivityProductList.isEmpty()) {
+            List<String> productIdList = newestActivityProductList.stream().map(ActivityProducts::getProductId).collect(Collectors.toList());
 
-        cacheManager.put(tempMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+            List<ActivityProducts> cacheActivityProductList = new ArrayList<>();
+            productIdList.forEach(x -> {
+                if (activityProductCache.get(x) != null) {
+                    cacheActivityProductList.addAll((List) activityProductCache.get(x));
+                }
+            });
 
-        logWrapper.recordInfoLog("增量添加活动商品缓存已执行,新增{}条", newestActivityProductList.size());
+            cacheActivityProductList.addAll(newestActivityProductList);
+
+            Map tempMap = cacheActivityProductList.stream().collect(Collectors.groupingBy(ActivityProducts::getProductId));
+
+            //批量添加至缓存
+            cacheManager.put(tempMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+
+            logWrapper.recordInfoLog("增量添加活动商品缓存已执行,新增{}条", newestActivityProductList.size());
+        }
     }
 
     /**
@@ -95,17 +109,19 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
      */
     public List<ActivityProducts> getActivityProductListByProductIdList(List<String> productIdList) {
         Map cacheActivityProductInfoMap = cacheManager.get(productIdList, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
-        if(cacheActivityProductInfoMap != null && !cacheActivityProductInfoMap.isEmpty()){
-            if(!checkActivityCacheIsFull()){
-                List<CacheActivityProductInfo> cacheActivityProductInfoList = (List<CacheActivityProductInfo>) Lists.newArrayList(cacheActivityProductInfoMap.values())
+        if (cacheActivityProductInfoMap != null && !cacheActivityProductInfoMap.isEmpty()) {
+            if (!checkActivityCacheIsFull()) {
+                List<List<CacheActivityProductInfo>> tempCacheActivityProductInfoList = (List<List<CacheActivityProductInfo>>) Lists.newArrayList(cacheActivityProductInfoMap.values())
                         .stream().map(x -> x).collect(Collectors.toList());
+
+                List<CacheActivityProductInfo> cacheActivityProductInfoList = new ArrayList<>();
+                tempCacheActivityProductInfoList.forEach(x -> cacheActivityProductInfoList.addAll(x));
 
                 List<ProductTimeStamp> productTimeStampList = productTimeStampRepository
                         .getTimeStampByProductIds(productIdList, Arrays.asList("aut"));
 
                 return processCacheInfo(productIdList, cacheActivityProductInfoList, productTimeStampList);
-            }
-            else{
+            } else {
                 logWrapper.recordErrorLog("活动缓存容量已满，需要进行配置扩容并重启服务，当前数据改成从mongo读取，不影响业务");
                 return productRepository.getActivityProductListByProductIdList(productIdList);
             }
@@ -129,9 +145,11 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
         if (activityProductsList != null && !activityProductsList.isEmpty()) {
             productTimeStampRepository.setActivityProductListUpdateTime(activityProductsList);
 
-            Map<String, CacheActivityProductInfo> cacheActivityProductInfoMap = new HashMap<>();
-            activityProductsList.forEach(x -> cacheActivityProductInfoMap.put(x.getProductId(), x.convertDtoToCacheData()));
-            cacheManager.put(cacheActivityProductInfoMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
+            Map activityProductListMap = new HashMap();
+            activityProductsList.stream().collect(Collectors.groupingBy(ActivityProducts::getProductId)).forEach((key, valList) ->
+                    activityProductListMap.put(key, valList.stream().map(z -> z.convertDtoToCacheData()).collect(Collectors.toList())));
+
+            cacheManager.put(activityProductListMap, CacheManager.CacheInfoTypeEnum.ACTIVITYPRODUCT);
             return activityProductsList;
         }
         return null;
@@ -173,10 +191,13 @@ public class ActivityCacheProcessor extends BaseCacheProcessor<ActivityProducts,
             Long cacheProductUpdateTimeStamp = t.getUpdateTime() != null ? t.getUpdateTime().getTime() : -1L;
             ProductTimeStamp tempStamp = productUpdateTimeList.stream().filter(pt -> pt.getProductId().equals(t.getProductId())).findAny().orElse(null);
 
+            Long nowTimeStamp = new Date().getTime();
+            Long endTimeStamp = t.getEndTime().getTime();
+
             Long productUpdateTimeStamp = tempStamp != null && tempStamp.getActivityUpdateTime() != null
                     ? tempStamp.getActivityUpdateTime().getTime() : 0L;
 
-            return Long.compare(cacheProductUpdateTimeStamp, productUpdateTimeStamp) == 0;
+            return Long.compare(cacheProductUpdateTimeStamp, productUpdateTimeStamp) == 0 && nowTimeStamp <= endTimeStamp;
         }).map(x -> x.convertCacheDataToDto()).collect(Collectors.toList());
     }
 }

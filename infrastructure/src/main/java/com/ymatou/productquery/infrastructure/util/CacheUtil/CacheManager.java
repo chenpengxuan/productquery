@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by zhangyong on 2017/4/6.
@@ -207,7 +208,7 @@ public class CacheManager {
                 break;
             case ACTIVITYPRODUCT:
                 synchronized (this) {
-                    expectActivityCacheSize = activityProductCacheContainer.size() + 1;
+                    expectActivityCacheSize = activityProductCacheContainer.size() + ((List)(cacheInfo)).size();
                 }
                 if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
                     activityProductCacheContainer.putIfAbsent(cacheKey, cacheInfo);
@@ -233,11 +234,15 @@ public class CacheManager {
                 liveProductCacheContainer.putAll(cacheMap);
                 break;
             case ACTIVITYPRODUCT:
-                synchronized (this) {
-                    expectActivityCacheSize = activityProductCacheContainer.size() + cacheMap.size();
-                }
-                if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
-                    activityProductCacheContainer.putAll(cacheMap);
+                if(cacheMap != null && !cacheMap.isEmpty()) {
+                    AtomicInteger tempSizeCount = new AtomicInteger(0);
+                    cacheMap.forEach((k, v) -> tempSizeCount.getAndAdd(v != null ? ((List) v).size() : 0));
+                    synchronized (this) {
+                        expectActivityCacheSize = activityProductCacheContainer.size() + tempSizeCount.get();
+                    }
+                    if (expectActivityCacheSize <= cacheProps.getActivityProductCacheSize()) {
+                        activityProductCacheContainer.putAll(cacheMap);
+                    }
                 }
                 break;
             default:
