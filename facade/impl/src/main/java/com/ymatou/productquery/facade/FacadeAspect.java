@@ -1,19 +1,28 @@
 package com.ymatou.productquery.facade;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
+import com.ymatou.productquery.infrastructure.config.props.BizProps;
 import com.ymatou.productquery.infrastructure.constants.Constants;
+import com.ymatou.productquery.infrastructure.util.HttpHelper;
 import com.ymatou.productquery.infrastructure.util.LogWrapper;
 import com.ymatou.productquery.infrastructure.util.Utils;
 import com.ymatou.productquery.model.BizException;
 import com.ymatou.productquery.model.req.BaseRequest;
 import com.ymatou.productquery.model.res.BaseResponseNetAdapter;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * Created by zhangyong on 2017/4/10.
@@ -24,6 +33,9 @@ public class FacadeAspect {
     @Autowired
     private LogWrapper logWrapper;
 
+    @Autowired
+    private BizProps bizProps;
+
     @Pointcut("execution(com.ymatou.productquery.model.res.BaseResponseNetAdapter com.ymatou.productquery.facade.ProductQueryFacade.*(*)) && args(req)")
     public void executeFacade(BaseRequest req) {
     }
@@ -31,6 +43,26 @@ public class FacadeAspect {
     @Around("executeFacade(req)")
     public Object aroundFacadeExecution(ProceedingJoinPoint joinPoint, BaseRequest req)
             throws InstantiationException, IllegalAccessException {
+        Signature sig = joinPoint.getSignature();
+        MethodSignature msig = null;
+        Boolean isPost = false;
+        if (sig instanceof MethodSignature) {
+            msig = (MethodSignature) sig;
+            Object target = joinPoint.getTarget();
+            try {
+                Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
+                if(currentMethod.getDeclaringClass().toString().equals("com.ymatou.productquery.facade.ProductQueryFacadeImpl")){
+                    Annotation getAnnotation = currentMethod.getAnnotation(GET.class);
+                    Annotation postAnnotation = currentMethod.getAnnotation(POST.class);
+                    isPost = postAnnotation != null;
+                    ////// TODO: 2017/5/24 比对逻辑 
+                }
+               
+            } catch (NoSuchMethodException e) {
+
+            }
+        }
+
 
         if (req == null) {
             logWrapper.recordErrorLog("{} Recv: null", joinPoint.getSignature());
@@ -59,11 +91,12 @@ public class FacadeAspect {
         Object resp = null;
 
         try {
-
             req.validate();
-
             resp = joinPoint.proceed(new Object[]{req});
 
+            if (bizProps.getOpenComparison()) {
+
+            }
         } catch (IllegalArgumentException e) {
             resp = BaseResponseNetAdapter.newBusinessFailureInstance(e.getLocalizedMessage());
             logWrapper.recordErrorLog("Invalid request: {}", req, e);
@@ -92,4 +125,19 @@ public class FacadeAspect {
         return req.getClass().getSimpleName() + "|" + req.getRequestId();
     }
 
+    //新老接口返回结果比对
+    private void CompareAsync(BaseRequest request, String javaResult) {
+        final Thread t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    String url = "proditem.iapi.ymatou.com";
+                    HttpHelper.getURLContent(url);
+
+                } catch (Exception e) {
+                }
+            }
+        }
+        );
+        t.start();
+    }
 }

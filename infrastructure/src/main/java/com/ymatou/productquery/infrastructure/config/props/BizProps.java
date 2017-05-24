@@ -65,6 +65,8 @@ public class BizProps {
      */
     private boolean useCache;
 
+    private boolean openComparison;
+
     @DisconfFileItem(name = "exceptionWarningSwitch")
     public Boolean getExceptionWarningSwitch() {
         return exceptionWarningSwitch;
@@ -153,5 +155,10 @@ public class BizProps {
 
     public void setParallelCount(int parallelCount) {
         this.parallelCount = parallelCount;
+    }
+
+    @DisconfFileItem(name = "openComparison")
+    public boolean getOpenComparison() {
+        return openComparison;
     }
 }
