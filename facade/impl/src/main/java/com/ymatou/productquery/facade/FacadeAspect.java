@@ -19,6 +19,7 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -43,19 +44,20 @@ public class FacadeAspect {
     public Object aroundFacadeExecution(ProceedingJoinPoint joinPoint, BaseRequest req)
             throws InstantiationException, IllegalAccessException {
         Signature sig = joinPoint.getSignature();
-        MethodSignature msig;
+        MethodSignature msig = null;
         Boolean isPost = false;
         if (sig instanceof MethodSignature) {
             msig = (MethodSignature) sig;
             Object target = joinPoint.getTarget();
             try {
                 Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
-                if(currentMethod.getDeclaringClass().getName().equals("com.ymatou.productquery.facade.ProductQueryFacadeImpl")){
+                if (currentMethod.getDeclaringClass().getName().equals("com.ymatou.productquery.facade.ProductQueryFacadeImpl")) {
+                    Annotation getAnnotation = currentMethod.getAnnotation(GET.class);
                     Annotation postAnnotation = currentMethod.getAnnotation(POST.class);
                     isPost = postAnnotation != null;
                     ////// TODO: 2017/5/24 比对逻辑
                 }
-               
+
             } catch (NoSuchMethodException e) {
 
             }
