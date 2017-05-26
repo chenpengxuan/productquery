@@ -51,13 +51,13 @@ public class FacadeAspect {
             Object target = joinPoint.getTarget();
             try {
                 Method currentMethod = target.getClass().getMethod(msig.getName(), msig.getParameterTypes());
-                if(currentMethod.getDeclaringClass().toString().equals("com.ymatou.productquery.facade.ProductQueryFacadeImpl")){
+                if (currentMethod.getDeclaringClass().getName().equals("com.ymatou.productquery.facade.ProductQueryFacadeImpl")) {
                     Annotation getAnnotation = currentMethod.getAnnotation(GET.class);
                     Annotation postAnnotation = currentMethod.getAnnotation(POST.class);
                     isPost = postAnnotation != null;
-                    ////// TODO: 2017/5/24 比对逻辑 
+                    ////// TODO: 2017/5/24 比对逻辑
                 }
-               
+
             } catch (NoSuchMethodException e) {
 
             }
